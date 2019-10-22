@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Archivos de origen">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Archivos de encabezado">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Archivos de recursos">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Archivos de origen\Rflct cpp">
+      <UniqueIdentifier>{7a7f5b49-2135-4f8d-8f38-09f6614ae33e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Tests h">
+      <UniqueIdentifier>{4259a33f-0002-490e-be42-f0374d55db11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Rflct h">
+      <UniqueIdentifier>{2961250c-99b3-4738-93d4-762dcd555e9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Tests cpp">
+      <UniqueIdentifier>{59e61f48-17af-465a-931b-9319948e27f4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\reflcpp\Arguments.hpp">
+      <Filter>Archivos de encabezado\Rflct h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\reflcpp\ArrayType.hpp">
+      <Filter>Archivos de encabezado\Rflct h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\reflcpp\BoundClassType.hpp">
+      <Filter>Archivos de encabezado\Rflct h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\reflcpp\BoundClassType_tmpl.hpp">
+      <Filter>Archivos de encabezado\Rflct h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\reflcpp\BoundMemberFunction.hpp">
+      <Filter>Archivos de encabezado\Rflct h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\reflcpp\check.hpp">
+      <Filter>Archivos de encabezado\Rflct h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\reflcpp\ClassType.hpp">
+      <Filter>Archivos de encabezado\Rflct h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\reflcpp\ClassType_tmpl.hpp">
+      <Filter>Archivos de encabezado\Rflct h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\reflcpp\debug.hpp">
+      <Filter>Archivos de encabezado\Rflct h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\reflcpp\FundamentalType.hpp">
+      <Filter>Archivos de encabezado\Rflct h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\reflcpp\macros.hpp">
+      <Filter>Archivos de encabezado\Rflct h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\reflcpp\MemberFunction.hpp">
+      <Filter>Archivos de encabezado\Rflct h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\reflcpp\MemberFunctionDcl.hpp">
+      <Filter>Archivos de encabezado\Rflct h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\reflcpp\platform.hpp">
+      <Filter>Archivos de encabezado\Rflct h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\reflcpp\PointerType.hpp">
+      <Filter>Archivos de encabezado\Rflct h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\reflcpp\PtrHolder.hpp">
+      <Filter>Archivos de encabezado\Rflct h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\reflcpp\RetValHolder.hpp">
+      <Filter>Archivos de encabezado\Rflct h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\reflcpp\Traits.hpp">
+      <Filter>Archivos de encabezado\Rflct h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\reflcpp\Type.hpp">
+      <Filter>Archivos de encabezado\Rflct h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\reflcpp\TypeInfoCmp.hpp">
+      <Filter>Archivos de encabezado\Rflct h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\A.hpp">
+      <Filter>Archivos de encabezado\Tests h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\A_reflection.hpp">
+      <Filter>Archivos de encabezado\Tests h</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\A_reflection.cpp">
+      <Filter>Archivos de origen\Tests cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\reflcpp\Arguments.cpp">
+      <Filter>Archivos de origen\Rflct cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\reflcpp\ArrayType.cpp">
+      <Filter>Archivos de origen\Rflct cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\reflcpp\check.cpp">
+      <Filter>Archivos de origen\Rflct cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\reflcpp\ClassType.cpp">
+      <Filter>Archivos de origen\Rflct cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\reflcpp\FundamentalType.cpp">
+      <Filter>Archivos de origen\Rflct cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\reflcpp\PointerType.cpp">
+      <Filter>Archivos de origen\Rflct cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\reflcpp\Type.cpp">
+      <Filter>Archivos de origen\Rflct cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\main.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
