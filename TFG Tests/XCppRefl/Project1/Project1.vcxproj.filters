@@ -25,6 +25,12 @@
     <Filter Include="Archivos de origen\Tests cpp">
       <UniqueIdentifier>{59e61f48-17af-465a-931b-9319948e27f4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de encabezado\Code Generator">
+      <UniqueIdentifier>{f1ff4c22-dcf3-425d-b543-801e62512cd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Code Generator">
+      <UniqueIdentifier>{e96215d4-7b82-4eeb-a9ca-775ee0055da2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\reflcpp\Arguments.hpp">
