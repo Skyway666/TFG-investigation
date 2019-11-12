@@ -1,18 +1,21 @@
 
 
+#include "MyClass.generated.h"
 #include "MyClass.h"
 // Automatically generated
 
-// Fill "TypeInfo
+// Fill "TypeInfo"
 void MyClass::registerForReflection() {
 	
-	TypeInfo info_instance;
-	TypeInfo* metadata = &info_instance;
-
-	//TypeInfo* metadata = &MyClass::metadata; //Link error
+	//TypeInfo info_instance;
+	//TypeInfo* metadata = &info_instance;
 
 	MyClass instance;
 	MyClass* classPointer = &instance;
+
+	TypeInfo metadata = MyClass::metadata; //Link error
+
+
 
 	// Add "int b" field
 
@@ -22,7 +25,9 @@ void MyClass::registerForReflection() {
 	name.string = (char*)"a";
 	name.length = 2;
 
-	metadata->properties.push_back(Property(name, offset, Type::INT));
+	metadata.properties.push_back(Property(name, offset, Type::INT));
 
 }
+
+TypeInfo MyClass::metadata;
 
