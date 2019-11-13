@@ -1,8 +1,7 @@
 #ifndef TYPEINFO_CLASS
 #define TYPEINFO_CLASS
 
-#include<vector>
-
+#define MAX_PROPERTIES 30
 // Static part from reflection library
 enum Type {
 	INT,
@@ -10,19 +9,9 @@ enum Type {
 	BOOL
 };
 
-struct StringWithLength {
-	char* string;
-	unsigned int length;
-};
-
+// TODO(Lucas): Consider changing name
 struct Property {
-	Property(StringWithLength str_len, int offset, Type type):offset(offset), type(type) {
-		name = new char[str_len.length];
-		memcpy((void*)name, str_len.string, str_len.length);
-	}
-	~Property() {
-		delete name;
-	}
+	Property(const char* name, int offset, Type type):name(name), offset(offset), type(type) {}
 	const char* name;
 	size_t offset;
 	Type type;
@@ -30,11 +19,27 @@ struct Property {
 
 class TypeInfo {
 public:
+
+	TypeInfo() {
+		for (int i = 0; i < MAX_PROPERTIES; i++)
+			properties[i] = nullptr;
+	}
 	int getIntegerValue(void* ptr, const char* name) {
 
 	}
-	// Maybe use an array
-	std::vector<Property> properties;
+	
+	unsigned int property_index;
+	Property* properties[MAX_PROPERTIES];
+
+	void pushProperty(Property* property) {
+		properties[property_index++] = property;
+	}
+
+	void cleanUp() {
+		for (int i = 0; i < MAX_PROPERTIES; i++)
+			if (properties[i]) delete properties[i];
+
+	}
 
 };
 

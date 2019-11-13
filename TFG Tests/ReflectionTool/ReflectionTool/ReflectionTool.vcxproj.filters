@@ -18,6 +18,9 @@
     <ClCompile Include="main.cpp">
       <Filter>Archivos de origen\CPP</Filter>
     </ClCompile>
+    <ClCompile Include="MyClass.generated.cpp">
+      <Filter>Archivos de origen\CPP</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyClass.h">
@@ -26,10 +29,5 @@
     <ClInclude Include="MyClass.generated.h">
       <Filter>Archivos de origen\H</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="MyClass.generated.cpp">
-      <Filter>Archivos de origen\CPP</Filter>
-    </None>
   </ItemGroup>
 </Project>
