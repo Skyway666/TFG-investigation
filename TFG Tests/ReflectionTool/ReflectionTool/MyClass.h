@@ -7,6 +7,7 @@ class MyClass {
 public:
 	int a;
 	int b;
+	bool is;
 
 
 	// Should be stored in a list. Outside of the class, with information to find it by string or template

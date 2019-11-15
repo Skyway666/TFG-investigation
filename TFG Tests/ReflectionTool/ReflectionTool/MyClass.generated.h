@@ -2,8 +2,13 @@
 #define TYPEINFO_CLASS
 
 #define MAX_PROPERTIES 30
+
+// Should be removed
+#include<string>
+
 // Static part from reflection library
 enum Type {
+	NULL_TYPE,
 	INT,
 	STRING,
 	BOOL
@@ -11,34 +16,54 @@ enum Type {
 
 // TODO(Lucas): Consider changing name
 struct Property {
+	Property(){}
 	Property(const char* name, int offset, Type type):name(name), offset(offset), type(type) {}
-	const char* name;
-	size_t offset;
-	Type type;
+	const char* name = "null";
+	size_t offset = 0;
+	Type type = Type::NULL_TYPE;
 };
 
 class TypeInfo {
 public:
 
-	TypeInfo() {
-		for (int i = 0; i < MAX_PROPERTIES; i++)
-			properties[i] = nullptr;
+	TypeInfo(){
+		for(int i = 0; i < MAX_PROPERTIES; i++)
+			properties[i] = Property("null", 0, Type::NULL_TYPE);
 	}
-	int getIntegerValue(void* ptr, const char* name) {
+	// Get field info from pointers
+	int getIntegerValue(void* instance_ptr, const char* name) {
+		Property property = getPropertyByStringAndType(name, Type::INT);
 
+		int ret = *((int*)((size_t)instance_ptr + property.offset));
+
+		return ret;
 	}
-	
-	unsigned int property_index;
-	Property* properties[MAX_PROPERTIES];
 
-	void pushProperty(Property* property) {
+	bool getBoolValue(void* instance_ptr, const char* name) {
+		Property property = getPropertyByStringAndType(name, Type::BOOL);
+
+		bool ret = *((int*)((size_t)instance_ptr + property.offset));
+
+		return ret;
+	}
+
+	// Properties
+	unsigned int property_index = 0;
+	Property properties[MAX_PROPERTIES];
+
+	void pushProperty(Property property) {
 		properties[property_index++] = property;
 	}
 
-	void cleanUp() {
-		for (int i = 0; i < MAX_PROPERTIES; i++)
-			if (properties[i]) delete properties[i];
+	// Helper functions
 
+	Property getPropertyByStringAndType(const char* name, Type type) {
+		for (int i = 0; i < property_index; i++)
+			if (strcmp(name, properties[i].name) == 0 && type == properties[i].type)
+				return properties[i];
+
+		
+		return Property("null", 0, Type::NULL_TYPE);
 	}
 
 };
