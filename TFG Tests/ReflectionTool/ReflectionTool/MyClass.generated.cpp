@@ -11,21 +11,20 @@ void MyClass::registerForReflection() {
 	TypeInfo* metadata = &MyClass::metadata;
 
 	// Add "int a" field
-	int offset = offsetof(MyClass, MyClass::a); 
-	metadata->pushProperty(Property("a", offset, Type::INT));
+	metadata->pushProperty(Property("a", offsetof(MyClass, MyClass::a), Type::INT));
 
 	// Add "int b" field
-	 offset = offsetof(MyClass, MyClass::b); 
-	metadata->pushProperty(Property("b", offset, Type::INT));
+	metadata->pushProperty(Property("b", offsetof(MyClass, MyClass::b), Type::INT));
 
 	// Add "bool is" field
-	offset = offsetof(MyClass, MyClass::is);
-	metadata->pushProperty(Property("is", offset, Type::BOOL));
+	metadata->pushProperty(Property("is", offsetof(MyClass, MyClass::is), Type::BOOL));
+
+	// Add "name" field
+	metadata->pushProperty(Property("name", offsetof(MyClass, MyClass::name), Type::CONST_STRING));
 
 	// Add "message" field
+	metadata->pushProperty(Property("message", offsetof(MyClass, MyClass::message), Type::STRING));
 
-	offset = offsetof(MyClass, MyClass::message);
-	metadata->pushProperty(Property("message", offset, Type::STRING));
 }
 
 

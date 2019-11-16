@@ -10,6 +10,7 @@
 enum Type {
 	NULL_TYPE,
 	INT,
+	CONST_STRING,
 	STRING,
 	BOOL
 };
@@ -46,12 +47,20 @@ public:
 
 		return ret;
 	}
-	const char* getStringValue(void* instance_ptr, const char* name) {
-		Property property = getPropertyByStringAndType(name, Type::STRING);
+	const char* getConstStringValue(void* instance_ptr, const char* name) {
+		Property property = getPropertyByStringAndType(name, Type::CONST_STRING);
 
 		const char* ret = *((const char**)((size_t)instance_ptr + property.offset));
 
 		return ret;
+	}
+
+	void getStringVaue(void* instance_ptr, const char* name, char* output_string, size_t size) {
+		Property property = getPropertyByStringAndType(name, Type::STRING);
+
+		char* to_copy_str = ((char*)((size_t)instance_ptr + property.offset));
+
+		strcpy_s(output_string, size, to_copy_str);
 	}
 
 	// Properties

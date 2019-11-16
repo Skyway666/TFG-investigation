@@ -5,10 +5,11 @@
 
 class MyClass {
 public:
-	int a;
-	int b;
-	bool is;
-	const char* message = "I'm MyClass";
+	int a = 143;
+	int b = 82;
+	bool is = false;
+	const char* name = "MyClass";
+	char message[150] = "LOL";
 
 
 	// Should be stored in a list. Outside of the class, with information to find it by string or template
