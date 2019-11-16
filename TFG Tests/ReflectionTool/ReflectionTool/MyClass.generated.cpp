@@ -21,6 +21,11 @@ void MyClass::registerForReflection() {
 	// Add "bool is" field
 	offset = offsetof(MyClass, MyClass::is);
 	metadata->pushProperty(Property("is", offset, Type::BOOL));
+
+	// Add "message" field
+
+	offset = offsetof(MyClass, MyClass::message);
+	metadata->pushProperty(Property("message", offset, Type::STRING));
 }
 
 

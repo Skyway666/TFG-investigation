@@ -42,7 +42,14 @@ public:
 	bool getBoolValue(void* instance_ptr, const char* name) {
 		Property property = getPropertyByStringAndType(name, Type::BOOL);
 
-		bool ret = *((int*)((size_t)instance_ptr + property.offset));
+		bool ret = *((bool*)((size_t)instance_ptr + property.offset));
+
+		return ret;
+	}
+	const char* getStringValue(void* instance_ptr, const char* name) {
+		Property property = getPropertyByStringAndType(name, Type::STRING);
+
+		const char* ret = *((const char**)((size_t)instance_ptr + property.offset));
 
 		return ret;
 	}

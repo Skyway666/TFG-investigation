@@ -8,6 +8,7 @@ public:
 	int a;
 	int b;
 	bool is;
+	const char* message = "I'm MyClass";
 
 
 	// Should be stored in a list. Outside of the class, with information to find it by string or template
