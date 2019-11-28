@@ -22,6 +22,12 @@ int main() {
 	char message_value[150];
 	MyClass::metadata.getStringVaue(&instance, "message", message_value, 150);
 
+	int sum1toA_return = 0;
+
+	MyClass::metadata.PushIntReturnPointer(&sum1toA_return);
+	MyClass::metadata.PushBoolArgument(true);
+	MyClass::metadata.Invoke(&instance, "sum1ToA");
+
 	return 0;
 
 }

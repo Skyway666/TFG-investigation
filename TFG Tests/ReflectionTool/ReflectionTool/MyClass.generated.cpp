@@ -11,18 +11,11 @@ TypeInfo MyClass::metadata;
 
 
 // FUNCTION REFLECTION
-
-// To be used  by the function wrapper (could be stored in a static structure)
-// Metadata::Invoke() (metadata instance) will fill the arguments, execute the function wrapper, and return the appropiate return value
-MyClass* instancePointer = nullptr;
-// Possible Wrapper Return Values
-int integerReturn = 0;
-
-// Possible Bool Arguments Values
-bool boolArgument1 = false;
-
 void MyClassFuncWrap_sum1ToA() {
-	integerReturn = instancePointer->sum1ToA(boolArgument1);
+	TypeInfo* metadata = &MyClass::metadata;
+
+	MethodDataHolder methodDataHolder = metadata->methodDataHolder;
+	*methodDataHolder.integerReturn = ((MyClass*)methodDataHolder.instancePointer)->sum1ToA(methodDataHolder.boolArguments[0]);
 }
 
 // Fill "TypeInfo metadata"
@@ -55,12 +48,13 @@ void MyClass::registerForReflection() {
 	method.function_wrapper = &MyClassFuncWrap_sum1ToA;
 	method.name = "sum1ToA";
 	method.returnValue = Type::INT;
+	// Maybe it could be just "pushArgument()"
 	method.argumentCount = 1;
 	method.arguments[0] = Type::BOOL;
+
+	metadata->pushMethod(method);
+
+
 }
-
-
-
-
 
 
