@@ -13,8 +13,8 @@ TypeInfo MyClass::metadata;
 // FUNCTION REFLECTION
 void MyClassFuncWrap_sum1ToA() {
 	TypeInfo* metadata = &MyClass::metadata;
-
 	MethodDataHolder methodDataHolder = metadata->methodDataHolder;
+
 	*methodDataHolder.integerReturn = ((MyClass*)methodDataHolder.instancePointer)->sum1ToA(methodDataHolder.boolArguments[0]);
 }
 
@@ -53,8 +53,6 @@ void MyClass::registerForReflection() {
 	method.arguments[0] = Type::BOOL;
 
 	metadata->pushMethod(method);
-
-
 }
 
 

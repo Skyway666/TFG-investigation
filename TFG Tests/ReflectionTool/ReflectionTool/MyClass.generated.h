@@ -27,21 +27,42 @@ struct Property {
 };
 
 struct Method {
+	// Not used by reflection system "Invoke"
 	int argumentCount = 0;
-	const char* name = "Null Method";
 	Type returnValue = Type::NULL_TYPE;
 	Type arguments[MAX_ARGUMENTS];
+
+	// Only really needed by now
+	const char* name = "Null Method";
 	void (*function_wrapper)(void);
 };
 
 // To be used  by the function wrapper (could be stored in a static structure)
 // Metadata::Invoke() (metadata instance) will fill the arguments, execute the function wrapper, and return the appropiate return value
 struct MethodDataHolder {
+	// Private to user
 	int* integerReturn;
 	void* instancePointer;
 	
 	int boolArgumentsCount = 0;
-	bool boolArguments[10];
+	bool boolArguments[MAX_ARGUMENTS];
+
+	// Public to user
+	void PushIntReturnPointer(int* returnPointer) {
+		integerReturn = returnPointer;
+	}
+	void PushBoolArgument(bool boolArgument) {
+		boolArguments[boolArgumentsCount++] = boolArgument;
+	}
+
+	void clear() {
+		integerReturn = nullptr;
+		instancePointer = nullptr;
+		boolArgumentsCount = 0;
+		for (int i = 0; i < MAX_ARGUMENTS; i++) {
+			boolArguments[i] = 0;
+		}
+	}
 };
 
 class TypeInfo {
@@ -98,19 +119,11 @@ public:
 	}
 	// Invoke methods from pointers
 
-	void PushIntReturnPointer(int* returnPointer) {
-		methodDataHolder.integerReturn = returnPointer;
-	}
-	void PushBoolArgument(bool boolArgument) {
-		methodDataHolder.boolArguments[methodDataHolder.boolArgumentsCount++] = boolArgument;
-	}
-
 	void Invoke(void* instance_ptr, const char* name) {
 		Method method = getMethodByString(name);
 		methodDataHolder.instancePointer = instance_ptr;
 
 		method.function_wrapper();
-
 	}
 	// Helper functions
 
