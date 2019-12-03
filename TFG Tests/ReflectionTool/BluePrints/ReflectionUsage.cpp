@@ -14,18 +14,12 @@ int main() {
 		// Option 2
 		Reflection::registerForReflection<MyClass>();
 
-		// Option 3?
-		Reflection::registerForReflection(MyClass);
-
 	// Getting the "MyClass" metadata instance
 		// Option 1
 		Metadata* metadata = Reflection::getMetadata("MyClass");
 
 		// Option 2
 		metadata = Reflection::getMetadata<MyClass>();
-
-		// Option 3?
-		metadata = Reflection::getMetadata(MyClass);
 
 
 
