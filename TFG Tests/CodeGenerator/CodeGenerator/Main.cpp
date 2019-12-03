@@ -40,9 +40,14 @@ struct Token {
 	Token(TokenType type): type(type){}
 
 	TokenType type;
+
+	// int number of line = 0;
+
 	// Probably  use dynamic memory, most tokkens don't need a name but some of them do
 	char name[MAX_NAME_CHARS] = { '\0' };
 };
+
+
 
 
 int main() {
