@@ -76,7 +76,7 @@ public:
 		properties[property_index++] = property;
 	}
 
-	// Get field info from pointers
+	// Get field data from pointers
 	int getIntegerValue(void* instance_ptr, const char* name) {
 		Property property = getPropertyByStringAndType(name, Type::INT);
 
@@ -108,6 +108,15 @@ public:
 		strcpy_s(output_string, size, to_copy_str);
 	}
 
+	// Should return some form of container, since several variables of different type can be declared with the same variable name
+	Type getFieldType(const char* name) {
+		for (int i = 0; i < property_index; i++)
+			if (strcmp(name, properties[i].name) == 0)
+				return properties[i].type;
+
+		return Type::NULL_TYPE;
+	}
+
 
 	// Methods
 	unsigned int method_index = 0;
@@ -137,7 +146,7 @@ public:
 
 	// Should be string, return value and arguments
 	Method getMethodByString(const char* name) {
-		for (int i = 0; i < property_index; i++)
+		for (int i = 0; i < method_index; i++)
 			if (strcmp(name, methods[i].name) == 0)
 				return methods[i];
 

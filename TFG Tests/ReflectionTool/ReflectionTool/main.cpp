@@ -22,6 +22,12 @@ int main() {
 	char message_value[150];
 	MyClass::metadata.getStringVaue(&instance, "message", message_value, 150);
 
+	Type a_type = MyClass::metadata.getFieldType("a");
+	Type is_type = MyClass::metadata.getFieldType("is");
+	Type name_type = MyClass::metadata.getFieldType("name");
+	Type message_type = MyClass::metadata.getFieldType("message");
+
+
 	int sum1toA_return = 0;
 
 	MyClass::metadata.methodDataHolder.PushIntReturnPointer(&sum1toA_return);

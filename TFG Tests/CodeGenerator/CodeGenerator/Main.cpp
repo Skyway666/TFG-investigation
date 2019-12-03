@@ -8,21 +8,23 @@ enum TokenType {
 	NULL_TOKEN,
 	USER_BIT, // Goes with name 
 	C_STR, // Goes with name
-	SPACE,
 	TY_INT,
 	TY_VOID,
 	TY_BOOL,
 	TY_CHAR,
-	TY_POINTER,
 	SP_DEFINE,
 	SP_IFNDEF,
 	SP_INCLUDE,
-	KW_OPEN_FUNC, //'('
-	KW_CLOSE_FUNC, // ')'
-	KW_OPEN_DEF, // '{'
-	KW_CLOSE_DEF, // '}'
-	KW_OPEN_ARR, // [
-	KW_CLOSE_ARR, // ]
+	SEP_SPACE,
+	SEP_OPEN_FUNC, //'('
+	SEP_CLOSE_FUNC, // ')'
+	SEP_OPEN_DEF, // '{'
+	SEP_CLOSE_DEF, // '}'
+	SEP_OPEN_ARR, // [
+	SEP_CLOSE_ARR, // ]
+	SEP_COL, // :
+	SEP_SEMICOL, // ;
+	SEP_POINTER, // *
 	KW_CLASS,
 	KW_STRUCT,
 	KW_PUBLIC,
@@ -62,7 +64,7 @@ int main() {
 		// Fill bit to analyse it later
 		Bit[bitCount++] = code[i];
 		bool clearBit = false; 
-		// Characters that indicate the end of a tokken (also a tokken themselves)
+		// Characters that indicate the end of a tokken (also a tokken themselves): Spaces, array keys, def keys, function keys, pointers, ':', ';'
 
 		// Detect spaces
 		if (code[i] == '\n' || code[i] == '\r' || code[i] == '\t' || code[i] == ' ') {
@@ -71,7 +73,7 @@ int main() {
 			bitCount - 1 == 0 ? nothingBehindSpace = true : tokenCount++;
 
 			// Allways add tokken of space
-			tokens[tokenCount] = Token(TokenType::SPACE);
+			tokens[tokenCount] = Token(TokenType::SEP_SPACE);
 
 			// Nothing behind the space, go for next iteration
 			if (nothingBehindSpace) {
@@ -90,12 +92,40 @@ int main() {
 
 		// Tokkens before separation tokkens
 
-		// Ints
-		if (strcmp(Bit, "#include") == 0) {
-			tokens[tokenCount - 1] = Token(TokenType::SP_INCLUDE);;
+		// Void
+		if (strcmp(Bit, "void") == 0) {
+			tokens[tokenCount - 1] = Token(TokenType::TY_VOID);;
 		}
+		// Ints
+		else if (strcmp(Bit, "int") == 0) {
+			tokens[tokenCount - 1] = Token(TokenType::TY_INT);;
+		}
+		// Bools
+		else if (strcmp(Bit, "bool") == 0) {
+			tokens[tokenCount - 1] = Token(TokenType::TY_BOOL);;
+		}
+		// Chars
+		else if (strcmp(Bit, "char") == 0) {
+			tokens[tokenCount - 1] = Token(TokenType::TY_CHAR);;
+		}
+
+
+		// Class
+		else if (strcmp(Bit, "class") == 0) {
+			tokens[tokenCount - 1] = Token(TokenType::KW_CLASS);;
+		}
+		else if (strcmp(Bit, "struct") == 0) {
+			tokens[tokenCount - 1] = Token(TokenType::KW_STRUCT);;
+		}
+		else if (strcmp(Bit, "public:") == 0) {
+			tokens[tokenCount - 1] = Token(TokenType::KW_PUBLIC);;
+		}
+		else if (strcmp(Bit, "private:") == 0) {
+			tokens[tokenCount - 1] = Token(TokenType::KW_PRIVATE);;
+		}
+
 		// Detect Defines
-		if (strcmp(Bit, "#define") == 0) {
+		else if (strcmp(Bit, "#define") == 0) {
 			tokens[tokenCount-1] = Token(TokenType::SP_DEFINE);
 		}
 		// Detect IfnDef
