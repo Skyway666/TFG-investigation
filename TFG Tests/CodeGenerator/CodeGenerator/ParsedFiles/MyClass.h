@@ -14,12 +14,7 @@ public:
 
 
 	// Methods
-	int sum1ToA(bool sum) {
-		if (sum)
-			a += 1;
-
-		return a;
-	}
+	int sum1ToA(bool sum);
 
 
 	// TODO(Lucas): Should be stored in a list. Outside of the class, with information to find it by string or template

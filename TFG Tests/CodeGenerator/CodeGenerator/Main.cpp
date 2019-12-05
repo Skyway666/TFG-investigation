@@ -15,6 +15,7 @@ enum TokenType {
 	SP_DEFINE,
 	SP_IFNDEF,
 	SP_INCLUDE,
+	SP_COMMENT,
 	SEP_SPACE,
 	SEP_OPEN_FUNC, //'('
 	SEP_CLOSE_FUNC, // ')'
@@ -48,7 +49,33 @@ struct Token {
 };
 
 
+Token parseSeparationTokken(char character) {
 
+	Token ret = Token(TokenType::NULL_TOKEN);
+
+	if (character == '\n' || character == '\r' || character == '\t' || character == ' ')
+		ret = Token(TokenType::SEP_SPACE);
+	else if(character == '[')
+		ret = Token(TokenType::SEP_OPEN_ARR);
+	else if (character == ']')
+		ret = Token(TokenType::SEP_CLOSE_ARR);
+	else if (character == '{')
+		ret = Token(TokenType::SEP_OPEN_DEF);
+	else if (character == '}')
+		ret = Token(TokenType::SEP_CLOSE_DEF);
+	else if (character == '(')
+		ret = Token(TokenType::SEP_OPEN_FUNC);
+	else if (character == ')')
+		ret = Token(TokenType::SEP_CLOSE_FUNC);
+	else if (character == '*')
+		ret = Token(TokenType::SEP_POINTER);
+	else if (character == ':')
+		ret = Token(TokenType::SEP_COL);
+	else if (character == ';')
+		ret = Token(TokenType::SEP_SEMICOL);
+
+	return ret;
+}
 
 int main() {
 	
@@ -71,14 +98,16 @@ int main() {
 		bool clearBit = false; 
 		// Characters that indicate the end of a tokken (also a tokken themselves): Spaces, array keys, def keys, function keys, pointers, ':', ';'
 
-		// Detect spaces
-		if (code[i] == '\n' || code[i] == '\r' || code[i] == '\t' || code[i] == ' ') {
+		// Detect separators
+		if (code[i] == '\n' || code[i] == '\r' || code[i] == '\t' || code[i] == ' ' ||
+			code[i] == '[' || code[i] == ']' || code[i] == '{' || code[i] == '}' ||
+			code[i] == '(' || code[i] == ')' || code[i] == '*' || code[i] == ':' || code[i] == ';') {
 
 			bool nothingBehindSpace = false;
 			bitCount - 1 == 0 ? nothingBehindSpace = true : tokenCount++;
 
-			// Allways add tokken of space
-			tokens[tokenCount] = Token(TokenType::SEP_SPACE);
+			// Allways add tokken of spearation
+			tokens[tokenCount] = parseSeparationTokken(code[i]);
 
 			// Nothing behind the space, go for next iteration
 			if (nothingBehindSpace) {
@@ -99,35 +128,47 @@ int main() {
 
 		// Void
 		if (strcmp(Bit, "void") == 0) {
-			tokens[tokenCount - 1] = Token(TokenType::TY_VOID);;
+			tokens[tokenCount - 1] = Token(TokenType::TY_VOID);
 		}
 		// Ints
 		else if (strcmp(Bit, "int") == 0) {
-			tokens[tokenCount - 1] = Token(TokenType::TY_INT);;
+			tokens[tokenCount - 1] = Token(TokenType::TY_INT);
 		}
 		// Bools
 		else if (strcmp(Bit, "bool") == 0) {
-			tokens[tokenCount - 1] = Token(TokenType::TY_BOOL);;
+			tokens[tokenCount - 1] = Token(TokenType::TY_BOOL);
 		}
 		// Chars
 		else if (strcmp(Bit, "char") == 0) {
-			tokens[tokenCount - 1] = Token(TokenType::TY_CHAR);;
+			tokens[tokenCount - 1] = Token(TokenType::TY_CHAR);
 		}
 
 
 		// Class
 		else if (strcmp(Bit, "class") == 0) {
-			tokens[tokenCount - 1] = Token(TokenType::KW_CLASS);;
+			tokens[tokenCount - 1] = Token(TokenType::KW_CLASS);
 		}
+		// Struct
 		else if (strcmp(Bit, "struct") == 0) {
-			tokens[tokenCount - 1] = Token(TokenType::KW_STRUCT);;
+			tokens[tokenCount - 1] = Token(TokenType::KW_STRUCT);
 		}
-		else if (strcmp(Bit, "public:") == 0) {
-			tokens[tokenCount - 1] = Token(TokenType::KW_PUBLIC);;
+		// Public
+		else if (strcmp(Bit, "public") == 0) {
+			tokens[tokenCount - 1] = Token(TokenType::KW_PUBLIC);
 		}
-		else if (strcmp(Bit, "private:") == 0) {
-			tokens[tokenCount - 1] = Token(TokenType::KW_PRIVATE);;
+		// Private
+		else if (strcmp(Bit, "private") == 0) {
+			tokens[tokenCount - 1] = Token(TokenType::KW_PRIVATE);
 		}
+		// Const
+		else if (strcmp(Bit, "const") == 0) {
+			tokens[tokenCount - 1] = Token(TokenType::KW_CONST);
+		}
+		// Unsigned
+		else if (strcmp(Bit, "unsigned") == 0) {
+			tokens[tokenCount - 1] = Token(TokenType::KW_UNSIGNED);
+		}
+		
 
 		// Detect Defines
 		else if (strcmp(Bit, "#define") == 0) {
@@ -148,6 +189,9 @@ int main() {
 			strcpy_s(user_bit.name, bitCount, Bit);
 			tokens[tokenCount - 1] = user_bit;
 		}
+
+		// Both the token and space have been added
+		tokenCount++;
 
 		if (clearBit) {
 			for (int i = 0; i < MAX_NAME_CHARS; i++)
