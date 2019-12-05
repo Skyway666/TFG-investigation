@@ -26,6 +26,9 @@ enum TokenType {
 	SEP_COL, // :
 	SEP_SEMICOL, // ;
 	SEP_POINTER, // *
+	OP_ASSIGN, // =
+	OP_SUM, // +
+	OP_SUBST, // -
 	KW_CLASS,
 	KW_STRUCT,
 	KW_PUBLIC,
@@ -33,6 +36,7 @@ enum TokenType {
 	KW_STATIC,
 	KW_CONST,
 	KW_UNSIGNED,
+
 };
 
 struct Token {
@@ -73,6 +77,12 @@ Token parseSeparationTokken(char character) {
 		ret = Token(TokenType::SEP_COL);
 	else if (character == ';')
 		ret = Token(TokenType::SEP_SEMICOL);
+	else if (character == '=')
+		ret = Token(TokenType::OP_ASSIGN);
+	else if (character == '+')
+		ret = Token(TokenType::OP_SUM);
+	else if (character == '-')
+		ret = Token(TokenType::OP_SUBST);
 
 	return ret;
 }
@@ -101,7 +111,8 @@ int main() {
 		// Detect separators
 		if (code[i] == '\n' || code[i] == '\r' || code[i] == '\t' || code[i] == ' ' ||
 			code[i] == '[' || code[i] == ']' || code[i] == '{' || code[i] == '}' ||
-			code[i] == '(' || code[i] == ')' || code[i] == '*' || code[i] == ':' || code[i] == ';') {
+			code[i] == '(' || code[i] == ')' || code[i] == '*' || code[i] == ':' || code[i] == ';' ||
+			code[i] == '=' || code[i] == '+' || code[i] == '-') {
 
 			bool nothingBehindSpace = false;
 			bitCount - 1 == 0 ? nothingBehindSpace = true : tokenCount++;
