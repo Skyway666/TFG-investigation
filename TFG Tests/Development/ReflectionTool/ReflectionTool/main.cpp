@@ -14,7 +14,7 @@ int main() {
 	strcpy_s(instance.message, 150, "Hi, I'm a reflected dynamic message");
 	instance.numbers[0] = 3;
 	instance.numbers[1] = -4;
-	instance.numbers[3] = 9;
+	instance.numbers[2] = 9;
 
 
 
