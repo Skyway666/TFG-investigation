@@ -11,6 +11,7 @@ public:
 	bool is = false;
 	const char* name = "MyClass";
 	char message[150] = "LOL";
+	int numbers[3];
 
 
 	// Methods

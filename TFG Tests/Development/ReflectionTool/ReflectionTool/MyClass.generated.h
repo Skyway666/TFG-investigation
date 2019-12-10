@@ -14,7 +14,8 @@ enum Type {
 	INT,
 	CONST_STRING,
 	STRING,
-	BOOL
+	BOOL,
+	ARRAY
 };
 
 // TODO(Lucas): Consider changing name
@@ -24,6 +25,10 @@ struct Property {
 	const char* name = "null";
 	size_t offset = 0;
 	Type type = Type::NULL_TYPE;
+
+	// Only to be used for arrays
+	Type arrayType = Type::NULL_TYPE;
+	int arraySize = 0; // IN MEMORY. To get size of elements -> arraySize / enum2sizeof(arrayType)
 };
 
 struct Method {
@@ -106,6 +111,14 @@ public:
 		char* to_copy_str = ((char*)((size_t)instance_ptr + property.offset));
 
 		strcpy_s(output_string, size, to_copy_str);
+	}
+
+	void getArrayValue(void* instance_ptr, const char* name, void* output_array) {
+		Property property = getPropertyByStringAndType(name, Type::ARRAY);
+
+		void* to_copy_arr = ((void*)((size_t)instance_ptr + property.offset));
+
+		memcpy(output_array, to_copy_arr, property.arraySize);
 	}
 
 	// Should return some form of container, since several variables of different type can be declared with the same variable name

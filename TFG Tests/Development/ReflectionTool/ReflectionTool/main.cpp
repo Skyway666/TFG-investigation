@@ -12,6 +12,9 @@ int main() {
 	instance.is = true;
 	instance.name = "MyClass - Reflected";
 	strcpy_s(instance.message, 150, "Hi, I'm a reflected dynamic message");
+	instance.numbers[0] = 3;
+	instance.numbers[1] = -4;
+	instance.numbers[3] = 9;
 
 
 
@@ -21,13 +24,17 @@ int main() {
 	const char* name_value = MyClass::metadata.getConstStringValue(&instance, "name");
 	char message_value[150];
 	MyClass::metadata.getStringVaue(&instance, "message", message_value, 150);
+	int numbers_value[3];
+	MyClass::metadata.getArrayValue(&instance, "numbers", numbers_value);
 
 	Type a_type = MyClass::metadata.getFieldType("a");
 	Type is_type = MyClass::metadata.getFieldType("is");
 	Type name_type = MyClass::metadata.getFieldType("name");
 	Type message_type = MyClass::metadata.getFieldType("message");
+	Type numbers_type = MyClass::metadata.getFieldType("numbers");
 
 
+	// Methods
 	int sum1toA_return = 0;
 
 	MyClass::metadata.methodDataHolder.PushIntReturnPointer(&sum1toA_return);
