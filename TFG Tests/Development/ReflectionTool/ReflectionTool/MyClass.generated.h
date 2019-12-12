@@ -46,8 +46,11 @@ struct Method {
 // Metadata::Invoke() (metadata instance) will fill the arguments, execute the function wrapper, and return the appropiate return value
 struct MethodDataHolder {
 	// Private to user
-	int* integerReturn;
+	// Pointer where the function will be called
 	void* instancePointer;
+	// Return value
+	int* integerReturn;
+
 	
 	int boolArgumentsCount = 0;
 	bool boolArguments[MAX_ARGUMENTS];
