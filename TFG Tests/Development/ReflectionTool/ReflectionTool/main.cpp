@@ -36,9 +36,10 @@ int main() {
 
 	// Methods
 	int sum1toA_return = 0;
+	bool boolArgument1 = true;
 
-	MyClass::metadata.methodDataHolder.PushIntReturnPointer(&sum1toA_return);
-	MyClass::metadata.methodDataHolder.PushBoolArgument(true);
+	MyClass::metadata.methodDataHolder.PushReturnPointer(&sum1toA_return);
+	MyClass::metadata.methodDataHolder.PushArgument(&boolArgument1);
 	MyClass::metadata.Invoke(&instance, "sum1ToA");
 
 	return 0;

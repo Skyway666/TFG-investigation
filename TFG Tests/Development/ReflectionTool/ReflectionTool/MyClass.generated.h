@@ -49,26 +49,26 @@ struct MethodDataHolder {
 	// Pointer where the function will be called
 	void* instancePointer;
 	// Return value
-	int* integerReturn;
+	void* returnPointer;
 
 	
-	int boolArgumentsCount = 0;
-	bool boolArguments[MAX_ARGUMENTS];
+	int argumentsCount = 0;
+	void* argumentsPointers[MAX_ARGUMENTS];
 
 	// Public to user
-	void PushIntReturnPointer(int* returnPointer) {
-		integerReturn = returnPointer;
+	void PushReturnPointer(void* userPointer) {
+		returnPointer = userPointer;
 	}
-	void PushBoolArgument(bool boolArgument) {
-		boolArguments[boolArgumentsCount++] = boolArgument;
+	void PushArgument(void* argument) {
+		argumentsPointers[argumentsCount++] = argument;
 	}
 
 	void clear() {
-		integerReturn = nullptr;
+		returnPointer = nullptr;
 		instancePointer = nullptr;
-		boolArgumentsCount = 0;
+		argumentsCount = 0;
 		for (int i = 0; i < MAX_ARGUMENTS; i++) {
-			boolArguments[i] = 0;
+			argumentsPointers[i] = nullptr;
 		}
 	}
 };

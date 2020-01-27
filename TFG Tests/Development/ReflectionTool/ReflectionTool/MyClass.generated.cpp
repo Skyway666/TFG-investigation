@@ -15,7 +15,7 @@ void MyClassFuncWrap_sum1ToA() {
 	TypeInfo* metadata = &MyClass::metadata;
 	MethodDataHolder methodDataHolder = metadata->methodDataHolder;
 
-	*methodDataHolder.integerReturn = ((MyClass*)methodDataHolder.instancePointer)->sum1ToA(methodDataHolder.boolArguments[0]);
+	*(int*)methodDataHolder.returnPointer = ((MyClass*)methodDataHolder.instancePointer)->sum1ToA(*(bool*)methodDataHolder.argumentsPointers[0]);
 }
 
 // Fill "TypeInfo metadata"
