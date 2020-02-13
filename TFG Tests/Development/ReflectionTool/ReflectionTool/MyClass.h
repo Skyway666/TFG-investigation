@@ -1,8 +1,6 @@
 #ifndef MYCLASS_CLASS
 #define MYCLASS_CLASS
 
-#include "MyClass.generated.h"
-
 class MyClass {
 public:
 	// Fields
@@ -21,11 +19,6 @@ public:
 
 		return a;
 	}
-
-
-	// TODO(Lucas): Should be stored in a list. Outside of the class, with information to find it by string or template
-	static TypeInfo metadata;
-	static void registerForReflection();
 };
 
 #endif

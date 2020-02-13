@@ -21,12 +21,18 @@
     <ClCompile Include="MyClass.generated.cpp">
       <Filter>Archivos de origen\CPP</Filter>
     </ClCompile>
+    <ClCompile Include="Reflection.cpp">
+      <Filter>Archivos de origen\CPP</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyClass.h">
       <Filter>Archivos de origen\H</Filter>
     </ClInclude>
     <ClInclude Include="MyClass.generated.h">
+      <Filter>Archivos de origen\H</Filter>
+    </ClInclude>
+    <ClInclude Include="Reflection.h">
       <Filter>Archivos de origen\H</Filter>
     </ClInclude>
   </ItemGroup>

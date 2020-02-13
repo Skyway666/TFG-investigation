@@ -1,10 +1,15 @@
 
 #include "MyClass.h"
+#include "Reflection.h"
+
+
+#include "MyClass.generated.h"
 
 
 int main() {
 
-	MyClass::registerForReflection();
+	registerMyClassForReflection();
+
 
 	MyClass instance;
 	instance.a = 5;
@@ -17,30 +22,31 @@ int main() {
 	instance.numbers[2] = 9;
 
 
+	TypeInfo* myClassMetadata = Reflection::getMetadataFor("MyClass");
 
-	int a_value = MyClass::metadata.getIntegerValue(&instance, "a");
-	int b_value = MyClass::metadata.getIntegerValue(&instance, "b");
-	bool is_value = MyClass::metadata.getBoolValue(&instance, "is");
-	const char* name_value = MyClass::metadata.getConstStringValue(&instance, "name");
+	int a_value = myClassMetadata->getIntegerValue(&instance, "a");
+	int b_value = myClassMetadata->getIntegerValue(&instance, "b");
+	bool is_value = myClassMetadata->getBoolValue(&instance, "is");
+	const char* name_value = myClassMetadata->getConstStringValue(&instance, "name");
 	char message_value[150];
-	MyClass::metadata.getStringVaue(&instance, "message", message_value, 150);
+	myClassMetadata->getStringVaue(&instance, "message", message_value, 150);
 	int numbers_value[3];
-	MyClass::metadata.getArrayValue(&instance, "numbers", numbers_value);
+	myClassMetadata->getArrayValue(&instance, "numbers", numbers_value);
 
-	Type a_type = MyClass::metadata.getFieldType("a");
-	Type is_type = MyClass::metadata.getFieldType("is");
-	Type name_type = MyClass::metadata.getFieldType("name");
-	Type message_type = MyClass::metadata.getFieldType("message");
-	Type numbers_type = MyClass::metadata.getFieldType("numbers");
+	Type a_type = myClassMetadata->getFieldType("a");
+	Type is_type = myClassMetadata->getFieldType("is");
+	Type name_type = myClassMetadata->getFieldType("name");
+	Type message_type = myClassMetadata->getFieldType("message");
+	Type numbers_type = myClassMetadata->getFieldType("numbers");
 
 
 	// Methods
 	int sum1toA_return = 0;
 	bool boolArgument1 = true;
 
-	MyClass::metadata.methodDataHolder.PushReturnPointer(&sum1toA_return);
-	MyClass::metadata.methodDataHolder.PushArgument(&boolArgument1);
-	MyClass::metadata.Invoke(&instance, "sum1ToA");
+	myClassMetadata->methodDataHolder.PushReturnPointer(&sum1toA_return);
+	myClassMetadata->methodDataHolder.PushArgument(&boolArgument1);
+	myClassMetadata->Invoke(&instance, "sum1ToA");
 
 	return 0;
 

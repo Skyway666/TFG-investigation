@@ -1,28 +1,29 @@
 
 
+#include "Reflection.h"
 #include "MyClass.h"
-
-// Temporal static member of the reflected class, should be stored in a list.
-TypeInfo MyClass::metadata;
 
 
 
 // Automatically generated
 
 
-// FUNCTION REFLECTION
+// FUNCTION REFLECTION: TODO(Lucas): Rename so function overload is supported
 void MyClassFuncWrap_sum1ToA() {
-	TypeInfo* metadata = &MyClass::metadata;
+	TypeInfo* metadata = Reflection::getMetadataFor("MyClass");
 	MethodDataHolder methodDataHolder = metadata->methodDataHolder;
 
 	*(int*)methodDataHolder.returnPointer = ((MyClass*)methodDataHolder.instancePointer)->sum1ToA(*(bool*)methodDataHolder.argumentsPointers[0]);
 }
 
-// Fill "TypeInfo metadata"
-void MyClass::registerForReflection() {
+// Fill "TypeInfo metadata" for MyClass: TODO(Lucas): Consider returning integer with the position of the newly registered metadata
+void registerMyClassForReflection() {
 	
-	TypeInfo* metadata = &MyClass::metadata;
+	TypeInfo* metadata = &Reflection::metadata[Reflection::metadata_index++];
 
+	// Name
+
+	metadata->name = "MyClass";
 	// FIELDS
 
 	// Add "int a" field
