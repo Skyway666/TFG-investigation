@@ -1,7 +1,7 @@
 #include "Reflection.h"
 
 TypeInfo Reflection::metadata[];
-int Reflection::metadata_index = 0;
+int Reflection::metadataIndex = 0;
 
 Reflection::Reflection() {
 }
@@ -13,7 +13,7 @@ Reflection::~Reflection() {
 
 TypeInfo* Reflection::getMetadataFor(const char* objectName) {
 
-	for (int i = 0; i < metadata_index; i++)
+	for (int i = 0; i < metadataIndex; i++)
 		if (strcmp(objectName, metadata[i].name) == 0)
 			return &metadata[i];
 

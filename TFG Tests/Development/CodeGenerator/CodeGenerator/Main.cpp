@@ -2,6 +2,9 @@
 #include "FileSystem.h"
 #include <string>
 #define MAX_NAME_CHARS 30
+#define MAX_PROPERTIES 30
+#define MAX_METHODS 30
+#define MAX_ARGUMENTS 10
 #define TEN_THOUSEND 10000
 
 enum TokenType {
@@ -39,6 +42,16 @@ enum TokenType {
 
 };
 
+enum Type {
+	NULL_TYPE,
+	VOID,
+	INT,
+	CONST_STRING,
+	STRING,
+	BOOL,
+	ARRAY
+};
+
 struct Token {
 	// Constructors
 	Token(): type(TokenType::NULL_TOKEN){}
@@ -51,6 +64,35 @@ struct Token {
 	// Probably  use dynamic memory, most tokkens don't need a name but some of them do
 	char name[MAX_NAME_CHARS] = { '\0' };
 };
+
+class PProperty {
+	char name[MAX_NAME_CHARS];
+	Type type = Type::NULL_TYPE;
+
+	Type arrayType = Type::NULL_TYPE;
+	int arraySize = 0; // IN MEMORY. To get size of elements -> arraySize / enum2sizeof(arrayType)
+};
+
+class PMethod {
+	char name[MAX_NAME_CHARS];
+
+	Type returnValue = Type::NULL_TYPE;
+	int argumentsIndex;
+	Type arguments[MAX_ARGUMENTS];
+
+};
+
+class PClass {
+	char name[MAX_NAME_CHARS];
+
+	int propertyIndex = 0;
+	PProperty properties[MAX_PROPERTIES];
+
+	int methodIndex = 0;
+	PMethod methods[MAX_METHODS];
+};
+
+
 
 
 Token parseSeparationTokken(char character) {
@@ -209,9 +251,6 @@ int main() {
 				Bit[i] = '\0';
 			bitCount = 0;
 		}
-		
-
-
 	}
 
 

@@ -12,6 +12,7 @@
 // Static part from reflection library
 enum Type {
 	NULL_TYPE,
+	VOID,
 	INT,
 	CONST_STRING,
 	STRING,
@@ -79,11 +80,11 @@ public:
 
 	const char* name;
 	// Properties
-	unsigned int property_index = 0;
+	unsigned int propertyIndex = 0;
 	Property properties[MAX_PROPERTIES];
 
 	void pushProperty(Property property) {
-		properties[property_index++] = property;
+		properties[propertyIndex++] = property;
 	}
 
 	// Get field data from pointers
@@ -128,7 +129,7 @@ public:
 
 	// Should return some form of container, since several variables of different type can be declared with the same variable name
 	Type getFieldType(const char* name) {
-		for (int i = 0; i < property_index; i++)
+		for (int i = 0; i < propertyIndex; i++)
 			if (strcmp(name, properties[i].name) == 0)
 				return properties[i].type;
 
@@ -137,12 +138,12 @@ public:
 
 
 	// Methods
-	unsigned int method_index = 0;
+	unsigned int methodIndex = 0;
 	Method methods[MAX_METHODS];
 	MethodDataHolder methodDataHolder;
 
 	void pushMethod(Method method) {
-		methods[method_index++] = method;
+		methods[methodIndex++] = method;
 	}
 	// Invoke methods from pointers
 
@@ -155,7 +156,7 @@ public:
 	// Helper functions
 
 	Property getPropertyByStringAndType(const char* name, Type type) {
-		for (int i = 0; i < property_index; i++)
+		for (int i = 0; i < propertyIndex; i++)
 			if (strcmp(name, properties[i].name) == 0 && type == properties[i].type)
 				return properties[i];
 
@@ -164,7 +165,7 @@ public:
 
 	// Should be string, return value and arguments
 	Method getMethodByString(const char* name) {
-		for (int i = 0; i < method_index; i++)
+		for (int i = 0; i < methodIndex; i++)
 			if (strcmp(name, methods[i].name) == 0)
 				return methods[i];
 
@@ -181,7 +182,7 @@ public:
 
 	static TypeInfo* getMetadataFor(const char* objectName);
 
-	static int metadata_index;
+	static int metadataIndex;
 	static TypeInfo metadata[MAX_TYPE_INFO];
 };
 

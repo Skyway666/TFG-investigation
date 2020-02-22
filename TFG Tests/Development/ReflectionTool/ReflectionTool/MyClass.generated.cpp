@@ -19,7 +19,7 @@ void MyClassFuncWrap_sum1ToA() {
 // Fill "TypeInfo metadata" for MyClass: TODO(Lucas): Consider returning integer with the position of the newly registered metadata
 void registerMyClassForReflection() {
 	
-	TypeInfo* metadata = &Reflection::metadata[Reflection::metadata_index++];
+	TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];
 
 	// Name
 
