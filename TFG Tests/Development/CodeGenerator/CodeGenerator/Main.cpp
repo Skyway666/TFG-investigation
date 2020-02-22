@@ -65,7 +65,7 @@ struct Token {
 	char name[MAX_NAME_CHARS] = { '\0' };
 };
 
-class PProperty {
+struct PProperty {
 	char name[MAX_NAME_CHARS];
 	Type type = Type::NULL_TYPE;
 
@@ -73,7 +73,7 @@ class PProperty {
 	int arraySize = 0; // IN MEMORY. To get size of elements -> arraySize / enum2sizeof(arrayType)
 };
 
-class PMethod {
+struct PMethod {
 	char name[MAX_NAME_CHARS];
 
 	Type returnValue = Type::NULL_TYPE;
@@ -82,7 +82,7 @@ class PMethod {
 
 };
 
-class PClass {
+struct PClass {
 	char name[MAX_NAME_CHARS];
 
 	int propertyIndex = 0;
@@ -90,6 +90,13 @@ class PClass {
 
 	int methodIndex = 0;
 	PMethod methods[MAX_METHODS];
+
+
+	void Parse(Token* tokens, int* currentToken) {
+
+
+	}
+
 };
 
 
@@ -131,6 +138,8 @@ Token parseSeparationTokken(char character) {
 
 int main() {
 	
+	// LEXER/TOKENIZER
+
 	char* code = nullptr;
 	int codeSize = 0;
 	codeSize = ImportFileString("ParsedFiles/MyClass.h", &code);
@@ -253,6 +262,22 @@ int main() {
 		}
 	}
 
+	// PARSER
+
+	// Looking for a class
+		
+	int currentToken = 0;
+	// For the moment we are only looking at one class/ file
+	PClass classDefinition;
+	while (tokens[currentToken].type != TokenType::NULL_TOKEN) {
+
+		if (tokens[currentToken].type == TokenType::KW_CLASS) {
+			classDefinition.Parse(tokens, &currentToken);
+		}
+
+
+		currentToken++;
+	}
 
 	return 0;
 }
