@@ -65,12 +65,21 @@ struct Token {
 	char name[MAX_NAME_CHARS] = { '\0' };
 };
 
+bool tokenIsType(TokenType type) {
+	return type == TokenType::TY_BOOL || type == TokenType::TY_CHAR || type == TokenType::TY_INT || type == TokenType::TY_VOID;
+}
+
+
 struct PProperty {
 	char name[MAX_NAME_CHARS];
 	Type type = Type::NULL_TYPE;
 
 	Type arrayType = Type::NULL_TYPE;
 	int arraySize = 0; // IN MEMORY. To get size of elements -> arraySize / enum2sizeof(arrayType)
+
+	void Parse(Token* tokens, int* currentToken) {
+
+	}
 };
 
 struct PMethod {
@@ -79,6 +88,10 @@ struct PMethod {
 	Type returnValue = Type::NULL_TYPE;
 	int argumentsIndex;
 	Type arguments[MAX_ARGUMENTS];
+
+	void Parse(Token* tokens, int* currentToken) {
+
+	}
 
 };
 
@@ -91,9 +104,40 @@ struct PClass {
 	int methodIndex = 0;
 	PMethod methods[MAX_METHODS];
 
-
 	void Parse(Token* tokens, int* currentToken) {
+		// For the moment we are only looking at one class/ file
+		while (tokens[*currentToken].type != TokenType::NULL_TOKEN) {
 
+			if (tokenIsType(tokens[*currentToken].type)) {
+				// We have either a method or a property
+				int i = *currentToken;
+				bool isMethod = false;
+				while (true) {
+					if (tokens[i].type == TokenType::SEP_OPEN_FUNC){
+						isMethod = true;
+						break;
+					}
+					if (tokens[i].type == TokenType::SEP_SEMICOL)
+						break;
+					i++;
+				}
+
+				if(isMethod){
+					// It's a method
+					PMethod method;
+					method.Parse(tokens, currentToken);
+					methods[methodIndex++] = method;
+				}
+				else {
+					// It's a property
+					PProperty property;
+					property.Parse(tokens, currentToken);
+					properties[propertyIndex++] = property;
+				}
+
+			}
+			(*currentToken)++;
+		}
 
 	}
 
