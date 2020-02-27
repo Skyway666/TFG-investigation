@@ -21,6 +21,17 @@ enum Type {
 };
 
 // TODO(Lucas): Consider changing name
+
+// Struc intended to be returned to the user
+struct TypeDef {
+	TypeDef(){}
+	TypeDef(Type type, int arraySize): type(type), arraySize(arraySize){}
+
+	Type type = Type::NULL_TYPE;
+	int arraySize = -1;
+};
+
+// Private stuff, don't give the user access
 struct Property {
 	Property() {}
 	Property(const char* name, int offset, Type type) :name(name), offset(offset), type(type) {}
@@ -29,8 +40,7 @@ struct Property {
 	Type type = Type::NULL_TYPE;
 
 	// Only to be used for arrays
-	Type arrayType = Type::NULL_TYPE;
-	int arraySize = 0; // IN MEMORY. To get size of elements -> arraySize / enum2sizeof(arrayType)
+	int arraySize = 0; // IN MEMORY. To get size of elements -> arraySize / enum2sizeof(type). If arraySize is more than 0, it is an array
 };
 
 struct Method {
@@ -89,7 +99,7 @@ public:
 
 	// Get field data from pointers
 	int getIntegerValue(void* instance_ptr, const char* name) {
-		Property property = getPropertyByStringAndType(name, Type::INT);
+		Property property = getVariable(name, Type::INT);
 
 		int ret = *((int*)((size_t)instance_ptr + property.offset));
 
@@ -97,14 +107,14 @@ public:
 	}
 
 	bool getBoolValue(void* instance_ptr, const char* name) {
-		Property property = getPropertyByStringAndType(name, Type::BOOL);
+		Property property = getVariable(name, Type::BOOL);
 
 		bool ret = *((bool*)((size_t)instance_ptr + property.offset));
 
 		return ret;
 	}
 	const char* getConstStringValue(void* instance_ptr, const char* name) {
-		Property property = getPropertyByStringAndType(name, Type::CONST_STRING);
+		Property property = getVariable(name, Type::CONST_STRING);
 
 		const char* ret = *((const char**)((size_t)instance_ptr + property.offset));
 
@@ -112,15 +122,15 @@ public:
 	}
 
 	void getStringVaue(void* instance_ptr, const char* name, char* output_string, size_t size) {
-		Property property = getPropertyByStringAndType(name, Type::STRING);
+		Property property = getVariable(name, Type::STRING);
 
 		char* to_copy_str = ((char*)((size_t)instance_ptr + property.offset));
 
 		strcpy_s(output_string, size, to_copy_str);
 	}
 
-	void getArrayValue(void* instance_ptr, const char* name, void* output_array) {
-		Property property = getPropertyByStringAndType(name, Type::ARRAY);
+	void getArrayValue(void* instance_ptr, const char* name, Type elementType, void* output_array) {
+		Property property = getArray(name, elementType);
 
 		void* to_copy_arr = ((void*)((size_t)instance_ptr + property.offset));
 
@@ -128,12 +138,13 @@ public:
 	}
 
 	// Should return some form of container, since several variables of different type can be declared with the same variable name
-	Type getFieldType(const char* name) {
+	TypeDef getFieldType(const char* name) {
 		for (int i = 0; i < propertyIndex; i++)
-			if (strcmp(name, properties[i].name) == 0)
-				return properties[i].type;
-
-		return Type::NULL_TYPE;
+			if (strcmp(name, properties[i].name) == 0) {
+				return TypeDef(properties[i].type, properties[i].arraySize);
+			}
+		
+		return TypeDef();
 	}
 
 
@@ -155,9 +166,17 @@ public:
 	}
 	// Helper functions
 
-	Property getPropertyByStringAndType(const char* name, Type type) {
+	Property getVariable(const char* name, Type type) {
 		for (int i = 0; i < propertyIndex; i++)
-			if (strcmp(name, properties[i].name) == 0 && type == properties[i].type)
+			if (strcmp(name, properties[i].name) == 0 && type == properties[i].type && properties[i].arraySize == 0)
+				return properties[i];
+
+		return Property();
+	}
+
+	Property getArray(const char* name, Type type) {
+		for (int i = 0; i < propertyIndex; i++)
+			if (strcmp(name, properties[i].name) == 0 && type == properties[i].type && properties[i].arraySize != 0)
 				return properties[i];
 
 		return Property();

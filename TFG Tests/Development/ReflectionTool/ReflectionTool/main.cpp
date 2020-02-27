@@ -31,13 +31,13 @@ int main() {
 	char message_value[150];
 	myClassMetadata->getStringVaue(&instance, "message", message_value, 150);
 	int numbers_value[3];
-	myClassMetadata->getArrayValue(&instance, "numbers", numbers_value);
+	myClassMetadata->getArrayValue(&instance, "numbers", Type::INT, numbers_value);
 
-	Type a_type = myClassMetadata->getFieldType("a");
-	Type is_type = myClassMetadata->getFieldType("is");
-	Type name_type = myClassMetadata->getFieldType("name");
-	Type message_type = myClassMetadata->getFieldType("message");
-	Type numbers_type = myClassMetadata->getFieldType("numbers");
+	TypeDef a_type = myClassMetadata->getFieldType("a");
+	TypeDef is_type = myClassMetadata->getFieldType("is");
+	TypeDef name_type = myClassMetadata->getFieldType("name");
+	TypeDef message_type = myClassMetadata->getFieldType("message");
+	TypeDef numbers_type = myClassMetadata->getFieldType("numbers");
 
 
 	// Methods
