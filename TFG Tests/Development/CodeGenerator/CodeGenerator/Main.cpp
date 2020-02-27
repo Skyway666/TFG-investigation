@@ -48,8 +48,7 @@ enum Type {
 	INT,
 	CONST_STRING,
 	STRING,
-	BOOL,
-	ARRAY
+	BOOL
 };
 
 struct Token {
@@ -96,7 +95,6 @@ struct PProperty {
 	char name[MAX_NAME_CHARS];
 	Type type = Type::NULL_TYPE;
 
-	Type arrayType = Type::NULL_TYPE;
 	int arraySize = 0; // IN MEMORY. To get size of elements -> arraySize / enum2sizeof(arrayType)
 
 	void Parse(Token* tokens, int* currentToken) {

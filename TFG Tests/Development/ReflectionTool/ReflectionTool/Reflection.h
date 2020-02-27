@@ -16,8 +16,7 @@ enum Type {
 	INT,
 	CONST_STRING,
 	STRING,
-	BOOL,
-	ARRAY
+	BOOL
 };
 
 // TODO(Lucas): Consider changing name
