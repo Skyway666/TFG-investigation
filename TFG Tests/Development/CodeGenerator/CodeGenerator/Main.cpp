@@ -102,17 +102,30 @@ struct PProperty {
 
 		type = token2Type(tokens[*currentToken].type);
 		bool nameFound = false;
+		bool pointerFound = false;
 
 		(*currentToken)++; // Go passed the type specifier
 
 		while (tokens[*currentToken].type != TokenType::SEP_SEMICOL) {
 
+			// If we find a pointer we are probably working with a const char * (for the moment)
+			if (tokens[*currentToken].type == TokenType::SEP_POINTER && !pointerFound) {
+				if (type == Type::STRING) {
+					type = Type::CONST_STRING;
+				}
+				pointerFound = true;
+			}
+			// Name of the variable
 			if (tokens[*currentToken].type == TokenType::USER_BIT && !nameFound) {
 				strcpy_s(name, MAX_NAME_CHARS, tokens[*currentToken].name);
 				nameFound = true;
 			}
 			if (tokens[*currentToken].type == TokenType::SEP_OPEN_ARR) {
 				// Look for the next "user bit" and convert the string to a number. This is the array size.
+				while (tokens[*currentToken].type != TokenType::USER_BIT) {
+					(*currentToken)++;
+				}
+				arraySize = std::stoi(tokens[*currentToken].name);
 			}
 
 			(*currentToken)++;
@@ -387,9 +400,8 @@ int main() {
 
 		if (tokens[currentToken].type == TokenType::KW_CLASS) {
 			classDefinition.Parse(tokens, &currentToken);
+			break;
 		}
-
-
 		currentToken++;
 	}
 
