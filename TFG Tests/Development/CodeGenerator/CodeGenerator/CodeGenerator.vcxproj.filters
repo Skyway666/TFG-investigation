@@ -11,19 +11,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
-      <Filter>CPP</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="FileSystem.h">
       <Filter>H</Filter>
     </ClInclude>
     <ClInclude Include="Globals.h">
       <Filter>H</Filter>
     </ClInclude>
-    <ClInclude Include="Tokenizer.cpp">
+    <ClInclude Include="Tokenizer.h">
       <Filter>H</Filter>
     </ClInclude>
+    <ClInclude Include="Parser.h">
+      <Filter>H</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeGenerator.h">
+      <Filter>H</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>CPP</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

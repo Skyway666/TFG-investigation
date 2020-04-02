@@ -4,6 +4,4 @@
 
 void registerMyClassForReflection();
 
-
-
 #endif //TYPEINFO_CLASS

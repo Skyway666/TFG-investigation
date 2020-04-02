@@ -113,9 +113,11 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CodeGenerator.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="Globals.h" />
-    <ClInclude Include="Tokenizer.cpp" />
+    <ClInclude Include="Parser.h" />
+    <ClInclude Include="Tokenizer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
