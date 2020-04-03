@@ -1,1 +1,6 @@
-I'm going to reflect MyClass
+#ifndef MyClassCLASS
+#define MyClassCLASS
+
+void registerMyClassForReflection();
+
+#endif //MyClassCLASS
