@@ -44,15 +44,49 @@ struct Property {
 	int arraySize = 0; // IN MEMORY. To get size of elements -> arraySize / enum2sizeof(type). If arraySize is more than 0, it is an array
 };
 
-struct Method {
-	// Not used by reflection system "Invoke"
+struct MethodDef {
+
 	int argumentCount = 0;
 	Type returnValue = Type::NULL_TYPE;
-	Type arguments[MAX_ARGUMENTS];
-
-	// Only really needed by now
+	Type arguments[MAX_ARGUMENTS] = {Type::NULL_TYPE};
 	const char* name = "Null Method";
-	void(*function_wrapper)(void);
+
+	bool operator==(MethodDef def) {
+
+		if (strcmp(name, def.name) != 0)
+			return false;
+
+		if (argumentCount != def.argumentCount)
+			return false;
+
+		for (int i = 0; i < MAX_ARGUMENTS; i++) {
+			if (arguments[i] != def.arguments[i]) {
+				return false;
+			}
+		}
+
+		return  true;	 
+	}
+
+	void clear() {
+		argumentCount = 0;
+		returnValue = Type::NULL_TYPE;
+		for (int i = 0; i < MAX_ARGUMENTS; i++)
+			arguments[i] = Type::NULL_TYPE;
+		name = "Null Method";
+	}
+};
+
+struct Method {
+	// Method definition
+	MethodDef def;
+
+	void(*function_wrapper)(void) = nullptr;
+
+	void clear() {
+		def.clear();
+		function_wrapper = nullptr;
+	}
 };
 
 // To be used  by the function wrapper (could be stored in a static structure)
@@ -158,15 +192,22 @@ public:
 		methods[methodIndex++] = method;
 	}
 	// Invoke methods from pointers
-
 	void Invoke(void* instance_ptr, const char* name) {
 		Method method = getMethodByString(name);
 		methodDataHolder.instancePointer = instance_ptr;
 
 		method.function_wrapper();
 	}
-	// Helper functions
 
+	void Invoke(void* instance_ptr, MethodDef def) {
+		Method method = getMethodByDef(def);
+		methodDataHolder.instancePointer = instance_ptr;
+
+		method.function_wrapper();
+	}
+
+
+	// Get Properties
 	Property getVariable(const char* name, Type type) {
 		for (int i = 0; i < propertyIndex; i++)
 			if (strcmp(name, properties[i].name) == 0 && type == properties[i].type && properties[i].arraySize == 0)
@@ -183,10 +224,18 @@ public:
 		return Property();
 	}
 
-	// Should be string, return value and arguments
+	// Get methods
 	Method getMethodByString(const char* name) {
 		for (int i = 0; i < methodIndex; i++)
-			if (strcmp(name, methods[i].name) == 0)
+			if (strcmp(name, methods[i].def.name) == 0)
+				return methods[i];
+
+		return Method();
+	}
+
+	Method getMethodByDef(MethodDef def) {
+		for (int i = 0; i < methodIndex; i++)
+			if (methods[i].def == def)
 				return methods[i];
 
 		return Method();

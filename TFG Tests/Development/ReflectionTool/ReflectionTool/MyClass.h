@@ -19,6 +19,13 @@ public:
 
 		return a;
 	}
+
+	int addNumbers(int a, int b){
+		return a + b;
+	}
+	int addNumbers(int a, int b, int c) {
+		return a + b + c;
+	}
 };
 
 #endif

@@ -41,12 +41,57 @@ int main() {
 
 
 	// Methods
+
+	// void sum1toA(bool)
 	int sum1toA_return = 0;
 	bool boolArgument1 = true;
 
 	myClassMetadata->methodDataHolder.PushReturnPointer(&sum1toA_return);
 	myClassMetadata->methodDataHolder.PushArgument(&boolArgument1);
 	myClassMetadata->Invoke(&instance, "sum1ToA");
+
+	myClassMetadata->methodDataHolder.clear();
+
+	// int addNumbers(int, int)
+
+	// Data
+	int addNumbers_return = 0;
+	int intArgument1 = 3;
+	int intArgument2 = 10;
+
+	// Method definition, for overload support
+	MethodDef def;
+	def.argumentCount = 2;
+	def.arguments[0] = Type::INT;
+	def.arguments[1] = Type::INT;
+	def.name = "addNumbers";
+
+	myClassMetadata->methodDataHolder.PushReturnPointer(&addNumbers_return);
+	myClassMetadata->methodDataHolder.PushArgument(&intArgument1);
+	myClassMetadata->methodDataHolder.PushArgument(&intArgument2);
+	myClassMetadata->Invoke(&instance, def);
+
+	myClassMetadata->methodDataHolder.clear();
+	def.clear();
+
+	// int addNumbers(int, int, int)
+	intArgument1 = 4;
+	intArgument2 = 8;
+	int intArgument3 = 2;
+
+	// Method definition, for overload support
+	def.argumentCount = 3;
+	def.arguments[0] = Type::INT;
+	def.arguments[1] = Type::INT;
+	def.arguments[2] = Type::INT;
+	def.name = "addNumbers";
+	
+	myClassMetadata->methodDataHolder.PushReturnPointer(&addNumbers_return);
+	myClassMetadata->methodDataHolder.PushArgument(&intArgument1);
+	myClassMetadata->methodDataHolder.PushArgument(&intArgument2);
+	myClassMetadata->methodDataHolder.PushArgument(&intArgument3);
+	myClassMetadata->Invoke(&instance, def);
+	
 
 	return 0;
 
