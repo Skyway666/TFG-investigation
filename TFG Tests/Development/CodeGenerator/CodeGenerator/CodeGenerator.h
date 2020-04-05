@@ -3,6 +3,50 @@
 #include "Parser.h"
 #include "FileSystem.h"
 
+const char* type2String(Type type) {
+
+	switch (type) {
+		case Type::VOID:
+			return "VOID";
+		break;
+		case Type::INT:
+			return "INT";
+		break;
+		case Type::BOOL:
+			return "BOOL";
+		break;
+		case Type::STRING:
+			return "STRING";
+		break;
+		case Type::CONST_STRING:
+			return "CONST_STRING";
+		break;
+		
+	}
+}
+
+const char* type2Ctype(Type type) {
+
+	switch (type) {
+	case Type::VOID:
+		return "void";
+		break;
+	case Type::INT:
+		return "int";
+		break;
+	case Type::BOOL:
+		return "bool";
+		break;
+	case Type::STRING:
+		return "char";
+		break;
+	case Type::CONST_STRING:
+		return "const char*";
+		break;
+
+	}
+}
+
 void generateCode(PClass object) {
 
 	// Header
@@ -45,17 +89,39 @@ void generateCode(PClass object) {
 	cpp << headerName << "\"";
 	cpp << std::endl << std::endl;
 
+	// METHODS REFLECTION
+
+	// PROPS REFLECTION
 
 	cpp << "void register";
 	cpp << object.name;
-	// Open "registerXXXXForReflection()"
 	cpp << "ForReflection(){" << std::endl;
+	// Open "registerXXXXForReflection()"
 
-	cpp << "// I have initialized an integer automatically :)" << std::endl;
-	cpp << "int a = 2;" << std::endl;
+	cpp << "TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];" << std::endl << std::endl;
+
+	cpp << "metadata->name = " << object.name << std::endl << std::endl;
+
+	for (int i = 0; i < object.propertyIndex; i++) {
+		PProperty prop = object.properties[i];
+
+		cpp << "metadata->pushProperty(Property(\"" << prop.name << "\", ";
+		cpp << "offsetof(" << object.name << ", " << object.name << "::" << prop.name << "), ";
+		cpp << "Type::" << type2String(prop.type);
+
+		if (prop.arraySize[0] != '\0') {
+			cpp << ", ";
+			cpp << prop.arraySize << " * sizeof(" << type2Ctype(prop.type) << ")";
+		}
+
+		cpp << "));" << std::endl;
+
+	}
 
 	cpp << "}" << std::endl;
 	// Close "registerXXXXForReflection()"
+
+	cpp.close();
 	
 
 }

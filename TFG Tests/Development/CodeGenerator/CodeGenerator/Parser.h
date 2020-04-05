@@ -32,7 +32,7 @@ struct PProperty {
 	char name[MAX_NAME_CHARS];
 	Type type = Type::NULL_TYPE;
 
-	int arraySize = 0; // IN MEMORY. To get size of elements -> arraySize / enum2sizeof(arrayType)
+	char arraySize[MAX_ARRAY_DIGITS]; // IN MEMORY. To get size of elements -> arraySize / enum2sizeof(arrayType)
 
 	void Parse(Token* tokens, int* currentToken) {
 		// Current token is the Property type
@@ -40,6 +40,7 @@ struct PProperty {
 		type = token2Type(tokens[*currentToken].type);
 		bool nameFound = false;
 		bool pointerFound = false;
+		arraySize[0] = '\0';
 
 		(*currentToken)++; // Go passed the type specifier
 
@@ -62,7 +63,7 @@ struct PProperty {
 				while (tokens[*currentToken].type != TokenType::USER_BIT) {
 					(*currentToken)++;
 				}
-				arraySize = std::stoi(tokens[*currentToken].name);
+				strcpy_s(arraySize, MAX_ARRAY_DIGITS, tokens[*currentToken].name);
 			}
 
 			(*currentToken)++;

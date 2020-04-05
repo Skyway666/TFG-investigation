@@ -34,6 +34,8 @@ struct TypeDef {
 struct Property {
 	Property() {}
 	Property(const char* name, int offset, Type type) :name(name), offset(offset), type(type) {}
+	Property(const char* name, int offset, Type type, int arraySize) :
+	name(name), offset(offset), type(type), arraySize(arraySize) {}
 	const char* name = "null";
 	size_t offset = 0;
 	Type type = Type::NULL_TYPE;

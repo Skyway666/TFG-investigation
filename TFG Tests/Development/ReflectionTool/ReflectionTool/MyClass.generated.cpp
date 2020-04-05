@@ -42,9 +42,7 @@ void registerMyClassForReflection() {
 	metadata->pushProperty(Property("message", offsetof(MyClass, MyClass::message), Type::STRING));
 
 	// Add "numbers" field
-	Property numbers = Property("numbers", offsetof(MyClass, MyClass::numbers), Type::INT);
-	numbers.arraySize = 3 * sizeof(int);
-	metadata->pushProperty(numbers);
+	metadata->pushProperty(Property("numbers", offsetof(MyClass, MyClass::numbers), Type::INT, 3 * sizeof(int)));
 
 
 	//METHODS

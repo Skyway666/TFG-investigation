@@ -5,6 +5,7 @@
 #define MAX_PROPERTIES 30
 #define MAX_METHODS 30
 #define MAX_ARGUMENTS 10
+#define MAX_ARRAY_DIGITS 15
 #define TEN_THOUSEND 10000
 
 enum TokenType {
