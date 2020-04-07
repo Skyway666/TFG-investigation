@@ -23,7 +23,8 @@ public:
 	int addNumbers(int a, int b){
 		return a + b;
 	}
-	int addNumbers(int a, int b, int c) {
+	int addNumbers(int& a, int b, int c) {
+		a = b + c;
 		return a + b + c;
 	}
 };
