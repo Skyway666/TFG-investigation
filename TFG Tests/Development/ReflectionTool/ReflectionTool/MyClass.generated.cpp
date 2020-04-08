@@ -9,21 +9,21 @@
 
 
 // FUNCTION REFLECTION: TODO(Lucas): Rename so function overload is supported
-void MyClassFuncWrap_sum1ToA_bool() {
+void MyClassFuncWrap_sum1ToA_BOOL() {
 	TypeInfo* metadata = Reflection::getMetadataFor("MyClass");
 	MethodDataHolder methodDataHolder = metadata->methodDataHolder;
 
 	*(int*)methodDataHolder.returnPointer = ((MyClass*)methodDataHolder.instancePointer)->sum1ToA(*(bool*)methodDataHolder.argumentsPointers[0]);
 }
 
-void MyClassFuncWrap_addNumbers_int_int() {
+void MyClassFuncWrap_addNumbers_INT_INT() {
 	TypeInfo* metadata = Reflection::getMetadataFor("MyClass");
 	MethodDataHolder methodDataHolder = metadata->methodDataHolder;
 
 	*(int*)methodDataHolder.returnPointer = ((MyClass*)methodDataHolder.instancePointer)->addNumbers(*(int*)methodDataHolder.argumentsPointers[0], *(int*)methodDataHolder.argumentsPointers[1]);
 }
 
-void MyClassFuncWrap_addNumbers_int_int_int() {
+void MyClassFuncWrap_addNumbers_INT_INT_INT() {
 	TypeInfo* metadata = Reflection::getMetadataFor("MyClass");
 	MethodDataHolder methodDataHolder = metadata->methodDataHolder;
 
@@ -64,7 +64,7 @@ void registerMyClassForReflection() {
 
 	// Add "void sum1ToA(bool)" method
 	Method method;
-	method.function_wrapper = &MyClassFuncWrap_sum1ToA_bool;
+	method.function_wrapper = &MyClassFuncWrap_sum1ToA_BOOL;
 	method.def.name = "sum1ToA";
 	method.def.returnValue = Type::INT;
 	// Maybe it could be just "pushArgument()"
@@ -75,7 +75,7 @@ void registerMyClassForReflection() {
 	method.clear();
 
 	// Add "int addNumbers(int, int)" method
-	method.function_wrapper = &MyClassFuncWrap_addNumbers_int_int;
+	method.function_wrapper = &MyClassFuncWrap_addNumbers_INT_INT;
 	method.def.name = "addNumbers";
 	method.def.returnValue = Type::INT;
 	// Maybe it could be just "pushArgument()"
@@ -86,7 +86,7 @@ void registerMyClassForReflection() {
 	metadata->pushMethod(method);
 
 	// Add "int addNumbers(int, int, int)" method
-	method.function_wrapper = &MyClassFuncWrap_addNumbers_int_int_int;
+	method.function_wrapper = &MyClassFuncWrap_addNumbers_INT_INT_INT;
 	method.def.name = "addNumbers";
 	method.def.returnValue = Type::INT;
 	// Maybe it could be just "pushArgument()"

@@ -1,6 +1,10 @@
 #include "Reflection.h"
 #include "MyClass.generated.h"
 
+void MyClassFuncWrap_sum1ToA_BOOL() {
+char whatHappens[100] = "Function implementation";
+}
+
 void registerMyClassForReflection(){
 TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];
 

@@ -21,7 +21,6 @@ const char* type2String(Type type) {
 		case Type::CONST_STRING:
 			return "CONST_STRING";
 		break;
-		
 	}
 }
 
@@ -45,6 +44,20 @@ const char* type2Ctype(Type type) {
 		break;
 
 	}
+}
+
+void writeFunctionDeclaration(std::ofstream& cpp, char* className, PMethod method) {
+
+	cpp << "void " << className << "FuncWrap_";
+
+	cpp << method.name;
+	for (int i = 0; i < method.argumentsIndex; i++) {
+		Type argument = method.arguments[i];
+		cpp << "_" << type2String(method.arguments[i]);
+	}
+
+	cpp << "() {";
+	cpp << std::endl;
 }
 
 void generateCode(PClass object) {
@@ -89,15 +102,28 @@ void generateCode(PClass object) {
 	cpp << headerName << "\"";
 	cpp << std::endl << std::endl;
 
-	// METHODS REFLECTION
+	// METHODS WRAPPERS
+	for (int i = 0; i < object.methodIndex; i++) {
 
-	// PROPS REFLECTION
+		PMethod method = object.methods[i];
+
+		writeFunctionDeclaration(cpp, object.name, method);
+		// Open "ClassNameFuncWrap_functionName_ARGUMENT1TYPE_ARGUMENT2TYPE...()
+		cpp << "char whatHappens[100] = \"Function implementation\";";
+		cpp << std::endl;
+		cpp << "}";
+		cpp << std::endl << std::endl;
+	}
+
+
+
 
 	cpp << "void register";
 	cpp << object.name;
 	cpp << "ForReflection(){" << std::endl;
-	// Open "registerXXXXForReflection()"
+	// Open "registerClassNameForReflection()"
 
+	// PROPS REFLECTION
 	cpp << "TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];" << std::endl << std::endl;
 
 	cpp << "metadata->name = " << object.name << std::endl << std::endl;
@@ -119,7 +145,12 @@ void generateCode(PClass object) {
 	}
 
 	cpp << "}" << std::endl;
-	// Close "registerXXXXForReflection()"
+
+	// METHOD REFLECTION
+
+
+
+	// Close "registerClassForReflection()"
 
 	cpp.close();
 	
