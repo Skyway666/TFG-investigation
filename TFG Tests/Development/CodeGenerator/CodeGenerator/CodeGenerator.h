@@ -48,16 +48,13 @@ const char* type2Ctype(Type type) {
 
 void writeFunctionDeclaration(std::ofstream& cpp, char* className, PMethod method) {
 
-	cpp << "void " << className << "FuncWrap_";
+	cpp  << className << "FuncWrap_";
 
 	cpp << method.name;
 	for (int i = 0; i < method.argumentsIndex; i++) {
 		Type argument = method.arguments[i];
 		cpp << "_" << type2String(method.arguments[i]);
 	}
-
-	cpp << "() {";
-	cpp << std::endl;
 }
 
 void generateCode(PClass object) {
@@ -107,11 +104,34 @@ void generateCode(PClass object) {
 
 		PMethod method = object.methods[i];
 
+		cpp << "void ";
 		writeFunctionDeclaration(cpp, object.name, method);
+		cpp << "() {";
+		cpp << std::endl;
 		// Open "ClassNameFuncWrap_functionName_ARGUMENT1TYPE_ARGUMENT2TYPE...()
-		cpp << "char whatHappens[100] = \"Function implementation\";";
+		cpp << "TypeInfo* metadata = Reflection::getMetadataFor(\"" << object.name << "\");" << std::endl;
+		cpp << "MethodDataHolder mdh = metadata->methodDataHolder;" << std::endl << std::endl;
+
+		if (method.returnValue != Type::VOID) {
+			cpp << "*(" << type2Ctype(method.returnValue) << "*)mdh.returnPointer = ";
+		}
+
+		cpp << "((" << object.name << "*)mdh.instancePointer)->" << method.name << "(";
+
+		for (int i = 0; i < method.argumentsIndex; i++) {
+			Type argument = method.arguments[i];
+			cpp << "*(" << type2Ctype(method.arguments[i]) << "*)mdh.argumentPointers[" << std::to_string(i) << "]";
+			if (i != method.argumentsIndex - 1) {
+				cpp << ", ";
+			}
+
+		}
+		cpp << ");";
+
+		// Close "ClassNameFuncWrap_functionName_ARGUMENT1TYPE_ARGUMENT2TYPE...()
 		cpp << std::endl;
 		cpp << "}";
+
 		cpp << std::endl << std::endl;
 	}
 
@@ -143,15 +163,31 @@ void generateCode(PClass object) {
 		cpp << "));" << std::endl;
 
 	}
-
-	cpp << "}" << std::endl;
+	cpp << std::endl;
 
 	// METHOD REFLECTION
+	cpp << "Method method;" << std::endl;
 
+	for (int i = 0; i < object.methodIndex; i++) {
+		PMethod method = object.methods[i];
+		cpp << "method.function_wrapper = &";
+		writeFunctionDeclaration(cpp, object.name, method);
+		cpp << ";" << std::endl;
+		cpp << "method.def.name = \"" << method.name << "\";" << std::endl;
+		cpp << "method.def.returnValue = Type::" << type2String(method.returnValue) << ";" << std::endl;
+
+		for (int i = 0; i < method.argumentsIndex; i++) {
+			cpp << "method.def.pushArgument(Type::" << type2String(method.arguments[i]) << ");" << std::endl;
+		}
+		cpp << std::endl;
+		cpp << "metadata->pushMethod(method);" << std::endl;
+		cpp << "method.def.clear()" << std::endl << std::endl;
+
+	}
 
 
 	// Close "registerClassForReflection()"
-
+	cpp << "}" << std::endl;
 	cpp.close();
 	
 

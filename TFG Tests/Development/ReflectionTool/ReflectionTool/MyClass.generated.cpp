@@ -11,9 +11,9 @@
 // FUNCTION REFLECTION: TODO(Lucas): Rename so function overload is supported
 void MyClassFuncWrap_sum1ToA_BOOL() {
 	TypeInfo* metadata = Reflection::getMetadataFor("MyClass");
-	MethodDataHolder methodDataHolder = metadata->methodDataHolder;
+	MethodDataHolder mdh = metadata->methodDataHolder;
 
-	*(int*)methodDataHolder.returnPointer = ((MyClass*)methodDataHolder.instancePointer)->sum1ToA(*(bool*)methodDataHolder.argumentsPointers[0]);
+	*(int*)mdh.returnPointer = ((MyClass*)mdh.instancePointer)->sum1ToA(*(bool*)mdh.argumentsPointers[0]);
 }
 
 void MyClassFuncWrap_addNumbers_INT_INT() {
@@ -67,9 +67,8 @@ void registerMyClassForReflection() {
 	method.function_wrapper = &MyClassFuncWrap_sum1ToA_BOOL;
 	method.def.name = "sum1ToA";
 	method.def.returnValue = Type::INT;
-	// Maybe it could be just "pushArgument()"
-	method.def.argumentCount = 1;
-	method.def.arguments[0] = Type::BOOL;
+
+	method.def.pushArgument(Type::BOOL);
 
 	metadata->pushMethod(method);
 	method.clear();
@@ -78,22 +77,21 @@ void registerMyClassForReflection() {
 	method.function_wrapper = &MyClassFuncWrap_addNumbers_INT_INT;
 	method.def.name = "addNumbers";
 	method.def.returnValue = Type::INT;
-	// Maybe it could be just "pushArgument()"
-	method.def.argumentCount = 2;
-	method.def.arguments[0] = Type::INT;
-	method.def.arguments[1] = Type::INT;
+
+	method.def.pushArgument(Type::INT);
+	method.def.pushArgument(Type::INT);
 
 	metadata->pushMethod(method);
+	method.def.clear();
 
 	// Add "int addNumbers(int, int, int)" method
 	method.function_wrapper = &MyClassFuncWrap_addNumbers_INT_INT_INT;
 	method.def.name = "addNumbers";
 	method.def.returnValue = Type::INT;
-	// Maybe it could be just "pushArgument()"
-	method.def.argumentCount = 3;
-	method.def.arguments[0] = Type::INT;
-	method.def.arguments[1] = Type::INT;
-	method.def.arguments[2] = Type::INT;
+
+	method.def.pushArgument(Type::INT);
+	method.def.pushArgument(Type::INT);
+	method.def.pushArgument(Type::INT);
 
 	metadata->pushMethod(method);
 }

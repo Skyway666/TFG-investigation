@@ -2,7 +2,24 @@
 #include "MyClass.generated.h"
 
 void MyClassFuncWrap_sum1ToA_BOOL() {
-char whatHappens[100] = "Function implementation";
+TypeInfo* metadata = Reflection::getMetadataFor("MyClass");
+MethodDataHolder mdh = metadata->methodDataHolder;
+
+*(int*)mdh.returnPointer = ((MyClass*)mdh.instancePointer)->sum1ToA(*(bool*)mdh.argumentPointers[0]);
+}
+
+void MyClassFuncWrap_addNumbers_INT_INT() {
+TypeInfo* metadata = Reflection::getMetadataFor("MyClass");
+MethodDataHolder mdh = metadata->methodDataHolder;
+
+*(int*)mdh.returnPointer = ((MyClass*)mdh.instancePointer)->addNumbers(*(int*)mdh.argumentPointers[0], *(int*)mdh.argumentPointers[1]);
+}
+
+void MyClassFuncWrap_addNumbers_INT_INT_INT() {
+TypeInfo* metadata = Reflection::getMetadataFor("MyClass");
+MethodDataHolder mdh = metadata->methodDataHolder;
+
+*(int*)mdh.returnPointer = ((MyClass*)mdh.instancePointer)->addNumbers(*(int*)mdh.argumentPointers[0], *(int*)mdh.argumentPointers[1], *(int*)mdh.argumentPointers[2]);
 }
 
 void registerMyClassForReflection(){
@@ -15,4 +32,33 @@ metadata->pushProperty(Property("b", offsetof(MyClass, MyClass::b), Type::INT));
 metadata->pushProperty(Property("is", offsetof(MyClass, MyClass::is), Type::BOOL));
 metadata->pushProperty(Property("name", offsetof(MyClass, MyClass::name), Type::CONST_STRING));
 metadata->pushProperty(Property("message", offsetof(MyClass, MyClass::message), Type::STRING, 150 * sizeof(char)));
+
+Method method;
+method.function_wrapper = &MyClassFuncWrap_sum1ToA_BOOL;
+method.def.name = "sum1ToA";
+method.def.returnValue = Type::INT;
+method.def.pushArgument(Type::BOOL);
+
+metadata->pushMethod(method);
+method.def.clear()
+
+method.function_wrapper = &MyClassFuncWrap_addNumbers_INT_INT;
+method.def.name = "addNumbers";
+method.def.returnValue = Type::INT;
+method.def.pushArgument(Type::INT);
+method.def.pushArgument(Type::INT);
+
+metadata->pushMethod(method);
+method.def.clear()
+
+method.function_wrapper = &MyClassFuncWrap_addNumbers_INT_INT_INT;
+method.def.name = "addNumbers";
+method.def.returnValue = Type::INT;
+method.def.pushArgument(Type::INT);
+method.def.pushArgument(Type::INT);
+method.def.pushArgument(Type::INT);
+
+metadata->pushMethod(method);
+method.def.clear()
+
 }

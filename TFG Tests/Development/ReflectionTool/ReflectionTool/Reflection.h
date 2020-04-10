@@ -51,6 +51,10 @@ struct MethodDef {
 	Type arguments[MAX_ARGUMENTS] = {Type::NULL_TYPE};
 	const char* name = "Null Method";
 
+	void pushArgument(Type argumentType) {
+		arguments[argumentCount++] = argumentType;
+	}
+
 	bool operator==(MethodDef def) {
 
 		if (strcmp(name, def.name) != 0)

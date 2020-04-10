@@ -15,6 +15,8 @@ public:
 
 	// Methods
 	int sum1ToA(bool sum);
+	int addNumbers(int a, int b);
+	int addNumbers(int a, int b, int c);
 };
 
 #endif
