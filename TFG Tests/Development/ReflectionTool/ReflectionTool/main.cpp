@@ -27,9 +27,9 @@ int main() {
 	int a_value = myClassMetadata->getIntegerValue(&instance, "a");
 	int b_value = myClassMetadata->getIntegerValue(&instance, "b");
 	bool is_value = myClassMetadata->getBoolValue(&instance, "is");
-	const char* name_value = myClassMetadata->getConstStringValue(&instance, "name");
+	const char* name_value = myClassMetadata->getStringVaue(&instance, "name");
 	char message_value[150];
-	myClassMetadata->getStringVaue(&instance, "message", message_value, 150);
+	myClassMetadata->getArrayValue(&instance, "message", Type::CHAR, (void*)message_value);
 	int numbers_value[3];
 	myClassMetadata->getArrayValue(&instance, "numbers", Type::INT, numbers_value);
 

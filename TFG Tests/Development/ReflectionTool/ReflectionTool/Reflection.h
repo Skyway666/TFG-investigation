@@ -14,9 +14,9 @@ enum Type {
 	NULL_TYPE,
 	VOID,
 	INT,
-	CONST_STRING,
-	STRING,
-	BOOL
+	CHAR,
+	BOOL,
+	OBJECT // Struct or class
 };
 
 // TODO(Lucas): Consider changing name
@@ -24,24 +24,29 @@ enum Type {
 // Struc intended to be returned to the user
 struct TypeDef {
 	TypeDef(){}
+	TypeDef(Type type): type(type){}
 	TypeDef(Type type, int arraySize): type(type), arraySize(arraySize){}
+	TypeDef(Type type, bool isPointer): type(type), isPointer(isPointer){}
+	TypeDef(Type type, int arraySize, bool isPointer): type(type), arraySize(arraySize), isPointer(isPointer){}
 
 	Type type = Type::NULL_TYPE;
-	int arraySize = -1;
+	int arraySize = -1; // IN MEMORY. To get size of elements -> arraySize / enum2sizeof(type). If arraySize is more than 0, it is an array
+	bool isPointer = false;
+
+	bool operator==(TypeDef typeDef) {
+		return type == typeDef.type && 
+			arraySize == typeDef.arraySize && 
+			isPointer == typeDef.isPointer;
+	}
 };
 
 // Private stuff, don't give the user access
 struct Property {
 	Property() {}
-	Property(const char* name, int offset, Type type) :name(name), offset(offset), type(type) {}
-	Property(const char* name, int offset, Type type, int arraySize) :
-	name(name), offset(offset), type(type), arraySize(arraySize) {}
+	Property(const char* name, int offset, TypeDef type) :name(name), offset(offset), type(type) {}
 	const char* name = "null";
 	size_t offset = 0;
-	Type type = Type::NULL_TYPE;
-
-	// Only to be used for arrays
-	int arraySize = 0; // IN MEMORY. To get size of elements -> arraySize / enum2sizeof(type). If arraySize is more than 0, it is an array
+	TypeDef type;
 };
 
 struct MethodDef {
@@ -152,20 +157,20 @@ public:
 
 		return ret;
 	}
-	const char* getConstStringValue(void* instance_ptr, const char* name) {
-		Property property = getVariable(name, Type::CONST_STRING);
+	char getCharValue(void* instance_ptr, const char* name) {
+		Property property = getVariable(name, Type::CHAR);
 
-		const char* ret = *((const char**)((size_t)instance_ptr + property.offset));
+		char ret = *((char*)((size_t)instance_ptr + property.offset));
 
 		return ret;
 	}
 
-	void getStringVaue(void* instance_ptr, const char* name, char* output_string, size_t size) {
-		Property property = getVariable(name, Type::STRING);
+	char* getStringVaue(void* instance_ptr, const char* name) {
+		Property property = getVariable(name, Type::CHAR, true);
 
-		char* to_copy_str = ((char*)((size_t)instance_ptr + property.offset));
+		char* ret = *((char**)((size_t)instance_ptr + property.offset));
 
-		strcpy_s(output_string, size, to_copy_str);
+		return ret;
 	}
 
 	void getArrayValue(void* instance_ptr, const char* name, Type elementType, void* output_array) {
@@ -173,14 +178,14 @@ public:
 
 		void* to_copy_arr = ((void*)((size_t)instance_ptr + property.offset));
 
-		memcpy(output_array, to_copy_arr, property.arraySize);
+		memcpy(output_array, to_copy_arr, property.type.arraySize);
 	}
 
 	// Should return some form of container, since several variables of different type can be declared with the same variable name
 	TypeDef getFieldType(const char* name) {
 		for (int i = 0; i < propertyIndex; i++)
 			if (strcmp(name, properties[i].name) == 0) {
-				return TypeDef(properties[i].type, properties[i].arraySize);
+				return properties[i].type;
 			}
 		
 		return TypeDef();
@@ -212,17 +217,23 @@ public:
 
 
 	// Get Properties
-	Property getVariable(const char* name, Type type) {
+	Property getVariable(const char* name, Type type, bool isPointer = false) {
+		TypeDef tmpTypeDef(type, isPointer);
+
 		for (int i = 0; i < propertyIndex; i++)
-			if (strcmp(name, properties[i].name) == 0 && type == properties[i].type && properties[i].arraySize == 0)
+			if (strcmp(name, properties[i].name) == 0 && tmpTypeDef == properties[i].type)
 				return properties[i];
 
 		return Property();
 	}
 
-	Property getArray(const char* name, Type type) {
+	Property getArray(const char* name, Type type, bool isPointer = false) {
 		for (int i = 0; i < propertyIndex; i++)
-			if (strcmp(name, properties[i].name) == 0 && type == properties[i].type && properties[i].arraySize != 0)
+			if (strcmp(properties[i].name, name) == 0 &&
+				properties[i].type.type == type &&
+				properties[i].type.isPointer == isPointer &&
+				properties[i].type.arraySize != -1 // Looking for an array, so arraySize must be != -1
+				)
 				return properties[i];
 
 		return Property();

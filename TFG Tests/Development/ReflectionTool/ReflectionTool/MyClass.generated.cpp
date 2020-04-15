@@ -50,14 +50,14 @@ void registerMyClassForReflection() {
 	// Add "bool is" field
 	metadata->pushProperty(Property("is", offsetof(MyClass, MyClass::is), Type::BOOL));
 
-	// Add "name" field
-	metadata->pushProperty(Property("name", offsetof(MyClass, MyClass::name), Type::CONST_STRING));
+	// Add "name" field (a char*)
+	metadata->pushProperty(Property("name", offsetof(MyClass, MyClass::name), TypeDef(Type::CHAR, -1, true)));
 
-	// Add "message" field
-	metadata->pushProperty(Property("message", offsetof(MyClass, MyClass::message), Type::STRING));
+	// Add "message" field (a char array)
+	metadata->pushProperty(Property("message", offsetof(MyClass, MyClass::message), TypeDef(Type::CHAR, 150)));
 
 	// Add "numbers" field
-	metadata->pushProperty(Property("numbers", offsetof(MyClass, MyClass::numbers), Type::INT, 3 * sizeof(int)));
+	metadata->pushProperty(Property("numbers", offsetof(MyClass, MyClass::numbers), TypeDef(Type::INT, 3 * (int)sizeof(int))));
 
 
 	//METHODS
