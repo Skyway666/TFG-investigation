@@ -24,19 +24,38 @@ enum Type {
 // Struc intended to be returned to the user
 struct TypeDef {
 	TypeDef(){}
-	TypeDef(Type type): type(type){}
-	TypeDef(Type type, int arraySize): type(type), arraySize(arraySize){}
-	TypeDef(Type type, bool isPointer): type(type), isPointer(isPointer){}
-	TypeDef(Type type, int arraySize, bool isPointer): type(type), arraySize(arraySize), isPointer(isPointer){}
+	TypeDef(Type type): type(type){} // Basic variable
+	TypeDef(Type type, int arraySize): type(type), arraySize(arraySize){} // Array of basic variables
+	TypeDef(Type type, bool isPointer): type(type), isPointer(isPointer){} // Basic variable pointer
+	TypeDef(Type type, int arraySize, bool isPointer): type(type), arraySize(arraySize), isPointer(isPointer){} // Array of basic variable pointers
+
+	TypeDef(Type type, const char* objectName): type(type), objectName(objectName){} // Basic object
+	TypeDef(Type type, const char* objectName, int arraySize) : type(type), objectName(objectName), arraySize(arraySize) {} // Array of basic objects
+	TypeDef(Type type, const char* objectName, bool isPointer) : type(type), objectName(objectName), isPointer(isPointer) {} // Object pointer
+	TypeDef(Type type, const char* objectName, int arraySize, bool isPointer) : type(type), objectName(objectName), arraySize(arraySize), isPointer(isPointer) {} //  Array of object pointers
+
 
 	Type type = Type::NULL_TYPE;
 	int arraySize = -1; // IN MEMORY. To get size of elements -> arraySize / enum2sizeof(type). If arraySize is more than 0, it is an array
 	bool isPointer = false;
+	const char* objectName = nullptr; // If the variable is of type Object, this will contain its name
 
 	bool operator==(TypeDef typeDef) {
-		return type == typeDef.type && 
-			arraySize == typeDef.arraySize && 
-			isPointer == typeDef.isPointer;
+		bool objectNameCheck = false;
+		if (objectName && typeDef.objectName) {
+			// Both are initialized, names need to be compared
+			objectNameCheck = strcmp(objectName, typeDef.objectName) == 0;
+		}
+		else if(!objectName && !typeDef.objectName){
+			// Both are uninitialized, check is passed
+			objectNameCheck = true;
+		}
+		// One is initialized and the other is not, check is not passed
+
+		return type == typeDef.type &&
+			arraySize == typeDef.arraySize &&
+			isPointer == typeDef.isPointer &&
+			objectNameCheck;
 	}
 };
 
@@ -174,11 +193,23 @@ public:
 	}
 
 	void getArrayValue(void* instance_ptr, const char* name, Type elementType, void* output_array) {
-		Property property = getArray(name, elementType);
+		Property array = getArray(name, elementType);
 
-		void* to_copy_arr = ((void*)((size_t)instance_ptr + property.offset));
+		void* to_copy_arr = ((void*)((size_t)instance_ptr + array.offset));
 
-		memcpy(output_array, to_copy_arr, property.type.arraySize);
+		memcpy(output_array, to_copy_arr, array.type.arraySize);
+	}
+
+	void* getObjectPointer(void* instance_ptr, const char* name, const char* objectName) {
+		Property object = getObject(name, objectName);
+
+		return ((void*)((size_t)instance_ptr + object.offset));
+	}
+
+	void* getPointerValue(void* instance_ptr, const char* name, Type type, const char* objectName = nullptr) {
+		Property pointer = getProperty(name, TypeDef(type, objectName, true));
+
+		return *((void**)((size_t)instance_ptr + pointer.offset));
 	}
 
 	// Should return some form of container, since several variables of different type can be declared with the same variable name
@@ -217,16 +248,18 @@ public:
 
 
 	// Get Properties
-	Property getVariable(const char* name, Type type, bool isPointer = false) {
-		TypeDef tmpTypeDef(type, isPointer);
-
+	Property getProperty(const char* name, TypeDef type) {
 		for (int i = 0; i < propertyIndex; i++)
-			if (strcmp(name, properties[i].name) == 0 && tmpTypeDef == properties[i].type)
+			if (strcmp(name, properties[i].name) == 0 && type == properties[i].type)
 				return properties[i];
 
 		return Property();
 	}
+	Property getVariable(const char* name, Type type, bool isPointer = false) {
+		return getProperty(name, TypeDef(type, isPointer));
+	}
 
+	// Will only get arrays with basic types
 	Property getArray(const char* name, Type type, bool isPointer = false) {
 		for (int i = 0; i < propertyIndex; i++)
 			if (strcmp(properties[i].name, name) == 0 &&
@@ -237,6 +270,10 @@ public:
 				return properties[i];
 
 		return Property();
+	}
+
+	Property getObject(const char* varName, const char* objectName, bool isPointer = false) {
+		return getProperty(varName, TypeDef(Type::OBJECT, objectName, isPointer));
 	}
 
 	// Get methods

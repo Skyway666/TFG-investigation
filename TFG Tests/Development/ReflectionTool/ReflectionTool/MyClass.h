@@ -1,6 +1,10 @@
 #ifndef MYCLASS_CLASS
 #define MYCLASS_CLASS
 
+class MyOtherClass {
+	bool silly = true;
+	int hi = 10;
+};
 class MyClass {
 public:
 	// Fields
@@ -10,6 +14,8 @@ public:
 	const char* name = "MyClass";
 	char message[150] = "LOL";
 	int numbers[3];
+	MyOtherClass child;
+	int* numberPointer = nullptr;
 
 
 	// Methods

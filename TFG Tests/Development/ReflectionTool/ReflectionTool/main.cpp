@@ -20,6 +20,8 @@ int main() {
 	instance.numbers[0] = 3;
 	instance.numbers[1] = -4;
 	instance.numbers[2] = 9;
+	int pointerNumber = 230;
+	instance.numberPointer = &pointerNumber;
 
 
 	TypeInfo* myClassMetadata = Reflection::getMetadataFor("MyClass");
@@ -33,11 +35,16 @@ int main() {
 	int numbers_value[3];
 	myClassMetadata->getArrayValue(&instance, "numbers", Type::INT, numbers_value);
 
+	MyOtherClass child_value = *((MyOtherClass*)myClassMetadata->getObjectPointer(&instance, "child", "MyOtherClass"));
+	int* numberPointer_value = (int*)myClassMetadata->getPointerValue(&instance, "numberPointer", Type::INT);
+
 	TypeDef a_type = myClassMetadata->getFieldType("a");
 	TypeDef is_type = myClassMetadata->getFieldType("is");
 	TypeDef name_type = myClassMetadata->getFieldType("name");
 	TypeDef message_type = myClassMetadata->getFieldType("message");
 	TypeDef numbers_type = myClassMetadata->getFieldType("numbers");
+	TypeDef child_type = myClassMetadata->getFieldType("child");
+	TypeDef numberPointer_type = myClassMetadata->getFieldType("numberPointer");
 
 
 	// Methods
