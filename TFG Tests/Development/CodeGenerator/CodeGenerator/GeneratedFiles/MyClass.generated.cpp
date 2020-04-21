@@ -27,38 +27,3 @@ TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];
 
 metadata->name = MyClass
 
-metadata->pushProperty(Property("a", offsetof(MyClass, MyClass::a), Type::INT));
-metadata->pushProperty(Property("b", offsetof(MyClass, MyClass::b), Type::INT));
-metadata->pushProperty(Property("is", offsetof(MyClass, MyClass::is), Type::BOOL));
-metadata->pushProperty(Property("name", offsetof(MyClass, MyClass::name), Type::CONST_STRING));
-metadata->pushProperty(Property("message", offsetof(MyClass, MyClass::message), Type::STRING, 150 * sizeof(char)));
-
-Method method;
-method.function_wrapper = &MyClassFuncWrap_sum1ToA_BOOL;
-method.def.name = "sum1ToA";
-method.def.returnValue = Type::INT;
-method.def.pushArgument(Type::BOOL);
-
-metadata->pushMethod(method);
-method.def.clear()
-
-method.function_wrapper = &MyClassFuncWrap_addNumbers_INT_INT;
-method.def.name = "addNumbers";
-method.def.returnValue = Type::INT;
-method.def.pushArgument(Type::INT);
-method.def.pushArgument(Type::INT);
-
-metadata->pushMethod(method);
-method.def.clear()
-
-method.function_wrapper = &MyClassFuncWrap_addNumbers_INT_INT_INT;
-method.def.name = "addNumbers";
-method.def.returnValue = Type::INT;
-method.def.pushArgument(Type::INT);
-method.def.pushArgument(Type::INT);
-method.def.pushArgument(Type::INT);
-
-metadata->pushMethod(method);
-method.def.clear()
-
-}

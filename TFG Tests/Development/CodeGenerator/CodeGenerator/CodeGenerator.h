@@ -15,13 +15,12 @@ const char* type2String(Type type) {
 		case Type::BOOL:
 			return "BOOL";
 		break;
-		case Type::STRING:
-			return "STRING";
-		break;
-		case Type::CONST_STRING:
-			return "CONST_STRING";
+		case Type::CHAR:
+			return "CHAR";
 		break;
 	}
+
+	return nullptr;
 }
 
 const char* type2Ctype(Type type) {
@@ -36,14 +35,12 @@ const char* type2Ctype(Type type) {
 	case Type::BOOL:
 		return "bool";
 		break;
-	case Type::STRING:
+	case Type::CHAR:
 		return "char";
 		break;
-	case Type::CONST_STRING:
-		return "const char*";
-		break;
-
 	}
+
+	return nullptr;
 }
 
 void writeFunctionDeclaration(std::ofstream& cpp, char* className, PMethod method) {

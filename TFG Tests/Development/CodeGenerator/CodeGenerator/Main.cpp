@@ -4,6 +4,10 @@
 #include "CodeGenerator.h"
 
 int main() {
+
+	// TOOL CONFIGURATION
+	strcpy_s(classes[classesIndex++], MAX_NAME_CHARS, "MyClass");
+	strcpy_s(classes[classesIndex++], MAX_NAME_CHARS, "MyOtherClass");
 	
 	// LEXER/TOKENIZER
 	Token tokens[TEN_THOUSEND];
@@ -24,7 +28,7 @@ int main() {
 	}
 
 	// Code Generator
-	generateCode(classDefinition);
+	//generateCode(classDefinition);
 
 	return 0;
 }

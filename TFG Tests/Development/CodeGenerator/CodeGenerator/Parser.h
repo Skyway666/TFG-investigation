@@ -1,8 +1,19 @@
 #pragma once
-
 #include "Globals.h"
 
-bool tokenIsType(TokenType type) {
+bool tokenIsType(Token token) {
+	TokenType type = token.type;
+	char* name = token.name;
+
+	// If it is a USER_BIT, we might be working with an Object. 
+	// We need to check if it matches any of the classes that the user has defined for reflection
+	if (type == TokenType::USER_BIT) {
+		for (int i = 0; i < classesIndex; i++) {
+			if (strcmp(name, classes[i]) == 0)
+				return true;
+		}
+	}
+
 	return type == TokenType::TY_BOOL || type == TokenType::TY_CHAR || type == TokenType::TY_INT || type == TokenType::TY_VOID;
 }
 
@@ -15,13 +26,16 @@ Type token2Type(TokenType type) {
 		ret = Type::BOOL;
 		break;
 	case TokenType::TY_CHAR:
-		ret = Type::STRING;
+		ret = Type::CHAR;
 		break;
 	case TokenType::TY_INT:
 		ret = Type::INT;
 		break;
 	case TokenType::TY_VOID:
 		ret = Type::VOID;
+		break;
+	case TokenType::USER_BIT:
+		ret = Type::OBJECT;
 		break;
 	}
 
@@ -33,31 +47,38 @@ struct PProperty {
 	Type type = Type::NULL_TYPE;
 
 	char arraySize[MAX_ARRAY_DIGITS]; // IN MEMORY. To get size of elements -> arraySize / enum2sizeof(arrayType)
+	bool isPointer = false;
+	char objectName[MAX_NAME_CHARS];
 
 	void Parse(Token* tokens, int* currentToken) {
 		// Current token is the Property type
 
+
 		type = token2Type(tokens[*currentToken].type);
-		bool nameFound = false;
-		bool pointerFound = false;
+		// Get arrays ready to use for Code Generator
 		arraySize[0] = '\0';
+		objectName[0] = '\0';
+
+		if(type == Type::OBJECT)
+			strcpy_s(objectName, MAX_NAME_CHARS, tokens[*currentToken].name);
 
 		(*currentToken)++; // Go passed the type specifier
+		
+		// Boolean needed in order to not overwrite "name" if more user bits are found
+		bool nameFound = false;
 
 		while (tokens[*currentToken].type != TokenType::SEP_SEMICOL) {
 
-			// If we find a pointer we are probably working with a const char * (for the moment)
-			if (tokens[*currentToken].type == TokenType::SEP_POINTER && !pointerFound) {
-				if (type == Type::STRING) {
-					type = Type::CONST_STRING;
-				}
-				pointerFound = true;
-			}
-			// Name of the variable
+			
 			if (tokens[*currentToken].type == TokenType::USER_BIT && !nameFound) {
 				strcpy_s(name, MAX_NAME_CHARS, tokens[*currentToken].name);
 				nameFound = true;
 			}
+			// We have found a '*', the variable must be a pointer
+			if (tokens[*currentToken].type == TokenType::SEP_POINTER) {
+				isPointer = true;
+			}
+			
 			if (tokens[*currentToken].type == TokenType::SEP_OPEN_ARR) {
 				// Look for the next "user bit" and convert the string to a number. This is the array size.
 				while (tokens[*currentToken].type != TokenType::USER_BIT) {
@@ -95,7 +116,7 @@ struct PMethod {
 				nameFound = true;
 			}
 
-			if (tokenIsType(tokens[*currentToken].type)) {
+			if (tokenIsType(tokens[*currentToken])) {
 				// This is an argument
 				arguments[argumentsIndex++] = token2Type(tokens[*currentToken].type);
 			}
@@ -129,7 +150,7 @@ struct PClass {
 				nameFound = true;
 			}
 
-			if (tokenIsType(tokens[*currentToken].type)) {
+			if (tokenIsType(tokens[*currentToken])) {
 				// We have either a method or a property
 				int i = *currentToken;
 				bool isMethod = false;
@@ -143,18 +164,11 @@ struct PClass {
 					i++;
 				}
 
-				if (isMethod) {
-					// It's a method
-					PMethod method;
-					method.Parse(tokens, currentToken);
-					methods[methodIndex++] = method;
-				}
-				else {
-					// It's a property
-					PProperty property;
-					property.Parse(tokens, currentToken);
-					properties[propertyIndex++] = property;
-				}
+				// Method or property
+				if (isMethod)
+					methods[methodIndex++].Parse(tokens, currentToken);
+				else 
+					properties[propertyIndex++].Parse(tokens, currentToken);
 
 			}
 			(*currentToken)++;

@@ -1,6 +1,8 @@
 #pragma once
-
+// GLOBAL INCLUDES
 #include <string>
+
+//GLOBAL DEFINES
 #define MAX_NAME_CHARS 30
 #define MAX_PROPERTIES 30
 #define MAX_METHODS 30
@@ -8,6 +10,7 @@
 #define MAX_ARRAY_DIGITS 15
 #define TEN_THOUSEND 10000
 
+// GLOBAL CLASSES
 enum TokenType {
 	NULL_TOKEN,
 	USER_BIT, // Goes with name 
@@ -47,9 +50,9 @@ enum Type {
 	NULL_TYPE,
 	VOID,
 	INT,
-	CONST_STRING,
-	STRING,
-	BOOL
+	CHAR,
+	BOOL,
+	OBJECT
 };
 
 struct Token {
@@ -64,3 +67,9 @@ struct Token {
 	// Probably  use dynamic memory, most tokkens don't need a name but some of them do
 	char name[MAX_NAME_CHARS] = { '\0' };
 };
+
+
+// GLOBAL VARS
+// In this array, we store the name of the classes that the user wants to reflect
+int classesIndex = 0;
+char classes[TEN_THOUSEND][MAX_NAME_CHARS];
