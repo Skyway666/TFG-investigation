@@ -8,7 +8,6 @@
 // Automatically generated
 
 
-// FUNCTION REFLECTION: TODO(Lucas): Rename so function overload is supported
 void MyClassFuncWrap_sum1ToA_BOOL() {
 	TypeInfo* metadata = Reflection::getMetadataFor("MyClass");
 	MethodDataHolder mdh = metadata->methodDataHolder;
@@ -54,7 +53,7 @@ void registerMyClassForReflection() {
 	metadata->pushProperty(Property("name", offsetof(MyClass, MyClass::name), TypeDef(Type::CHAR, true)));
 
 	// Add "message" field (a char array)
-	metadata->pushProperty(Property("message", offsetof(MyClass, MyClass::message), TypeDef(Type::CHAR, 150)));
+	metadata->pushProperty(Property("message", offsetof(MyClass, MyClass::message), TypeDef(Type::CHAR, 150 * (int)sizeof(char))));
 
 	// Add "numbers" field
 	metadata->pushProperty(Property("numbers", offsetof(MyClass, MyClass::numbers), TypeDef(Type::INT, 3 * (int)sizeof(int))));

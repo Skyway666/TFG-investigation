@@ -19,7 +19,6 @@ enum Type {
 	OBJECT // Struct or class
 };
 
-// TODO(Lucas): Consider changing name
 
 // Struc intended to be returned to the user
 struct TypeDef {

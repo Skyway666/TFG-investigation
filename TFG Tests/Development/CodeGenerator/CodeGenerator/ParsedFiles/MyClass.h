@@ -22,6 +22,9 @@ public:
 	int sum1ToA(bool sum);
 	int addNumbers(int a, int b);
 	int addNumbers(int a, int b, int c);
+	int reference(bool &hello);
+	char* getName(bool* localizationCheck);
+	MyClass returnSomething(MyOtherClass* jaja)
 };
 
 #endif

@@ -57,6 +57,18 @@ void writeFunctionDeclaration(std::ofstream& cpp, char* className, PMethod metho
 	}
 }
 
+bool supportCheck(PMethod& method) {
+	if (method.returnValue == Type::OBJECT)
+		return false;
+
+	for (int i = 0; i++; i < method.argumentsIndex) {
+		if (method.arguments[i] == Type::OBJECT)
+			return false;
+	}
+
+	return true;
+}
+
 void generateCode(PClass object) {
 
 	// Header
@@ -103,6 +115,10 @@ void generateCode(PClass object) {
 
 		PMethod method = object.methods[i];
 
+		// TODO: Support methods with pointers or objects as arguments/return value 
+		if (!supportCheck(method))
+			continue;
+
 		cpp << "void ";
 		writeFunctionDeclaration(cpp, object.name, method);
 		cpp << "() {";
@@ -119,7 +135,8 @@ void generateCode(PClass object) {
 
 		for (int i = 0; i < method.argumentsIndex; i++) {
 			Type argument = method.arguments[i];
-			cpp << "*(" << type2Ctype(method.arguments[i]) << "*)mdh.argumentPointers[" << std::to_string(i) << "]";
+
+			cpp << "*(" << type2Ctype(argument) << "*)mdh.argumentPointers[" << std::to_string(i) << "]";
 			if (i != method.argumentsIndex - 1) {
 				cpp << ", ";
 			}
@@ -188,6 +205,10 @@ void generateCode(PClass object) {
 
 	for (int i = 0; i < object.methodIndex; i++) {
 		PMethod method = object.methods[i];
+
+		if (!supportCheck(method)) 
+			continue;
+
 		cpp << "method.function_wrapper = &";
 		writeFunctionDeclaration(cpp, object.name, method);
 		cpp << ";" << std::endl;
