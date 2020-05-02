@@ -28,7 +28,7 @@ int main() {
 	}
 
 	// Code Generator
-	//generateCode(classDefinition);
+	generateCode(classDefinition);
 
 	return 0;
 }

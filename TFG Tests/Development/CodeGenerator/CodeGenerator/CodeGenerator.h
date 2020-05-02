@@ -18,6 +18,9 @@ const char* type2String(Type type) {
 		case Type::CHAR:
 			return "CHAR";
 		break;
+		case Type::OBJECT:
+			return "OBJECT";
+		break;
 	}
 
 	return nullptr;
@@ -83,7 +86,6 @@ void generateCode(PClass object) {
 
 	// Cpp
 
-	// rename file
 	char cppName[MAX_NAME_CHARS];
 	strcpy_s(cppName, MAX_NAME_CHARS, object.name);
 	strcat_s(cppName, ".generated.cpp");
@@ -134,7 +136,6 @@ void generateCode(PClass object) {
 
 
 
-
 	cpp << "void register";
 	cpp << object.name;
 	cpp << "ForReflection(){" << std::endl;
@@ -150,11 +151,31 @@ void generateCode(PClass object) {
 
 		cpp << "metadata->pushProperty(Property(\"" << prop.name << "\", ";
 		cpp << "offsetof(" << object.name << ", " << object.name << "::" << prop.name << "), ";
+
+		bool notBasic = prop.isPointer || prop.arraySize[0] != 0 || prop.type == Type::OBJECT;
+
+		if (notBasic) {
+			cpp << "TypeDef(";
+
+		}
+		
 		cpp << "Type::" << type2String(prop.type);
+
+		if (prop.type == Type::OBJECT) {
+			cpp << ", \"" << prop.objectName << "\"";
+		}
 
 		if (prop.arraySize[0] != '\0') {
 			cpp << ", ";
-			cpp << prop.arraySize << " * sizeof(" << type2Ctype(prop.type) << ")";
+			cpp << prop.arraySize << " * (int)sizeof(" << type2Ctype(prop.type) << ")";
+		}
+
+		if (prop.isPointer) {
+			cpp << ", " << "true";
+		}
+
+		if (notBasic) {
+			cpp << ")";
 		}
 
 		cpp << "));" << std::endl;

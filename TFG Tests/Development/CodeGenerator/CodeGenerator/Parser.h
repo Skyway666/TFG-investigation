@@ -147,6 +147,8 @@ struct PClass {
 
 			if (tokens[*currentToken].type == TokenType::USER_BIT && !nameFound) {
 				strcpy_s(name, MAX_NAME_CHARS, tokens[*currentToken].name);
+				// Go passed the name of the class
+				(*currentToken)++;
 				nameFound = true;
 			}
 
