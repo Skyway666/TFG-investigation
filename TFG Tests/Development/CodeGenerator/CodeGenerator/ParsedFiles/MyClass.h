@@ -15,6 +15,9 @@ public:
 	MyOtherClass child;
 	MyOtherClass* childPointer;
 	int* numberPointer;
+	bool* booleanPointers[5];
+	MyOtherClass classes[21];
+	MyOtherClass* classArrays[34];
 
 
 

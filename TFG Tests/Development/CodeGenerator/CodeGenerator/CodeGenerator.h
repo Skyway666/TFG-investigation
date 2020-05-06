@@ -184,7 +184,10 @@ void generateCode(PClass object) {
 
 		if (prop.arraySize[0] != '\0') {
 			cpp << ", ";
-			cpp << prop.arraySize << " * (int)sizeof(" << type2Ctype(prop.type) << ")";
+			cpp << prop.arraySize << " * (int)sizeof(" << (prop.type != Type::OBJECT ? type2Ctype(prop.type) : prop.objectName);
+			if (prop.isPointer)
+				cpp << "*";
+			cpp << ")";
 		}
 
 		if (prop.isPointer) {

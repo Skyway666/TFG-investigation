@@ -16,6 +16,7 @@ public:
 	int numbers[3];
 	MyOtherClass child;
 	int* numberPointer = nullptr;
+	bool* boolPointers[5];
 
 
 	// Methods

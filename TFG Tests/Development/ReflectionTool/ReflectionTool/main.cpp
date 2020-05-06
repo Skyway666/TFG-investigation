@@ -22,21 +22,36 @@ int main() {
 	instance.numbers[2] = 9;
 	int pointerNumber = 230;
 	instance.numberPointer = &pointerNumber;
-
+	bool a, b, c;
+	a = true;
+	b = false;
+	c = true;
+	instance.boolPointers[0] = &a;
+	instance.boolPointers[1] = &b;
+	instance.boolPointers[2] = &c;
 
 	TypeInfo* myClassMetadata = Reflection::getMetadataFor("MyClass");
 
 	int a_value = myClassMetadata->getIntegerValue(&instance, "a");
+
 	int b_value = myClassMetadata->getIntegerValue(&instance, "b");
+
 	bool is_value = myClassMetadata->getBoolValue(&instance, "is");
+
 	const char* name_value = myClassMetadata->getStringVaue(&instance, "name");
+
 	char message_value[150];
 	myClassMetadata->getArrayValue(&instance, "message", Type::CHAR, (void*)message_value);
+
 	int numbers_value[3];
 	myClassMetadata->getArrayValue(&instance, "numbers", Type::INT, numbers_value);
 
 	MyOtherClass child_value = *((MyOtherClass*)myClassMetadata->getObjectPointer(&instance, "child", "MyOtherClass"));
+
 	int* numberPointer_value = (int*)myClassMetadata->getPointerValue(&instance, "numberPointer", Type::INT);
+
+	bool* boolPointers_value[3];
+	myClassMetadata->getArrayValue(&instance, "boolPointers", TypeDef(Type::BOOL, true), boolPointers_value);
 
 	TypeDef a_type = myClassMetadata->getFieldType("a");
 	TypeDef is_type = myClassMetadata->getFieldType("is");

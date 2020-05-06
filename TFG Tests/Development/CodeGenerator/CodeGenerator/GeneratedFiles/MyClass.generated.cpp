@@ -50,6 +50,9 @@ metadata->pushProperty(Property("numbers", offsetof(MyClass, MyClass::numbers), 
 metadata->pushProperty(Property("child", offsetof(MyClass, MyClass::child), TypeDef(Type::OBJECT, "MyOtherClass")));
 metadata->pushProperty(Property("childPointer", offsetof(MyClass, MyClass::childPointer), TypeDef(Type::OBJECT, "MyOtherClass", true)));
 metadata->pushProperty(Property("numberPointer", offsetof(MyClass, MyClass::numberPointer), TypeDef(Type::INT, true)));
+metadata->pushProperty(Property("booleanPointers", offsetof(MyClass, MyClass::booleanPointers), TypeDef(Type::BOOL, 5 * (int)sizeof(bool*), true)));
+metadata->pushProperty(Property("classes", offsetof(MyClass, MyClass::classes), TypeDef(Type::OBJECT, "MyOtherClass", 21 * (int)sizeof(MyOtherClass))));
+metadata->pushProperty(Property("classArrays", offsetof(MyClass, MyClass::classArrays), TypeDef(Type::OBJECT, "MyOtherClass", 34 * (int)sizeof(MyOtherClass*), true)));
 
 Method method;
 method.function_wrapper = &MyClassFuncWrap_sum1ToA_BOOL;

@@ -64,6 +64,9 @@ void registerMyClassForReflection() {
 	// Add "numberPointer" field
 	metadata->pushProperty(Property("numberPointer", offsetof(MyClass, MyClass::numberPointer), TypeDef(Type::INT, true)));
 
+	// Add "booleanPointers" field
+	metadata->pushProperty(Property("boolPointers", offsetof(MyClass, MyClass::boolPointers), TypeDef(Type::BOOL, 3 * (int)sizeof(bool*), true)));
+
 
 	//METHODS
 
