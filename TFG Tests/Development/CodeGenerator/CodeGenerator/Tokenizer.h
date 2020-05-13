@@ -158,5 +158,7 @@ void tokenizeFile(const char* file, Token* tokens) {
 			bitCount = 0;
 		}
 	}
+
+	delete code;
 }
 

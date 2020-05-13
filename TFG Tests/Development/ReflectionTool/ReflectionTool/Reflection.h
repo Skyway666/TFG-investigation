@@ -228,6 +228,9 @@ public:
 		return *((void**)((size_t)instance_ptr + pointer.offset));
 	}
 
+	// TODO (Lucas): Create "getPropertyPointer", which returns a void* to the property
+
+
 	// Should return some form of container, since several variables of different type can be declared with the same variable name
 	TypeDef getFieldType(const char* name) {
 		for (int i = 0; i < propertyIndex; i++)
@@ -237,6 +240,31 @@ public:
 		
 		return TypeDef();
 	}
+
+	// Get Properties
+	Property getProperty(const char* name, TypeDef type) {
+		for (int i = 0; i < propertyIndex; i++)
+			if (strcmp(name, properties[i].name) == 0 && type == properties[i].type)
+				return properties[i];
+
+		return Property();
+	}
+	Property getVariable(const char* name, Type type, bool isPointer = false) {
+		return getProperty(name, TypeDef(type, isPointer));
+	}
+
+	Property getObject(const char* varName, const char* objectName, bool isPointer = false) {
+		return getProperty(varName, TypeDef(Type::OBJECT, objectName, isPointer));
+	}
+
+	Property getArray(const char* name, TypeDef type) {
+		for (int i = 0; i < propertyIndex; i++)
+			if (strcmp(name, properties[i].name) == 0 && type.isArrayOf(type))
+				return properties[i];
+
+		return Property();
+	}
+
 
 
 	// Methods
@@ -260,31 +288,6 @@ public:
 		methodDataHolder.instancePointer = instance_ptr;
 
 		method.function_wrapper();
-	}
-
-
-	// Get Properties
-	Property getProperty(const char* name, TypeDef type) {
-		for (int i = 0; i < propertyIndex; i++)
-			if (strcmp(name, properties[i].name) == 0 && type == properties[i].type)
-				return properties[i];
-
-		return Property();
-	}
-	Property getVariable(const char* name, Type type, bool isPointer = false) {
-		return getProperty(name, TypeDef(type, isPointer));
-	}
-
-	Property getObject(const char* varName, const char* objectName, bool isPointer = false) {
-		return getProperty(varName, TypeDef(Type::OBJECT, objectName, isPointer));
-	}
-	
-	Property getArray(const char* name, TypeDef type) {
-		for (int i = 0; i < propertyIndex; i++)
-			if (strcmp(name, properties[i].name) == 0 && type.isArrayOf(type))
-				return properties[i];
-
-		return Property();
 	}
 
 	// Get methods

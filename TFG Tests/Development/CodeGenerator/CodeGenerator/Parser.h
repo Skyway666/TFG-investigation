@@ -129,7 +129,7 @@ struct PMethod {
 
 };
 
-struct PClass {
+struct PObject {
 	char name[MAX_NAME_CHARS];
 
 	int propertyIndex = 0;

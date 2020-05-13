@@ -69,7 +69,7 @@ bool supportCheck(PMethod& method) {
 	return true;
 }
 
-void generateCode(PClass object) {
+void generateCode(PObject object) {
 
 	// Header
 	char headerName[MAX_NAME_CHARS];
