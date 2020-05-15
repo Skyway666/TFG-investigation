@@ -3,7 +3,7 @@
 #include <string>
 
 //GLOBAL DEFINES
-#define MAX_NAME_CHARS 30
+#define MAX_NAME_CHARS 50
 #define MAX_PROPERTIES 30
 #define MAX_METHODS 30
 #define MAX_ARGUMENTS 10

@@ -106,7 +106,7 @@ void generateCode(PObject object) {
 
 	cpp << "#include \"Reflection.h\"" << std::endl;
 	cpp << "#include \"";
-	// Maybe let the user define the route, to customize file location
+	// TODO(Lucas): Maybe let the user define the route, to customize file location
 	cpp << headerName << "\"";
 	cpp << std::endl << std::endl;
 
