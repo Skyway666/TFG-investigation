@@ -1,0 +1,4 @@
+{
+  "inputDirectory": "../CodeGenerator/ParsedFiles",
+  "outputDirectory": "../CodeGenerator/GeneratedFiles"
+}

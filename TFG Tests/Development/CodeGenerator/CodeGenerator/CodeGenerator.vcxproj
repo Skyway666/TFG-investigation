@@ -111,12 +111,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Third Party\parson.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CodeGenerator.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Parser.h" />
+    <ClInclude Include="Third Party\parson.h" />
     <ClInclude Include="Tokenizer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

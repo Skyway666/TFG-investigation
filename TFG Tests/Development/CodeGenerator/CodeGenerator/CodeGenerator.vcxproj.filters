@@ -9,6 +9,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Third Party">
+      <UniqueIdentifier>{da4c665e-96d8-47c9-b0f5-df981cf05ab7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileSystem.h">
@@ -26,10 +29,16 @@
     <ClInclude Include="CodeGenerator.h">
       <Filter>H</Filter>
     </ClInclude>
+    <ClInclude Include="Third Party\parson.h">
+      <Filter>Third Party</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="Third Party\parson.c">
+      <Filter>Third Party</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

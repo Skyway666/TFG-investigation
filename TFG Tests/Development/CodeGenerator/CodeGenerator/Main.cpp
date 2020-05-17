@@ -1,13 +1,20 @@
-
 #include "Tokenizer.h"
 #include "Parser.h"
 #include "CodeGenerator.h"
+#include "Third Party/parson.h"
 
 int main() {
 
 	// TOOL CONFIGURATION
 	strcpy_s(classes[classesIndex++], MAX_NAME_CHARS, "MyClass");
 	strcpy_s(classes[classesIndex++], MAX_NAME_CHARS, "MyOtherClass");
+
+	JSON_Value* rawFile = json_parse_file("config.json");
+
+	JSON_Object* file = json_value_get_object(rawFile);
+	const char* outputDirectory = json_object_get_string(file, "outputDirectory");
+	
+
 	
 	// LEXER/TOKENIZER
 	Token tokens[TEN_THOUSEND];
