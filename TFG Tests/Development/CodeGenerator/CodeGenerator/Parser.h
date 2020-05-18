@@ -8,8 +8,8 @@ bool tokenIsType(Token token) {
 	// If it is a USER_BIT, we might be working with an Object. 
 	// We need to check if it matches any of the classes that the user has defined for reflection
 	if (type == TokenType::USER_BIT) {
-		for (int i = 0; i < classesIndex; i++) {
-			if (strcmp(name, classes[i]) == 0)
+		for (int i = 0; i < objectsIndex; i++) {
+			if (strcmp(name, objects[i]) == 0)
 				return true;
 		}
 	}

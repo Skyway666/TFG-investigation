@@ -1,4 +1,8 @@
 {
-  "inputDirectory": "../CodeGenerator/ParsedFiles",
-  "outputDirectory": "../CodeGenerator/GeneratedFiles"
+  "input-directory": "ParsedFiles",
+  "output-directory": "GeneratedFiles",
+  "reflected-objects": [
+    "MyClass",
+    "MyOtherClass"
+  ]
 }

@@ -73,8 +73,11 @@ void generateCode(PObject object) {
 
 	// Header
 	char headerName[MAX_NAME_CHARS];
-	strcpy_s(headerName, MAX_NAME_CHARS, object.name);
-	strcat_s(headerName, ".generated.h");
+
+	if(outputDirectory)
+		strcpy_s(headerName, MAX_NAME_CHARS, outputDirectory);
+
+	strcat_s(headerName, "/Reflection.h");
 
 	std::ofstream header(headerName);
 
@@ -97,10 +100,11 @@ void generateCode(PObject object) {
 	header.close();
 
 	// Cpp
-
 	char cppName[MAX_NAME_CHARS];
-	strcpy_s(cppName, MAX_NAME_CHARS, object.name);
-	strcat_s(cppName, ".generated.cpp");
+	if (outputDirectory)
+		strcpy_s(cppName, MAX_NAME_CHARS, outputDirectory);
+
+	strcat_s(cppName, "/Reflection.cpp");
 
 	std::ofstream cpp(cppName);
 

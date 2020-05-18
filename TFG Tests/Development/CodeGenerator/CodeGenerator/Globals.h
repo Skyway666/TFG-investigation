@@ -4,6 +4,7 @@
 
 //GLOBAL DEFINES
 #define MAX_NAME_CHARS 50
+#define MAX_FILE_NAME_CHARS	200
 #define MAX_PROPERTIES 30
 #define MAX_METHODS 30
 #define MAX_ARGUMENTS 10
@@ -71,5 +72,8 @@ struct Token {
 
 // GLOBAL VARS
 // In this array, we store the name of the classes that the user wants to reflect
-int classesIndex = 0;
-char classes[TEN_THOUSEND][MAX_NAME_CHARS];
+int objectsIndex = 0;
+char objects[TEN_THOUSEND][MAX_NAME_CHARS];
+
+// In this pointer, we store the string of the output directory
+const char* outputDirectory = nullptr;
