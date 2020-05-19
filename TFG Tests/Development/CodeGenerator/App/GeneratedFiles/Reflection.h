@@ -3,4 +3,9 @@
 
 void registerMyClassForReflection();
 
-#endif //MyClassCLASS
+#endif //MyClassCLASS#ifndef MyOtherClassCLASS
+#define MyOtherClassCLASS
+
+void registerMyOtherClassForReflection();
+
+#endif //MyOtherClassCLASS

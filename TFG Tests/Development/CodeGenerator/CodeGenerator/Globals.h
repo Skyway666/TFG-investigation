@@ -76,4 +76,5 @@ int objectsIndex = 0;
 char objects[TEN_THOUSEND][MAX_NAME_CHARS];
 
 // In this pointer, we store the string of the output directory
-const char* outputDirectory = nullptr;
+char outputCPP[MAX_FILE_NAME_CHARS] = "Reflection.cpp";
+char outputH[MAX_FILE_NAME_CHARS] = "Reflection.h";

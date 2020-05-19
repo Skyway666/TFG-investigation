@@ -1,7 +1,6 @@
 #ifndef MYCLASS_CLASS
 #define MYCLASS_CLASS
 
-#include "MyClass.generated.h"
 
 class MyClass {
 public:

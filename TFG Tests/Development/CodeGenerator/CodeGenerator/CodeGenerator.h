@@ -72,14 +72,7 @@ bool supportCheck(PMethod& method) {
 void generateCode(PObject object) {
 
 	// Header
-	char headerName[MAX_NAME_CHARS];
-
-	if(outputDirectory)
-		strcpy_s(headerName, MAX_NAME_CHARS, outputDirectory);
-
-	strcat_s(headerName, "/Reflection.h");
-
-	std::ofstream header(headerName, std::ofstream::app);
+	std::ofstream header(outputH, std::ofstream::app);
 
 	header << "#ifndef ";
 	header << object.name;
@@ -100,18 +93,12 @@ void generateCode(PObject object) {
 	header.close();
 
 	// Cpp
-	char cppName[MAX_NAME_CHARS];
-	if (outputDirectory)
-		strcpy_s(cppName, MAX_NAME_CHARS, outputDirectory);
-
-	strcat_s(cppName, "/Reflection.cpp");
-
-	std::ofstream cpp(cppName, std::ofstream::app);
+	std::ofstream cpp(outputCPP, std::ofstream::app);
 
 	cpp << "#include \"Reflection.h\"" << std::endl;
 	cpp << "#include \"";
 	// TODO(Lucas): Maybe let the user define the route, to customize file location
-	cpp << headerName << "\"";
+	cpp << outputH << "\"";
 	cpp << std::endl << std::endl;
 
 	// METHODS WRAPPERS
@@ -165,7 +152,7 @@ void generateCode(PObject object) {
 	// PROPS REFLECTION
 	cpp << "TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];" << std::endl << std::endl;
 
-	cpp << "metadata->name = " << object.name << std::endl << std::endl;
+	cpp << "metadata->name = " << "\"" <<object.name << "\"" << std::endl << std::endl;
 
 	for (int i = 0; i < object.propertyIndex; i++) {
 		PProperty prop = object.properties[i];

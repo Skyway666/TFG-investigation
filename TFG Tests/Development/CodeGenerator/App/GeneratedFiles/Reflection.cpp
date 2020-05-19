@@ -39,7 +39,7 @@ MethodDataHolder mdh = metadata->methodDataHolder;
 void registerMyClassForReflection(){
 TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];
 
-metadata->name = MyClass
+metadata->name = "MyClass"
 
 metadata->pushProperty(Property("a", offsetof(MyClass, MyClass::a), Type::INT));
 metadata->pushProperty(Property("b", offsetof(MyClass, MyClass::b), Type::INT));
@@ -98,4 +98,17 @@ method.def.pushArgument(Type::BOOL);
 metadata->pushMethod(method);
 method.def.clear()
 
+}
+#include "Reflection.h"
+#include "GeneratedFiles/Reflection.h"
+
+void registerMyOtherClassForReflection(){
+TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];
+
+metadata->name = "MyOtherClass"
+
+metadata->pushProperty(Property("hello", offsetof(MyOtherClass, MyOtherClass::hello), Type::INT));
+metadata->pushProperty(Property("world", offsetof(MyOtherClass, MyOtherClass::world), Type::INT));
+
+Method method;
 }
