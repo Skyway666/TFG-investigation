@@ -3,7 +3,7 @@
 #include <fstream>
 
 // Itereate files
-#include <experimental/filesystem>
+#include <filesystem>
 
 // Initializes dynamic memory
 int ImportFileString(const char* file_name, char** buffer) {
