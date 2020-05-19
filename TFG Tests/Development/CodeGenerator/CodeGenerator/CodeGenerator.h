@@ -79,7 +79,7 @@ void generateCode(PObject object) {
 
 	strcat_s(headerName, "/Reflection.h");
 
-	std::ofstream header(headerName);
+	std::ofstream header(headerName, std::ofstream::app);
 
 	header << "#ifndef ";
 	header << object.name;
@@ -106,7 +106,7 @@ void generateCode(PObject object) {
 
 	strcat_s(cppName, "/Reflection.cpp");
 
-	std::ofstream cpp(cppName);
+	std::ofstream cpp(cppName, std::ofstream::app);
 
 	cpp << "#include \"Reflection.h\"" << std::endl;
 	cpp << "#include \"";

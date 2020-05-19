@@ -2,6 +2,9 @@
 #include <iostream>
 #include <fstream>
 
+// Itereate files
+#include <experimental/filesystem>
+
 // Initializes dynamic memory
 int ImportFileString(const char* file_name, char** buffer) {
 	std::ifstream file;
@@ -18,4 +21,8 @@ int ImportFileString(const char* file_name, char** buffer) {
 	file.read(*buffer, size);
 
 	return size;
+}
+
+bool checkExtension(std::string file, std::string extension) {
+	return	file.substr(file.find_last_of(".") + 1) == extension;
 }

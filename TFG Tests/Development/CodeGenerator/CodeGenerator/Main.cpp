@@ -3,6 +3,8 @@
 #include "CodeGenerator.h"
 #include "Third Party/parson.h"
 
+
+
 /* This function will fill:
 
 	- outputDirectory (global variable)
@@ -26,24 +28,11 @@ void loadConfig(const char** inputDirectory) {
 	}
 }
 
-int main() {
-
-	// TOOL CONFIGURATION
-
-	// Declared locally, since there is no need to use it elsewhere
-	const char* inputDirectory = nullptr;
-	loadConfig(&inputDirectory);
-
-
-	// TOOL CYCLE FOR 1 FILE -> TODO(Lucas): Iterate input directory
+void generateReflection(const char* header) {
 
 	// LEXER/TOKENIZER
-	char parsedFileName[MAX_FILE_NAME_CHARS];
-	strcpy_s(parsedFileName, MAX_NAME_CHARS, inputDirectory);
-	strcat_s(parsedFileName, "/MyClass.h");
-
 	Token tokens[TEN_THOUSEND];
-	tokenizeFile(parsedFileName, tokens);
+	tokenizeFile(header, tokens);
 
 	// PARSER
 	// Looking for a class
@@ -61,6 +50,29 @@ int main() {
 
 	// Code Generator
 	generateCode(classDefinition);
+}
+
+int main() {
+
+	// TOOL CONFIGURATION
+
+	// Declared locally, since there is no need to use it elsewhere
+	const char* inputDirectory = nullptr;
+	loadConfig(&inputDirectory);
+
+	// TOOL CYCLE FOR 1 FILE -> TODO(Lucas): Iterate input directory
+	using std::experimental::filesystem::recursive_directory_iterator;
+	for (auto& it : recursive_directory_iterator(inputDirectory)) {
+		// Ignore directories
+		if (it.status().type() == std::experimental::filesystem::v1::file_type::directory) 
+			continue;
+
+		std::string file= it.path().generic_string();
+
+		if (checkExtension(file, "h")) {
+			generateReflection(file.c_str());
+		}
+	}
 
 	return 0;
 }
