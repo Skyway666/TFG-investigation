@@ -1,6 +1,7 @@
 #include "Reflection.h"
-#include "GeneratedFiles/Reflection.h"
 
+
+// Reflection code for MyClass
 void MyClassFuncWrap_sum1ToA_BOOL() {
 TypeInfo* metadata = Reflection::getMetadataFor("MyClass");
 MethodDataHolder mdh = metadata->methodDataHolder;
@@ -99,9 +100,9 @@ metadata->pushMethod(method);
 method.def.clear()
 
 }
-#include "Reflection.h"
-#include "GeneratedFiles/Reflection.h"
 
+
+// Reflection code for MyOtherClass
 void registerMyOtherClassForReflection(){
 TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];
 
@@ -111,4 +112,33 @@ metadata->pushProperty(Property("hello", offsetof(MyOtherClass, MyOtherClass::he
 metadata->pushProperty(Property("world", offsetof(MyOtherClass, MyOtherClass::world), Type::INT));
 
 Method method;
+}
+
+
+// Reflection code for YetAnotherClass
+void YetAnotherClassFuncWrap_getActive_INT() {
+TypeInfo* metadata = Reflection::getMetadataFor("YetAnotherClass");
+MethodDataHolder mdh = metadata->methodDataHolder;
+
+*(bool*)mdh.returnPointer = ((YetAnotherClass*)mdh.instancePointer)->getActive(*(int*)mdh.argumentPointers[0]);
+}
+
+void registerYetAnotherClassForReflection(){
+TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];
+
+metadata->name = "YetAnotherClass"
+
+metadata->pushProperty(Property("isActive", offsetof(YetAnotherClass, YetAnotherClass::isActive), Type::BOOL));
+metadata->pushProperty(Property("test", offsetof(YetAnotherClass, YetAnotherClass::test), Type::CHAR));
+metadata->pushProperty(Property("child", offsetof(YetAnotherClass, YetAnotherClass::child), TypeDef(Type::OBJECT, "MyOtherClass", true)));
+
+Method method;
+method.function_wrapper = &YetAnotherClassFuncWrap_getActive_INT;
+method.def.name = "getActive";
+method.def.returnValue = Type::BOOL;
+method.def.pushArgument(Type::INT);
+
+metadata->pushMethod(method);
+method.def.clear()
+
 }

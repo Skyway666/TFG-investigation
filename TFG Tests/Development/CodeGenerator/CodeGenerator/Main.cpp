@@ -54,18 +54,31 @@ void generateReflection(const char* header) {
 	// Looking for a class
 	int currentToken = 0;
 	// For the moment we are only looking at one class/ file
-	PObject classDefinition;
+	int classDefinitionsIndex = 0;
+	PObject* classDefinitions = new PObject[MAX_OBJECTS];
 	while (tokens[currentToken].type != TokenType::NULL_TOKEN) {
 
 		if (tokens[currentToken].type == TokenType::KW_CLASS) {
-			classDefinition.Parse(tokens, &currentToken);
-			break;
+			PObject* currentClass = &classDefinitions[classDefinitionsIndex++];
+
+			// Go passed the class keyword
+			currentToken++; 
+			currentClass->Parse(tokens, &currentToken);
+
+			// Store this to generate global initialize function, once the class has been parsed
+			strcpy_s(parsedObjects[parsedObjectsIndex++], MAX_NAME_CHARS, currentClass->name);
+
+			// The object could have stopped parsing due to finding a new class, we don't want to skip it
+			continue; 
 		}
 		currentToken++;
 	}
 
-	// Code Generator
-	generateCode(classDefinition);
+	// CODE GENERATOR
+	for(int i = 0; i < classDefinitionsIndex; i++)
+		generateCode(classDefinitions[i]);
+
+	delete classDefinitions;
 }
 
 int main() {
@@ -81,6 +94,8 @@ int main() {
 	remove(outputCPP);
 	remove(outputH);
 
+	openFiles();
+
 	// TOOL CYCLE FOR 1 FILE -> TODO(Lucas): Iterate input directory
 	using std::experimental::filesystem::recursive_directory_iterator;
 	for (auto& it : recursive_directory_iterator(inputDirectory)) {
@@ -94,6 +109,8 @@ int main() {
 			generateReflection(file.c_str());
 		}
 	}
+
+	closeFiles();
 
 	return 0;
 }

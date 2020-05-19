@@ -69,37 +69,44 @@ bool supportCheck(PMethod& method) {
 	return true;
 }
 
+void openFiles() {
+	std::ofstream header(outputH, std::ofstream::app);
+
+	header << "#ifndef ";
+	header << "REFLECTION" << std::endl;
+
+	header << "#define ";
+	header << "REFLECTION" << std::endl << std::endl;
+
+	header.close();
+
+	std::ofstream cpp(outputCPP, std::ofstream::app);
+
+	cpp << "#include \"Reflection.h\"" << std::endl;
+
+	cpp.close();
+}
+
 void generateCode(PObject object) {
 
 	// Header
 	std::ofstream header(outputH, std::ofstream::app);
 
-	header << "#ifndef ";
-	header << object.name;
-	header << "CLASS" << std::endl;
-
-	header << "#define ";
-	header << object.name;
-	header << "CLASS" << std::endl << std::endl;
+	header << std::endl << std::endl;
+	header << "// Register function for " << object.name;
+	header << std::endl;
 
 	header << "void register";
 	header << object.name;
 	header << "ForReflection();" << std::endl << std::endl;
 
-	header << "#endif //";
-	header << object.name;
-	header << "CLASS";
-
 	header.close();
 
 	// Cpp
 	std::ofstream cpp(outputCPP, std::ofstream::app);
-
-	cpp << "#include \"Reflection.h\"" << std::endl;
-	cpp << "#include \"";
-	// TODO(Lucas): Maybe let the user define the route, to customize file location
-	cpp << outputH << "\"";
 	cpp << std::endl << std::endl;
+	cpp << "// Reflection code for " << object.name;
+	cpp << std::endl;
 
 	// METHODS WRAPPERS
 	for (int i = 0; i < object.methodIndex; i++) {
@@ -222,6 +229,26 @@ void generateCode(PObject object) {
 	// Close "registerClassForReflection()"
 	cpp << "}" << std::endl;
 	cpp.close();
-	
+}
 
+void closeFiles() {
+
+	// Generate global register function, that will initialize all the library
+	std::ofstream header(outputH, std::ofstream::app);
+	header << std::endl << std::endl;
+
+	header << "// Global register function" << std::endl;
+
+	header << "void registerALLForReflection() {" << std::endl << std::endl;
+
+	for (int i = 0; i < parsedObjectsIndex; i++) {
+		header << "register" << parsedObjects[i] << "ForReflection();";
+		header << std::endl;
+	}
+
+	header << std::endl << "}";
+
+	header << std::endl << std::endl << "#endif //REFLECTION";
+
+	header.close();
 }

@@ -8,7 +8,8 @@
 #define MAX_PROPERTIES 30
 #define MAX_METHODS 30
 #define MAX_ARGUMENTS 10
-#define MAX_ARRAY_DIGITS 15
+#define MAX_DIGITS 15
+#define MAX_OBJECTS 1000
 #define TEN_THOUSEND 10000
 
 // GLOBAL CLASSES
@@ -73,8 +74,13 @@ struct Token {
 // GLOBAL VARS
 // In this array, we store the name of the classes that the user wants to reflect
 int objectsIndex = 0;
-char objects[TEN_THOUSEND][MAX_NAME_CHARS];
+char objects[MAX_OBJECTS][MAX_NAME_CHARS];
 
-// In this pointer, we store the string of the output directory
+// Objects which the tool has generated code for. Thanks to this array we will implement a final function
+// to register all the library at once
+int parsedObjectsIndex = 0;
+char parsedObjects[MAX_OBJECTS][MAX_NAME_CHARS];
+
+// In this arrays we store the name of the files we will output
 char outputCPP[MAX_FILE_NAME_CHARS] = "Reflection.cpp";
 char outputH[MAX_FILE_NAME_CHARS] = "Reflection.h";

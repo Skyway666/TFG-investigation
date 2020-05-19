@@ -9,4 +9,13 @@ public:
 	int world = 82;
 };
 
+class YetAnotherClass {
+	public:
+		bool isActive;
+		char test;
+		MyOtherClass* child;
+
+		bool getActive(int index);
+};
+
 #endif

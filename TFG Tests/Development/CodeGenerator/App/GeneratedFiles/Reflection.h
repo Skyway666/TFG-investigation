@@ -1,11 +1,30 @@
-#ifndef MyClassCLASS
-#define MyClassCLASS
+#ifndef REFLECTION
+#define REFLECTION
 
+
+
+// Register function for MyClass
 void registerMyClassForReflection();
 
-#endif //MyClassCLASS#ifndef MyOtherClassCLASS
-#define MyOtherClassCLASS
 
+
+// Register function for MyOtherClass
 void registerMyOtherClassForReflection();
 
-#endif //MyOtherClassCLASS
+
+
+// Register function for YetAnotherClass
+void registerYetAnotherClassForReflection();
+
+
+
+// Global register function
+void registerALLForReflection() {
+
+registerMyClassForReflection();
+registerMyOtherClassForReflection();
+registerYetAnotherClassForReflection();
+
+}
+
+#endif //REFLECTION

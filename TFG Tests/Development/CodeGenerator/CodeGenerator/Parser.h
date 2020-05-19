@@ -46,7 +46,7 @@ struct PProperty {
 	char name[MAX_NAME_CHARS];
 	Type type = Type::NULL_TYPE;
 
-	char arraySize[MAX_ARRAY_DIGITS]; // IN MEMORY. To get size of elements -> arraySize / enum2sizeof(arrayType)
+	char arraySize[MAX_DIGITS]; // IN MEMORY. To get size of elements -> arraySize / enum2sizeof(arrayType)
 	bool isPointer = false;
 	char objectName[MAX_NAME_CHARS];
 
@@ -84,7 +84,7 @@ struct PProperty {
 				while (tokens[*currentToken].type != TokenType::USER_BIT) {
 					(*currentToken)++;
 				}
-				strcpy_s(arraySize, MAX_ARRAY_DIGITS, tokens[*currentToken].name);
+				strcpy_s(arraySize, MAX_DIGITS, tokens[*currentToken].name);
 			}
 
 			(*currentToken)++;
@@ -143,7 +143,7 @@ struct PObject {
 
 		bool nameFound = false;
 
-		while (tokens[*currentToken].type != TokenType::NULL_TOKEN) {
+		while (tokens[*currentToken].type != TokenType::KW_CLASS && tokens[*currentToken].type != TokenType::NULL_TOKEN) {
 
 			if (tokens[*currentToken].type == TokenType::USER_BIT && !nameFound) {
 				strcpy_s(name, MAX_NAME_CHARS, tokens[*currentToken].name);
