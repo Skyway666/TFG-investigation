@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <fstream>
+#include <string>
 
 // Itereate files
 #include <filesystem>
@@ -12,15 +13,18 @@ int ImportFileString(const char* file_name, char** buffer) {
 	if (!file) {
 		return 0;
 	}
-	// get length of file:
-	file.seekg(0, file.end);
-	int size = file.tellg();
-	file.seekg(0, file.beg);
+	
+	std::string line;
+	std::string text;
+	while (std::getline(file, line)) {
+		text += line;
+		text += '\n';
+	}
+	int length = text.length();
+	*buffer = new char[length + 1];
+	strcpy_s(*buffer, length + 1, text.c_str());
 
-	*buffer = new char[size];
-	file.read(*buffer, size);
-
-	return size;
+	return text.length();
 }
 
 bool checkExtension(std::string file, std::string extension) {

@@ -1,4 +1,3 @@
-#pragma once
 #define MAX_TYPE_INFO 100
 
 #define MAX_PROPERTIES 30

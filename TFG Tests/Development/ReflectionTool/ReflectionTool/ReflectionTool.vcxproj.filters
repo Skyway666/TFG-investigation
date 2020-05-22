@@ -32,7 +32,7 @@
     <ClInclude Include="MyClass.generated.h">
       <Filter>Archivos de origen\H</Filter>
     </ClInclude>
-    <ClInclude Include="Reflection.h">
+    <ClInclude Include="..\..\CodeGenerator\Reflection.h">
       <Filter>Archivos de origen\H</Filter>
     </ClInclude>
   </ItemGroup>
