@@ -1,3 +1,324 @@
 
 
-const char* typeInfoCode = "#define MAX_TYPE_INFO 100\n\n#define MAX_PROPERTIES 30\n#define MAX_METHODS 30\n#define MAX_ARGUMENTS 10\n\n// TODO(Lucas): Should be removed\n#include<string>\n\n\n// Static part from reflection library\nenum Type {\n	NULL_TYPE,\n	VOID,\n	INT,\n	CHAR,\n	BOOL,\n	OBJECT // Struct or class\n};\n\n\n// Struc intended to be returned to the user\nstruct TypeDef {\n	TypeDef(){}\n	TypeDef(Type type): type(type){} // Basic variable\n	TypeDef(Type type, int arraySize): type(type), arraySize(arraySize){} // Array of basic variables\n	TypeDef(Type type, bool isPointer): type(type), isPointer(isPointer){} // Basic variable pointer\n	TypeDef(Type type, int arraySize, bool isPointer): type(type), arraySize(arraySize), isPointer(isPointer){} // Array of basic variable pointers\n\n	TypeDef(Type type, const char* objectName): type(type), objectName(objectName){} // Basic object\n	TypeDef(Type type, const char* objectName, int arraySize) : type(type), objectName(objectName), arraySize(arraySize) {} // Array of basic objects\n	TypeDef(Type type, const char* objectName, bool isPointer) : type(type), objectName(objectName), isPointer(isPointer) {} // Object pointer\n	TypeDef(Type type, const char* objectName, int arraySize, bool isPointer) : type(type), objectName(objectName), arraySize(arraySize), isPointer(isPointer) {} //  Array of object pointers\n\n\n	Type type = Type::NULL_TYPE;\n	int arraySize = -1; // IN MEMORY. To get size of elements -> arraySize / enum2sizeof(type). If arraySize is different from -1, it is an array\n	bool isPointer = false;\n	const char* objectName = nullptr; // If the variable is of type Object, this will contain its name\n\n	bool operator==(TypeDef typeDef) {\n		bool objectNameCheck = false;\n		if (objectName && typeDef.objectName) {\n			// Both are initialized, names need to be compared\n			objectNameCheck = strcmp(objectName, typeDef.objectName) == 0;\n		}\n		else if(!objectName && !typeDef.objectName){\n			// Both are uninitialized, check is passed\n			objectNameCheck = true;\n		}\n		// One is initialized and the other is not, check is not passed\n\n		return type == typeDef.type &&\n			arraySize == typeDef.arraySize &&\n			isPointer == typeDef.isPointer &&\n			objectNameCheck;\n	}\n\n	bool isArrayOf(TypeDef typeDef) {\n		bool objectNameCheck = false;\n		if (objectName && typeDef.objectName) {\n			// Both are initialized, names need to be compared\n			objectNameCheck = strcmp(objectName, typeDef.objectName) == 0;\n		}\n		else if (!objectName && !typeDef.objectName) {\n			// Both are uninitialized, check is passed\n			objectNameCheck = true;\n		}\n		// One is initialized and the other is not, check is not passed\n\n		return type == typeDef.type &&\n			isPointer == typeDef.isPointer &&\n			objectNameCheck;\n	}\n};\n\n// Private stuff, don't give the user access\nstruct Property {\n	Property() {}\n	Property(const char* name, int offset, TypeDef type) :name(name), offset(offset), type(type) {}\n	const char* name = "null";\n	size_t offset = 0;\n	TypeDef type;\n};\n\nstruct MethodDef {\n\n	int argumentCount = 0;\n	Type returnValue = Type::NULL_TYPE;\n	Type arguments[MAX_ARGUMENTS] = {Type::NULL_TYPE};\n	const char* name = "Null Method";\n\n	void pushArgument(Type argumentType) {\n		arguments[argumentCount++] = argumentType;\n	}\n\n	bool operator==(MethodDef def) {\n\n		if (strcmp(name, def.name) != 0)\n			return false;\n\n		if (argumentCount != def.argumentCount)\n			return false;\n\n		for (int i = 0; i < MAX_ARGUMENTS; i++) {\n			if (arguments[i] != def.arguments[i]) {\n				return false;\n			}\n		}\n\n		return  true;	 \n	}\n\n	void clear() {\n		argumentCount = 0;\n		returnValue = Type::NULL_TYPE;\n		for (int i = 0; i < MAX_ARGUMENTS; i++)\n			arguments[i] = Type::NULL_TYPE;\n		name = "Null Method";\n	}\n};\n\nstruct Method {\n	// Method definition\n	MethodDef def;\n\n	void(*function_wrapper)(void) = nullptr;\n\n	void clear() {\n		def.clear();\n		function_wrapper = nullptr;\n	}\n};\n\n// To be used  by the function wrapper (could be stored in a static structure)\n// Metadata::Invoke() (metadata instance) will fill the arguments, execute the function wrapper, and return the appropiate return value\nstruct MethodDataHolder {\n	// Private to user\n	// Pointer where the function will be called\n	void* instancePointer;\n	// Return value\n	void* returnPointer;\n\n\n	int argumentsCount = 0;\n	void* argumentsPointers[MAX_ARGUMENTS];\n\n	// Public to user\n	void PushReturnPointer(void* userPointer) {\n		returnPointer = userPointer;\n	}\n	void PushArgument(void* argument) {\n		argumentsPointers[argumentsCount++] = argument;\n	}\n\n	void clear() {\n		returnPointer = nullptr;\n		instancePointer = nullptr;\n		argumentsCount = 0;\n		for (int i = 0; i < MAX_ARGUMENTS; i++) {\n			argumentsPointers[i] = nullptr;\n		}\n	}\n};\n\nclass TypeInfo {\npublic:\n\n	const char* name;\n	// Properties\n	unsigned int propertyIndex = 0;\n	Property properties[MAX_PROPERTIES];\n\n	void pushProperty(Property property) {\n		properties[propertyIndex++] = property;\n	}\n\n	// Get field data from pointers\n	int getIntegerValue(void* instance_ptr, const char* name) {\n		Property property = getVariable(name, Type::INT);\n\n		int ret = *((int*)((size_t)instance_ptr + property.offset));\n\n		return ret;\n	}\n\n	bool getBoolValue(void* instance_ptr, const char* name) {\n		Property property = getVariable(name, Type::BOOL);\n\n		bool ret = *((bool*)((size_t)instance_ptr + property.offset));\n\n		return ret;\n	}\n	char getCharValue(void* instance_ptr, const char* name) {\n		Property property = getVariable(name, Type::CHAR);\n\n		char ret = *((char*)((size_t)instance_ptr + property.offset));\n\n		return ret;\n	}\n\n	char* getStringVaue(void* instance_ptr, const char* name) {\n		Property property = getVariable(name, Type::CHAR, true);\n\n		char* ret = *((char**)((size_t)instance_ptr + property.offset));\n\n		return ret;\n	}\n\n	void getArrayValue(void* instance_ptr, const char* name, TypeDef elementType, void* output_array) {\n		Property array = getArray(name, elementType);\n\n		void* to_copy_arr = ((void*)((size_t)instance_ptr + array.offset));\n\n		memcpy(output_array, to_copy_arr, array.type.arraySize);\n	}\n\n	void* getObjectPointer(void* instance_ptr, const char* name, const char* objectName) {\n		Property object = getObject(name, objectName);\n\n		return ((void*)((size_t)instance_ptr + object.offset));\n	}\n\n	void* getPointerValue(void* instance_ptr, const char* name, Type type, const char* objectName = nullptr) {\n		Property pointer = getProperty(name, TypeDef(type, objectName, true));\n\n		return *((void**)((size_t)instance_ptr + pointer.offset));\n	}\n\n	// TODO (Lucas): Create "getPropertyPointer", which returns a void* to the property\n\n\n	// Should return some form of container, since several variables of different type can be declared with the same variable name\n	TypeDef getFieldType(const char* name) {\n		for (int i = 0; i < propertyIndex; i++)\n			if (strcmp(name, properties[i].name) == 0) {\n				return properties[i].type;\n			}\n		\n		return TypeDef();\n	}\n\n	// Get Properties\n	Property getProperty(const char* name, TypeDef type) {\n		for (int i = 0; i < propertyIndex; i++)\n			if (strcmp(name, properties[i].name) == 0 && type == properties[i].type)\n				return properties[i];\n\n		return Property();\n	}\n	Property getVariable(const char* name, Type type, bool isPointer = false) {\n		return getProperty(name, TypeDef(type, isPointer));\n	}\n\n	Property getObject(const char* varName, const char* objectName, bool isPointer = false) {\n		return getProperty(varName, TypeDef(Type::OBJECT, objectName, isPointer));\n	}\n\n	Property getArray(const char* name, TypeDef type) {\n		for (int i = 0; i < propertyIndex; i++)\n			if (strcmp(name, properties[i].name) == 0 && type.isArrayOf(type))\n				return properties[i];\n\n		return Property();\n	}\n\n\n\n	// Methods\n	unsigned int methodIndex = 0;\n	Method methods[MAX_METHODS];\n	MethodDataHolder methodDataHolder;\n\n	void pushMethod(Method method) {\n		methods[methodIndex++] = method;\n	}\n	// Invoke methods from pointers\n	void Invoke(void* instance_ptr, const char* name) {\n		Method method = getMethodByString(name);\n		methodDataHolder.instancePointer = instance_ptr;\n\n		method.function_wrapper();\n	}\n\n	void Invoke(void* instance_ptr, MethodDef def) {\n		Method method = getMethodByDef(def);\n		methodDataHolder.instancePointer = instance_ptr;\n\n		method.function_wrapper();\n	}\n\n	// Get methods\n	Method getMethodByString(const char* name) {\n		for (int i = 0; i < methodIndex; i++)\n			if (strcmp(name, methods[i].def.name) == 0)\n				return methods[i];\n\n		return Method();\n	}\n\n	Method getMethodByDef(MethodDef def) {\n		for (int i = 0; i < methodIndex; i++)\n			if (methods[i].def == def)\n				return methods[i];\n\n		return Method();\n	}\n\n};\n\nclass Reflection {\npublic:\n	Reflection();\n	~Reflection();\n\n\n	static TypeInfo* getMetadataFor(const char* objectName);\n\n	static int metadataIndex;\n	static TypeInfo metadata[MAX_TYPE_INFO];\n};\n\n";
+const char* typeInfoCode = R"(#define MAX_TYPE_INFO 100
+#define MAX_PROPERTIES 30
+#define MAX_METHODS 30
+#define MAX_ARGUMENTS 10
+
+// TODO(Lucas): Should be removed
+#include<string>
+
+
+// Static part from reflection library
+enum Type {
+	NULL_TYPE,
+	VOID,
+	INT,
+	CHAR,
+	BOOL,
+	OBJECT // Struct or class
+};
+
+
+// Struc intended to be returned to the user
+struct TypeDef {
+	TypeDef(){}
+	TypeDef(Type type): type(type){} // Basic variable
+	TypeDef(Type type, int arraySize): type(type), arraySize(arraySize){} // Array of basic variables
+	TypeDef(Type type, bool isPointer): type(type), isPointer(isPointer){} // Basic variable pointer
+	TypeDef(Type type, int arraySize, bool isPointer): type(type), arraySize(arraySize), isPointer(isPointer){} // Array of basic variable pointers
+
+	TypeDef(Type type, const char* objectName): type(type), objectName(objectName){} // Basic object
+	TypeDef(Type type, const char* objectName, int arraySize) : type(type), objectName(objectName), arraySize(arraySize) {} // Array of basic objects
+	TypeDef(Type type, const char* objectName, bool isPointer) : type(type), objectName(objectName), isPointer(isPointer) {} // Object pointer
+	TypeDef(Type type, const char* objectName, int arraySize, bool isPointer) : type(type), objectName(objectName), arraySize(arraySize), isPointer(isPointer) {} //  Array of object pointers
+
+
+	Type type = Type::NULL_TYPE;
+	int arraySize = -1; // IN MEMORY. To get size of elements -> arraySize / enum2sizeof(type). If arraySize is different from -1, it is an array
+	bool isPointer = false;
+	const char* objectName = nullptr; // If the variable is of type Object, this will contain its name
+
+	bool operator==(TypeDef typeDef) {
+		bool objectNameCheck = false;
+		if (objectName && typeDef.objectName) {
+			// Both are initialized, names need to be compared
+			objectNameCheck = strcmp(objectName, typeDef.objectName) == 0;
+		}
+		else if(!objectName && !typeDef.objectName){
+			// Both are uninitialized, check is passed
+			objectNameCheck = true;
+		}
+		// One is initialized and the other is not, check is not passed
+
+		return type == typeDef.type &&
+			arraySize == typeDef.arraySize &&
+			isPointer == typeDef.isPointer &&
+			objectNameCheck;
+	}
+
+	bool isArrayOf(TypeDef typeDef) {
+		bool objectNameCheck = false;
+		if (objectName && typeDef.objectName) {
+			// Both are initialized, names need to be compared
+			objectNameCheck = strcmp(objectName, typeDef.objectName) == 0;
+		}
+		else if (!objectName && !typeDef.objectName) {
+			// Both are uninitialized, check is passed
+			objectNameCheck = true;
+		}
+		// One is initialized and the other is not, check is not passed
+
+		return type == typeDef.type &&
+			isPointer == typeDef.isPointer &&
+			objectNameCheck;
+	}
+};
+
+// Private stuff, don't give the user access
+struct Property {
+	Property() {}
+	Property(const char* name, int offset, TypeDef type) :name(name), offset(offset), type(type) {}
+	const char* name = "null";
+	size_t offset = 0;
+	TypeDef type;
+};
+
+struct MethodDef {
+
+	int argumentCount = 0;
+	Type returnValue = Type::NULL_TYPE;
+	Type arguments[MAX_ARGUMENTS] = {Type::NULL_TYPE};
+	const char* name = "Null Method";
+
+	void pushArgument(Type argumentType) {
+		arguments[argumentCount++] = argumentType;
+	}
+
+	bool operator==(MethodDef def) {
+
+		if (strcmp(name, def.name) != 0)
+			return false;
+
+		if (argumentCount != def.argumentCount)
+			return false;
+
+		for (int i = 0; i < MAX_ARGUMENTS; i++) {
+			if (arguments[i] != def.arguments[i]) {
+				return false;
+			}
+		}
+
+		return  true;	 
+	}
+
+	void clear() {
+		argumentCount = 0;
+		returnValue = Type::NULL_TYPE;
+		for (int i = 0; i < MAX_ARGUMENTS; i++)
+			arguments[i] = Type::NULL_TYPE;
+		name = "Null Method";
+	}
+};
+
+struct Method {
+	// Method definition
+	MethodDef def;
+
+	void(*function_wrapper)(void) = nullptr;
+
+	void clear() {
+		def.clear();
+		function_wrapper = nullptr;
+	}
+};
+
+// To be used  by the function wrapper (could be stored in a static structure)
+// Metadata::Invoke() (metadata instance) will fill the arguments, execute the function wrapper, and return the appropiate return value
+struct MethodDataHolder {
+	// Private to user
+	// Pointer where the function will be called
+	void* instancePointer;
+	// Return value
+	void* returnPointer;
+
+
+	int argumentsCount = 0;
+	void* argumentsPointers[MAX_ARGUMENTS];
+
+	// Public to user
+	void PushReturnPointer(void* userPointer) {
+		returnPointer = userPointer;
+	}
+	void PushArgument(void* argument) {
+		argumentsPointers[argumentsCount++] = argument;
+	}
+
+	void clear() {
+		returnPointer = nullptr;
+		instancePointer = nullptr;
+		argumentsCount = 0;
+		for (int i = 0; i < MAX_ARGUMENTS; i++) {
+			argumentsPointers[i] = nullptr;
+		}
+	}
+};
+
+class TypeInfo {
+public:
+
+	const char* name;
+	// Properties
+	unsigned int propertyIndex = 0;
+	Property properties[MAX_PROPERTIES];
+
+	void pushProperty(Property property) {
+		properties[propertyIndex++] = property;
+	}
+
+	// Get field data from pointers
+	int getIntegerValue(void* instance_ptr, const char* name) {
+		Property property = getVariable(name, Type::INT);
+
+		int ret = *((int*)((size_t)instance_ptr + property.offset));
+
+		return ret;
+	}
+
+	bool getBoolValue(void* instance_ptr, const char* name) {
+		Property property = getVariable(name, Type::BOOL);
+
+		bool ret = *((bool*)((size_t)instance_ptr + property.offset));
+
+		return ret;
+	}
+	char getCharValue(void* instance_ptr, const char* name) {
+		Property property = getVariable(name, Type::CHAR);
+
+		char ret = *((char*)((size_t)instance_ptr + property.offset));
+
+		return ret;
+	}
+
+	char* getStringVaue(void* instance_ptr, const char* name) {
+		Property property = getVariable(name, Type::CHAR, true);
+
+		char* ret = *((char**)((size_t)instance_ptr + property.offset));
+
+		return ret;
+	}
+
+	void getArrayValue(void* instance_ptr, const char* name, TypeDef elementType, void* output_array) {
+		Property array = getArray(name, elementType);
+
+		void* to_copy_arr = ((void*)((size_t)instance_ptr + array.offset));
+
+		memcpy(output_array, to_copy_arr, array.type.arraySize);
+	}
+
+	void* getObjectPointer(void* instance_ptr, const char* name, const char* objectName) {
+		Property object = getObject(name, objectName);
+
+		return ((void*)((size_t)instance_ptr + object.offset));
+	}
+
+	void* getPointerValue(void* instance_ptr, const char* name, Type type, const char* objectName = nullptr) {
+		Property pointer = getProperty(name, TypeDef(type, objectName, true));
+
+		return *((void**)((size_t)instance_ptr + pointer.offset));
+	}
+
+	// TODO (Lucas): Create "getPropertyPointer", which returns a void* to the property
+
+
+	// Should return some form of container, since several variables of different type can be declared with the same variable name
+	TypeDef getFieldType(const char* name) {
+		for (int i = 0; i < propertyIndex; i++)
+			if (strcmp(name, properties[i].name) == 0) {
+				return properties[i].type;
+			}
+		
+		return TypeDef();
+	}
+
+	// Get Properties
+	Property getProperty(const char* name, TypeDef type) {
+		for (int i = 0; i < propertyIndex; i++)
+			if (strcmp(name, properties[i].name) == 0 && type == properties[i].type)
+				return properties[i];
+
+		return Property();
+	}
+	Property getVariable(const char* name, Type type, bool isPointer = false) {
+		return getProperty(name, TypeDef(type, isPointer));
+	}
+
+	Property getObject(const char* varName, const char* objectName, bool isPointer = false) {
+		return getProperty(varName, TypeDef(Type::OBJECT, objectName, isPointer));
+	}
+
+	Property getArray(const char* name, TypeDef type) {
+		for (int i = 0; i < propertyIndex; i++)
+			if (strcmp(name, properties[i].name) == 0 && type.isArrayOf(type))
+				return properties[i];
+
+		return Property();
+	}
+
+
+
+	// Methods
+	unsigned int methodIndex = 0;
+	Method methods[MAX_METHODS];
+	MethodDataHolder methodDataHolder;
+
+	void pushMethod(Method method) {
+		methods[methodIndex++] = method;
+	}
+	// Invoke methods from pointers
+	void Invoke(void* instance_ptr, const char* name) {
+		Method method = getMethodByString(name);
+		methodDataHolder.instancePointer = instance_ptr;
+
+		method.function_wrapper();
+	}
+
+	void Invoke(void* instance_ptr, MethodDef def) {
+		Method method = getMethodByDef(def);
+		methodDataHolder.instancePointer = instance_ptr;
+
+		method.function_wrapper();
+	}
+
+	// Get methods
+	Method getMethodByString(const char* name) {
+		for (int i = 0; i < methodIndex; i++)
+			if (strcmp(name, methods[i].def.name) == 0)
+				return methods[i];
+
+		return Method();
+	}
+
+	Method getMethodByDef(MethodDef def) {
+		for (int i = 0; i < methodIndex; i++)
+			if (methods[i].def == def)
+				return methods[i];
+
+		return Method();
+	}
+
+};
+
+class Reflection {
+public:
+	Reflection();
+	~Reflection();
+
+
+	static TypeInfo* getMetadataFor(const char* objectName);
+
+	static int metadataIndex;
+	static TypeInfo metadata[MAX_TYPE_INFO];
+};
+
+)";

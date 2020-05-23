@@ -1,5 +1,4 @@
 #define MAX_TYPE_INFO 100
-
 #define MAX_PROPERTIES 30
 #define MAX_METHODS 30
 #define MAX_ARGUMENTS 10

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <algorithm>
 
 // This program will produce a file with a variable initialized by a file
 void main(int argc, char* args[]) {
@@ -16,18 +17,18 @@ void main(int argc, char* args[]) {
 
 
 	// Create new file
-	std::ofstream typeInfoIncFile(output);
+	std::ofstream typeInfoIncFile(output, std::ofstream::binary);
 
 	typeInfoIncFile << std::endl << std::endl;
-	typeInfoIncFile << "const char* typeInfoCode = \"";
+	typeInfoIncFile << "const char* typeInfoCode = R\"(";
 
 	std::string line;
 	while (std::getline(typeInfoFile, line)) {
 		// Output the text from the file
 		typeInfoIncFile << line;
-		typeInfoIncFile << "\\n";
+		typeInfoIncFile << "\n";
 	}
-	typeInfoIncFile << "\";";
+	typeInfoIncFile << ")\";";
 
 	// Cleanup
 	typeInfoFile.close();

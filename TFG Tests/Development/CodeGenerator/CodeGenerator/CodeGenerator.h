@@ -2,6 +2,7 @@
 #include "Globals.h"
 #include "Parser.h"
 #include "FileSystem.h"
+#include "IncrustatedTypeInfo.h"
 
 const char* type2String(Type type) {
 
@@ -77,6 +78,8 @@ void openFiles() {
 
 	header << "#define ";
 	header << "REFLECTION" << std::endl << std::endl;
+
+	header << typeInfoCode;
 
 	header.close();
 

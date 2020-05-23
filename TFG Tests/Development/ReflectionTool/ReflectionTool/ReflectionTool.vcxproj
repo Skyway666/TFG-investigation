@@ -119,7 +119,7 @@
     <ClCompile Include="Reflection.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\CodeGenerator\Reflection.h" />
+    <ClInclude Include="..\..\CodeGenerator\TypeInfo.h" />
     <ClInclude Include="MyClass.generated.h" />
     <ClInclude Include="MyClass.h" />
   </ItemGroup>
