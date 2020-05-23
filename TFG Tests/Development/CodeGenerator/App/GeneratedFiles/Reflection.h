@@ -334,8 +334,8 @@ void registerMyOtherClassForReflection();
 
 
 
-// Register function for YetAnotherClass
-void registerYetAnotherClassForReflection();
+// Register function for AnotherClassBitesTheDust
+void registerAnotherClassBitesTheDustForReflection();
 
 
 
@@ -344,7 +344,7 @@ void registerALLForReflection() {
 
 registerMyClassForReflection();
 registerMyOtherClassForReflection();
-registerYetAnotherClassForReflection();
+registerAnotherClassBitesTheDustForReflection();
 
 }
 

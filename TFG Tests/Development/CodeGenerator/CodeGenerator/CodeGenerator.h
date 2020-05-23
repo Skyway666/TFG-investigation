@@ -162,7 +162,7 @@ void generateCode(PObject object) {
 	// PROPS REFLECTION
 	cpp << "TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];" << std::endl << std::endl;
 
-	cpp << "metadata->name = " << "\"" <<object.name << "\"" << std::endl << std::endl;
+	cpp << "metadata->name = " << "\"" <<object.name << "\";" << std::endl << std::endl;
 
 	for (int i = 0; i < object.propertyIndex; i++) {
 		PProperty prop = object.properties[i];

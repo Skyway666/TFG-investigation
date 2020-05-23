@@ -40,7 +40,7 @@ MethodDataHolder mdh = metadata->methodDataHolder;
 void registerMyClassForReflection(){
 TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];
 
-metadata->name = "MyClass"
+metadata->name = "MyClass";
 
 metadata->pushProperty(Property("a", offsetof(MyClass, MyClass::a), Type::INT));
 metadata->pushProperty(Property("b", offsetof(MyClass, MyClass::b), Type::INT));
@@ -106,7 +106,7 @@ method.def.clear()
 void registerMyOtherClassForReflection(){
 TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];
 
-metadata->name = "MyOtherClass"
+metadata->name = "MyOtherClass";
 
 metadata->pushProperty(Property("hello", offsetof(MyOtherClass, MyOtherClass::hello), Type::INT));
 metadata->pushProperty(Property("world", offsetof(MyOtherClass, MyOtherClass::world), Type::INT));
@@ -115,30 +115,15 @@ Method method;
 }
 
 
-// Reflection code for YetAnotherClass
-void YetAnotherClassFuncWrap_getActive_INT() {
-TypeInfo* metadata = Reflection::getMetadataFor("YetAnotherClass");
-MethodDataHolder mdh = metadata->methodDataHolder;
-
-*(bool*)mdh.returnPointer = ((YetAnotherClass*)mdh.instancePointer)->getActive(*(int*)mdh.argumentPointers[0]);
-}
-
-void registerYetAnotherClassForReflection(){
+// Reflection code for AnotherClassBitesTheDust
+void registerAnotherClassBitesTheDustForReflection(){
 TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];
 
-metadata->name = "YetAnotherClass"
+metadata->name = "AnotherClassBitesTheDust";
 
-metadata->pushProperty(Property("isActive", offsetof(YetAnotherClass, YetAnotherClass::isActive), Type::BOOL));
-metadata->pushProperty(Property("test", offsetof(YetAnotherClass, YetAnotherClass::test), Type::CHAR));
-metadata->pushProperty(Property("child", offsetof(YetAnotherClass, YetAnotherClass::child), TypeDef(Type::OBJECT, "MyOtherClass", true)));
+metadata->pushProperty(Property("queenType", offsetof(AnotherClassBitesTheDust, AnotherClassBitesTheDust::queenType), TypeDef(Type::CHAR, true)));
+metadata->pushProperty(Property("isFredy", offsetof(AnotherClassBitesTheDust, AnotherClassBitesTheDust::isFredy), Type::BOOL));
+metadata->pushProperty(Property("indexOfAwesomeness", offsetof(AnotherClassBitesTheDust, AnotherClassBitesTheDust::indexOfAwesomeness), Type::INT));
 
 Method method;
-method.function_wrapper = &YetAnotherClassFuncWrap_getActive_INT;
-method.def.name = "getActive";
-method.def.returnValue = Type::BOOL;
-method.def.pushArgument(Type::INT);
-
-metadata->pushMethod(method);
-method.def.clear()
-
 }

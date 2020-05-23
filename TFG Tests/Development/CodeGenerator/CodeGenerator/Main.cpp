@@ -44,6 +44,13 @@ void loadConfig(char* inputDirectory) {
 	json_value_free(rawFile);
 }
 
+bool objectNeedsReflection(const char* objectName) {
+		for (int i = 0; i < objectsIndex; i++)
+			if (strcmp(objectName, objects[i]) == 0)
+				return true;
+
+		return false;
+}
 void generateReflection(const char* header) {
 
 	// LEXER/TOKENIZER
@@ -63,6 +70,15 @@ void generateReflection(const char* header) {
 
 			// Go passed the class keyword
 			currentToken++; 
+			
+			currentClass->ParseName(tokens, &currentToken);
+			// Skip the parsing of object which don't need reflection
+			if (!objectNeedsReflection(currentClass->name)) {
+				classDefinitionsIndex--;
+				continue;
+			}
+
+
 			currentClass->Parse(tokens, &currentToken);
 
 			// Store this to generate global initialize function, once the class has been parsed

@@ -138,19 +138,19 @@ struct PObject {
 	int methodIndex = 0;
 	PMethod methods[MAX_METHODS];
 
+	void ParseName(Token* tokens, int* currentToken) {
+		while (tokens[*currentToken].type != TokenType::USER_BIT)
+			(*currentToken)++;
+
+		strcpy_s(name, MAX_NAME_CHARS, tokens[*currentToken].name);
+		// Go passed the name of the class
+		(*currentToken)++;
+
+	}
+
 	void Parse(Token* tokens, int* currentToken) {
 		// For the moment we are only looking at one class/ file
-
-		bool nameFound = false;
-
 		while (tokens[*currentToken].type != TokenType::KW_CLASS && tokens[*currentToken].type != TokenType::NULL_TOKEN) {
-
-			if (tokens[*currentToken].type == TokenType::USER_BIT && !nameFound) {
-				strcpy_s(name, MAX_NAME_CHARS, tokens[*currentToken].name);
-				// Go passed the name of the class
-				(*currentToken)++;
-				nameFound = true;
-			}
 
 			if (tokenIsType(tokens[*currentToken])) {
 				// We have either a method or a property

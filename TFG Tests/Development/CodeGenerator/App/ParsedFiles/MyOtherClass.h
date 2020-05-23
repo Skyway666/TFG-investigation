@@ -18,4 +18,10 @@ class YetAnotherClass {
 		bool getActive(int index);
 };
 
+class AnotherClassBitesTheDust {
+	char* queenType;
+	bool isFredy;
+	int indexOfAwesomeness;
+};
+
 #endif

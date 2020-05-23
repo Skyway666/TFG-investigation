@@ -3,6 +3,7 @@
   "output-directory": "GeneratedFiles",
   "reflected-objects": [
     "MyClass",
-    "MyOtherClass"
+    "MyOtherClass",
+    "AnotherClassBitesTheDust"
   ]
 }
