@@ -4,6 +4,7 @@
   "reflected-objects": [
     "MyClass",
     "MyOtherClass",
-    "AnotherClassBitesTheDust"
+    "AnotherClassBitesTheDust",
+    "MyStructure"
   ]
 }

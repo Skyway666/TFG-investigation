@@ -65,7 +65,7 @@ void generateReflection(const char* header) {
 	PObject* classDefinitions = new PObject[MAX_OBJECTS];
 	while (tokens[currentToken].type != TokenType::NULL_TOKEN) {
 
-		if (tokens[currentToken].type == TokenType::KW_CLASS) {
+		if (tokenIsObject(tokens[currentToken])) {
 			PObject* currentClass = &classDefinitions[classDefinitionsIndex++];
 
 			// Go passed the class keyword

@@ -29,4 +29,9 @@ public:
 	MyClass returnSomething(MyOtherClass* jaja)
 };
 
+struct MyStructure {
+	int struct_number;
+	bool hasClass;
+};
+
 #endif

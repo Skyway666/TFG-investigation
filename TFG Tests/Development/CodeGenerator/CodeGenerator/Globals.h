@@ -70,6 +70,10 @@ struct Token {
 	char name[MAX_NAME_CHARS] = { '\0' };
 };
 
+bool tokenIsObject(Token token) {
+	return token.type == TokenType::KW_CLASS || token.type == TokenType::KW_STRUCT;
+}
+
 
 // GLOBAL VARS
 // In this array, we store the name of the classes that the user wants to reflect

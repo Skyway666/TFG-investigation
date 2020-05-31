@@ -205,7 +205,9 @@ void generateCode(PObject object) {
 	cpp << std::endl;
 
 	// METHOD REFLECTION
-	cpp << "Method method;" << std::endl;
+
+	if(object.methodIndex != 0)
+		cpp << "Method method;" << std::endl;
 
 	for (int i = 0; i < object.methodIndex; i++) {
 		PMethod method = object.methods[i];

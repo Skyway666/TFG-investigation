@@ -150,7 +150,7 @@ struct PObject {
 
 	void Parse(Token* tokens, int* currentToken) {
 		// For the moment we are only looking at one class/ file
-		while (tokens[*currentToken].type != TokenType::KW_CLASS && tokens[*currentToken].type != TokenType::NULL_TOKEN) {
+		while (!tokenIsObject(tokens[*currentToken]) && tokens[*currentToken].type != TokenType::NULL_TOKEN) {
 
 			if (tokenIsType(tokens[*currentToken])) {
 				// We have either a method or a property

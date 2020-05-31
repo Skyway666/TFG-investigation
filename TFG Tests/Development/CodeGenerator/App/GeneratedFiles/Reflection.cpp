@@ -102,6 +102,18 @@ method.def.clear()
 }
 
 
+// Reflection code for MyStructure
+void registerMyStructureForReflection(){
+TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];
+
+metadata->name = "MyStructure";
+
+metadata->pushProperty(Property("struct_number", offsetof(MyStructure, MyStructure::struct_number), Type::INT));
+metadata->pushProperty(Property("hasClass", offsetof(MyStructure, MyStructure::hasClass), Type::BOOL));
+
+}
+
+
 // Reflection code for MyOtherClass
 void registerMyOtherClassForReflection(){
 TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];
@@ -111,7 +123,6 @@ metadata->name = "MyOtherClass";
 metadata->pushProperty(Property("hello", offsetof(MyOtherClass, MyOtherClass::hello), Type::INT));
 metadata->pushProperty(Property("world", offsetof(MyOtherClass, MyOtherClass::world), Type::INT));
 
-Method method;
 }
 
 
@@ -125,5 +136,4 @@ metadata->pushProperty(Property("queenType", offsetof(AnotherClassBitesTheDust, 
 metadata->pushProperty(Property("isFredy", offsetof(AnotherClassBitesTheDust, AnotherClassBitesTheDust::isFredy), Type::BOOL));
 metadata->pushProperty(Property("indexOfAwesomeness", offsetof(AnotherClassBitesTheDust, AnotherClassBitesTheDust::indexOfAwesomeness), Type::INT));
 
-Method method;
 }

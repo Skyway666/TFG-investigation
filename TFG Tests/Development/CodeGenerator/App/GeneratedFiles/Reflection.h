@@ -329,6 +329,11 @@ void registerMyClassForReflection();
 
 
 
+// Register function for MyStructure
+void registerMyStructureForReflection();
+
+
+
 // Register function for MyOtherClass
 void registerMyOtherClassForReflection();
 
@@ -343,6 +348,7 @@ void registerAnotherClassBitesTheDustForReflection();
 void registerALLForReflection() {
 
 registerMyClassForReflection();
+registerMyStructureForReflection();
 registerMyOtherClassForReflection();
 registerAnotherClassBitesTheDustForReflection();
 
