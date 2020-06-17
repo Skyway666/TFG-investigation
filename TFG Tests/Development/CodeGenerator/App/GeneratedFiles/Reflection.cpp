@@ -1,4 +1,6 @@
 #include "Reflection.h"
+#include "../ParsedFiles/MyClass.h"
+#include "../ParsedFiles/MyOtherClass.h"
 
 
 // Reflection code for MyClass

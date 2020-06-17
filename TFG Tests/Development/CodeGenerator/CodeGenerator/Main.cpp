@@ -18,9 +18,12 @@ void loadConfig(char* inputDirectory) {
 	JSON_Array* jsonReflectedObjects = json_object_get_array(file, "reflected-objects");
 
 
-	const char* outputDirectory = nullptr;
+	const char* tmp_outputDirectory = nullptr;
 	if(json_object_has_value(file, "output-directory") == 1)
-		outputDirectory = json_object_get_string(file, "output-directory");
+		tmp_outputDirectory = json_object_get_string(file, "output-directory");
+
+	// Copy the output directory to a global variable for later use
+	strcpy_s(outputDirectory, MAX_FILE_NAME_CHARS, tmp_outputDirectory);
 
 	if(json_object_has_value(file, "input-directory") == 1)
 		strcpy_s(inputDirectory, MAX_FILE_NAME_CHARS, json_object_get_string(file, "input-directory"));
@@ -33,9 +36,9 @@ void loadConfig(char* inputDirectory) {
 
 	// Assemble output files
 
-	if (outputDirectory) {
-		strcpy_s(outputCPP, MAX_FILE_NAME_CHARS,  outputDirectory);
-		strcpy_s(outputH, MAX_FILE_NAME_CHARS, outputDirectory);
+	if (tmp_outputDirectory) {
+		strcpy_s(outputCPP, MAX_FILE_NAME_CHARS, tmp_outputDirectory);
+		strcpy_s(outputH, MAX_FILE_NAME_CHARS, tmp_outputDirectory);
 
 		strcat_s(outputH, "/Reflection.h");
 		strcat_s(outputCPP, "/Reflection.cpp");
@@ -110,19 +113,33 @@ int main() {
 	remove(outputCPP);
 	remove(outputH);
 
-	openFiles();
+	// Get paths to header files
+	int headerFilesIndex = 0;
+	char headerFiles[MAX_FILES][MAX_FILE_NAME_CHARS];
 
 	using std::filesystem::recursive_directory_iterator;
 	for (auto& it : recursive_directory_iterator(inputDirectory)) {
 		// Ignore directories
-		if (it.status().type() == std::filesystem::file_type::directory) 
+		if (it.status().type() == std::filesystem::file_type::directory)
 			continue;
 
-		std::string file= it.path().generic_string();
+		std::string file = it.path().generic_string();
 
 		if (checkExtension(file, "h")) {
-			generateReflection(file.c_str());
+			strcpy_s(headerFiles[headerFilesIndex++], MAX_FILE_NAME_CHARS, file.c_str());
 		}
+	}
+
+
+
+	// Initialize generated files
+		// includes
+		// TypeInfo
+		// header protection
+	openFiles(headerFiles, headerFilesIndex);
+
+	for (int i = 0; i < headerFilesIndex; i++) {
+		generateReflection(headerFiles[i]);
 	}
 
 	closeFiles();

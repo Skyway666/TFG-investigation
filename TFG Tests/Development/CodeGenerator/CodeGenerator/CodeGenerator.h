@@ -62,7 +62,7 @@ bool supportCheck(PMethod& method) {
 	if (method.returnValue == Type::OBJECT)
 		return false;
 
-	for (int i = 0; i++; i < method.argumentsIndex) {
+	for (int i = 0; i < method.argumentsIndex; i++) {
 		if (method.arguments[i] == Type::OBJECT)
 			return false;
 	}
@@ -70,7 +70,7 @@ bool supportCheck(PMethod& method) {
 	return true;
 }
 
-void openFiles() {
+void openFiles(char headerFiles[][MAX_FILE_NAME_CHARS], int headerFilesCount) {
 	std::ofstream header(outputH, std::ofstream::app);
 
 	header << "#ifndef ";
@@ -86,6 +86,14 @@ void openFiles() {
 	std::ofstream cpp(outputCPP, std::ofstream::app);
 
 	cpp << "#include \"Reflection.h\"" << std::endl;
+
+	for (int i = 0; i < headerFilesCount; i++) {
+		// Generate path relative to output-directory
+		char includePath[MAX_FILE_NAME_CHARS];
+		relativePath(headerFiles[i], outputDirectory, includePath);
+
+		cpp << "#include \"" << includePath << "\"" << std::endl;
+	}
 
 	cpp.close();
 }

@@ -4,6 +4,7 @@
 
 //GLOBAL DEFINES
 #define MAX_NAME_CHARS 50
+#define MAX_FILES 1000
 #define MAX_FILE_NAME_CHARS	200
 #define MAX_PROPERTIES 30
 #define MAX_METHODS 30
@@ -86,5 +87,6 @@ int parsedObjectsIndex = 0;
 char parsedObjects[MAX_OBJECTS][MAX_NAME_CHARS];
 
 // In this arrays we store the name of the files we will output
+char outputDirectory[MAX_FILE_NAME_CHARS] = "";
 char outputCPP[MAX_FILE_NAME_CHARS] = "Reflection.cpp";
 char outputH[MAX_FILE_NAME_CHARS] = "Reflection.h";

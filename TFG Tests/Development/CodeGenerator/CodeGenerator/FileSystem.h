@@ -30,3 +30,9 @@ int ImportFileString(const char* file_name, char** buffer) {
 bool checkExtension(std::string file, std::string extension) {
 	return	file.substr(file.find_last_of(".") + 1) == extension;
 }
+
+void relativePath(const char* pathA, const char* pathB, char* output) {
+	std::string path = std::filesystem::relative(pathA, pathB).generic_string();
+
+	strcpy_s(output, path.length() + 1, path.c_str());
+}
