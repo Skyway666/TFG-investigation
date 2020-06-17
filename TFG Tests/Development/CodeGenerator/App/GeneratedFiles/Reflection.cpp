@@ -157,3 +157,12 @@ TypeInfo* Reflection::getMetadataFor(const char* objectName) {
 
 	return nullptr;
 }
+
+void registerALLForReflection() {
+
+registerMyClassForReflection();
+registerMyStructureForReflection();
+registerMyOtherClassForReflection();
+registerAnotherClassBitesTheDustForReflection();
+
+}

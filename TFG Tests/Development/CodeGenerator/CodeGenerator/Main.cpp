@@ -112,11 +112,10 @@ int main() {
 
 	openFiles();
 
-	// TOOL CYCLE FOR 1 FILE -> TODO(Lucas): Iterate input directory
-	using std::experimental::filesystem::recursive_directory_iterator;
+	using std::filesystem::recursive_directory_iterator;
 	for (auto& it : recursive_directory_iterator(inputDirectory)) {
 		// Ignore directories
-		if (it.status().type() == std::experimental::filesystem::v1::file_type::directory) 
+		if (it.status().type() == std::filesystem::file_type::directory) 
 			continue;
 
 		std::string file= it.path().generic_string();

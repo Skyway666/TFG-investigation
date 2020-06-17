@@ -238,27 +238,19 @@ void generateCode(PObject object) {
 
 void closeFiles() {
 
-	// Generate global register function, that will initialize all the library
+	// Header
 	std::ofstream header(outputH, std::ofstream::app);
 	header << std::endl << std::endl;
 
+	// RegisterAll declaration
 	header << "// Global register function" << std::endl;
-
-	header << "void registerALLForReflection() {" << std::endl << std::endl;
-
-	for (int i = 0; i < parsedObjectsIndex; i++) {
-		header << "register" << parsedObjects[i] << "ForReflection();";
-		header << std::endl;
-	}
-
-	header << std::endl << "}";
-
+	header << "void registerALLForReflection();" << std::endl << std::endl;
 	header << std::endl << std::endl << "#endif //REFLECTION";
-
 	header.close();
 
 	std::ofstream cpp(outputCPP, std::ofstream::app);
-	
+
+	// Reflection statics declaration
 	const char* reflectionStatics = R"(TypeInfo Reflection::metadata[];
 int Reflection::metadataIndex = 0;
 
@@ -280,6 +272,17 @@ TypeInfo* Reflection::getMetadataFor(const char* objectName) {
 })";
 
 	cpp << std::endl;
-	cpp << reflectionStatics;
+	cpp << reflectionStatics << std::endl << std::endl;
+
+	// RegisterAll definition
+	cpp << "void registerALLForReflection() {" << std::endl << std::endl;
+
+	for (int i = 0; i < parsedObjectsIndex; i++) {
+		cpp << "register" << parsedObjects[i] << "ForReflection();";
+		cpp << std::endl;
+	}
+
+	cpp << std::endl << "}";
+
 	cpp.close();
 }
