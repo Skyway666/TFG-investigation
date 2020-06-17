@@ -256,4 +256,30 @@ void closeFiles() {
 	header << std::endl << std::endl << "#endif //REFLECTION";
 
 	header.close();
+
+	std::ofstream cpp(outputCPP, std::ofstream::app);
+	
+	const char* reflectionStatics = R"(TypeInfo Reflection::metadata[];
+int Reflection::metadataIndex = 0;
+
+Reflection::Reflection() {
+}
+
+
+Reflection::~Reflection() {
+}
+
+
+TypeInfo* Reflection::getMetadataFor(const char* objectName) {
+
+	for (int i = 0; i < metadataIndex; i++)
+		if (strcmp(objectName, metadata[i].name) == 0)
+			return &metadata[i];
+
+	return nullptr;
+})";
+
+	cpp << std::endl;
+	cpp << reflectionStatics;
+	cpp.close();
 }
