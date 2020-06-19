@@ -145,7 +145,7 @@ void generateCode(PObject object) {
 		for (int i = 0; i < method.argumentsIndex; i++) {
 			Type argument = method.arguments[i];
 
-			cpp << "*(" << type2Ctype(argument) << "*)mdh.argumentPointers[" << std::to_string(i) << "]";
+			cpp << "*(" << type2Ctype(argument) << "*)mdh.argumentsPointers[" << std::to_string(i) << "]";
 			if (i != method.argumentsIndex - 1) {
 				cpp << ", ";
 			}
@@ -234,7 +234,7 @@ void generateCode(PObject object) {
 		}
 		cpp << std::endl;
 		cpp << "metadata->pushMethod(method);" << std::endl;
-		cpp << "method.def.clear()" << std::endl << std::endl;
+		cpp << "method.def.clear();" << std::endl << std::endl;
 
 	}
 
