@@ -307,10 +307,10 @@ public:
 
 };
 
-class Reflection {
+class Mirror {
 public:
-	Reflection();
-	~Reflection();
+	Mirror();
+	~Mirror();
 
 
 	static TypeInfo* getMetadataFor(const char* objectName);

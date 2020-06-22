@@ -32,6 +32,9 @@
     <ClInclude Include="Third Party\parson.h">
       <Filter>Third Party</Filter>
     </ClInclude>
+    <ClInclude Include="IncrustatedTypeInfo.h">
+      <Filter>H</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">

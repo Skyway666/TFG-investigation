@@ -1,17 +1,17 @@
 #include "../../Mirror/TypeInfo.h"
 
-TypeInfo Reflection::metadata[];
-int Reflection::metadataIndex = 0;
+TypeInfo Mirror::metadata[];
+int Mirror::metadataIndex = 0;
 
-Reflection::Reflection() {
+Mirror::Mirror() {
 }
 
 
-Reflection::~Reflection() {
+Mirror::~Mirror() {
 }
 
 
-TypeInfo* Reflection::getMetadataFor(const char* objectName) {
+TypeInfo* Mirror::getMetadataFor(const char* objectName) {
 
 	for (int i = 0; i < metadataIndex; i++)
 		if (strcmp(objectName, metadata[i].name) == 0)

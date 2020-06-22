@@ -133,7 +133,7 @@ void generateCode(PObject object) {
 		cpp << "() {";
 		cpp << std::endl;
 		// Open "ClassNameFuncWrap_functionName_ARGUMENT1TYPE_ARGUMENT2TYPE...()
-		cpp << "TypeInfo* metadata = Reflection::getMetadataFor(\"" << object.name << "\");" << std::endl;
+		cpp << "TypeInfo* metadata = Mirror::getMetadataFor(\"" << object.name << "\");" << std::endl;
 		cpp << "MethodDataHolder mdh = metadata->methodDataHolder;" << std::endl << std::endl;
 
 		if (method.returnValue != Type::VOID) {
@@ -168,7 +168,7 @@ void generateCode(PObject object) {
 	// Open "registerClassNameForReflection()"
 
 	// PROPS REFLECTION
-	cpp << "TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];" << std::endl << std::endl;
+	cpp << "TypeInfo* metadata = &Mirror::metadata[Mirror::metadataIndex++];" << std::endl << std::endl;
 
 	cpp << "metadata->name = " << "\"" <<object.name << "\";" << std::endl << std::endl;
 
@@ -259,18 +259,18 @@ void closeFiles() {
 	std::ofstream cpp(outputCPP, std::ofstream::app);
 
 	// Reflection statics declaration
-	const char* reflectionStatics = R"(TypeInfo Reflection::metadata[];
-int Reflection::metadataIndex = 0;
+	const char* reflectionStatics = R"(TypeInfo Mirror::metadata[];
+int Mirror::metadataIndex = 0;
 
-Reflection::Reflection() {
+Mirror::Mirror() {
 }
 
 
-Reflection::~Reflection() {
+Mirror::~Mirror() {
 }
 
 
-TypeInfo* Reflection::getMetadataFor(const char* objectName) {
+TypeInfo* Mirror::getMetadataFor(const char* objectName) {
 
 	for (int i = 0; i < metadataIndex; i++)
 		if (strcmp(objectName, metadata[i].name) == 0)

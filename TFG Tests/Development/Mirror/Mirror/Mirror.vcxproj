@@ -128,6 +128,7 @@
     <ClInclude Include="CodeGenerator.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="IncrustatedTypeInfo.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="Third Party\parson.h" />
     <ClInclude Include="Tokenizer.h" />

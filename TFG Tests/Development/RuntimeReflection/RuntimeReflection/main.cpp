@@ -30,7 +30,7 @@ int main() {
 	instance.boolPointers[1] = &b;
 	instance.boolPointers[2] = &c;
 
-	TypeInfo* myClassMetadata = Reflection::getMetadataFor("MyClass");
+	TypeInfo* myClassMetadata = Mirror::getMetadataFor("MyClass");
 
 	int a_value = myClassMetadata->getIntegerValue(&instance, "a");
 

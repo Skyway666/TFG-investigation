@@ -1,1 +1,1 @@
-TypeInfoIncrustator.exe TypeInfo.h CodeGenerator/IncrustatedTypeInfo.h
+TypeInfoIncrustator.exe TypeInfo.h Mirror/IncrustatedTypeInfo.h

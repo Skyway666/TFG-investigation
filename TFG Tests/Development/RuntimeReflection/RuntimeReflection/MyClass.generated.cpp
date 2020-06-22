@@ -9,21 +9,21 @@
 
 
 void MyClassFuncWrap_sum1ToA_BOOL() {
-	TypeInfo* metadata = Reflection::getMetadataFor("MyClass");
+	TypeInfo* metadata = Mirror::getMetadataFor("MyClass");
 	MethodDataHolder mdh = metadata->methodDataHolder;
 
 	*(int*)mdh.returnPointer = ((MyClass*)mdh.instancePointer)->sum1ToA(*(bool*)mdh.argumentsPointers[0]);
 }
 
 void MyClassFuncWrap_addNumbers_INT_INT() {
-	TypeInfo* metadata = Reflection::getMetadataFor("MyClass");
+	TypeInfo* metadata = Mirror::getMetadataFor("MyClass");
 	MethodDataHolder methodDataHolder = metadata->methodDataHolder;
 
 	*(int*)methodDataHolder.returnPointer = ((MyClass*)methodDataHolder.instancePointer)->addNumbers(*(int*)methodDataHolder.argumentsPointers[0], *(int*)methodDataHolder.argumentsPointers[1]);
 }
 
 void MyClassFuncWrap_addNumbers_INT_INT_INT() {
-	TypeInfo* metadata = Reflection::getMetadataFor("MyClass");
+	TypeInfo* metadata = Mirror::getMetadataFor("MyClass");
 	MethodDataHolder methodDataHolder = metadata->methodDataHolder;
 
 	*(int*)methodDataHolder.returnPointer = ((MyClass*)methodDataHolder.instancePointer)->addNumbers(*(int*)methodDataHolder.argumentsPointers[0], *(int*)methodDataHolder.argumentsPointers[1], *(int*)methodDataHolder.argumentsPointers[2]);
@@ -33,7 +33,7 @@ void MyClassFuncWrap_addNumbers_INT_INT_INT() {
 // Fill "TypeInfo metadata" for MyClass: TODO(Lucas): Consider returning integer with the position of the newly registered metadata
 void registerMyClassForReflection() {
 	
-	TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];
+	TypeInfo* metadata = &Mirror::metadata[Mirror::metadataIndex++];
 
 	// Name
 

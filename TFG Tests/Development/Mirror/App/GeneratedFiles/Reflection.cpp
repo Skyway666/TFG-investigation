@@ -5,42 +5,42 @@
 
 // Reflection code for MyClass
 void MyClassFuncWrap_sum1ToA_BOOL() {
-TypeInfo* metadata = Reflection::getMetadataFor("MyClass");
+TypeInfo* metadata = Mirror::getMetadataFor("MyClass");
 MethodDataHolder mdh = metadata->methodDataHolder;
 
 *(int*)mdh.returnPointer = ((MyClass*)mdh.instancePointer)->sum1ToA(*(bool*)mdh.argumentsPointers[0]);
 }
 
 void MyClassFuncWrap_addNumbers_INT_INT() {
-TypeInfo* metadata = Reflection::getMetadataFor("MyClass");
+TypeInfo* metadata = Mirror::getMetadataFor("MyClass");
 MethodDataHolder mdh = metadata->methodDataHolder;
 
 *(int*)mdh.returnPointer = ((MyClass*)mdh.instancePointer)->addNumbers(*(int*)mdh.argumentsPointers[0], *(int*)mdh.argumentsPointers[1]);
 }
 
 void MyClassFuncWrap_addNumbers_INT_INT_INT() {
-TypeInfo* metadata = Reflection::getMetadataFor("MyClass");
+TypeInfo* metadata = Mirror::getMetadataFor("MyClass");
 MethodDataHolder mdh = metadata->methodDataHolder;
 
 *(int*)mdh.returnPointer = ((MyClass*)mdh.instancePointer)->addNumbers(*(int*)mdh.argumentsPointers[0], *(int*)mdh.argumentsPointers[1], *(int*)mdh.argumentsPointers[2]);
 }
 
 void MyClassFuncWrap_reference_BOOL() {
-TypeInfo* metadata = Reflection::getMetadataFor("MyClass");
+TypeInfo* metadata = Mirror::getMetadataFor("MyClass");
 MethodDataHolder mdh = metadata->methodDataHolder;
 
 *(int*)mdh.returnPointer = ((MyClass*)mdh.instancePointer)->reference(*(bool*)mdh.argumentsPointers[0]);
 }
 
 void MyClassFuncWrap_getName_BOOL() {
-TypeInfo* metadata = Reflection::getMetadataFor("MyClass");
+TypeInfo* metadata = Mirror::getMetadataFor("MyClass");
 MethodDataHolder mdh = metadata->methodDataHolder;
 
 *(char*)mdh.returnPointer = ((MyClass*)mdh.instancePointer)->getName(*(bool*)mdh.argumentsPointers[0]);
 }
 
 void registerMyClassForReflection(){
-TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];
+TypeInfo* metadata = &Mirror::metadata[Mirror::metadataIndex++];
 
 metadata->name = "MyClass";
 
@@ -106,7 +106,7 @@ method.def.clear();
 
 // Reflection code for MyStructure
 void registerMyStructureForReflection(){
-TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];
+TypeInfo* metadata = &Mirror::metadata[Mirror::metadataIndex++];
 
 metadata->name = "MyStructure";
 
@@ -118,7 +118,7 @@ metadata->pushProperty(Property("hasClass", offsetof(MyStructure, MyStructure::h
 
 // Reflection code for MyOtherClass
 void registerMyOtherClassForReflection(){
-TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];
+TypeInfo* metadata = &Mirror::metadata[Mirror::metadataIndex++];
 
 metadata->name = "MyOtherClass";
 
@@ -130,12 +130,41 @@ metadata->pushProperty(Property("world", offsetof(MyOtherClass, MyOtherClass::wo
 
 // Reflection code for AnotherClassBitesTheDust
 void registerAnotherClassBitesTheDustForReflection(){
-TypeInfo* metadata = &Reflection::metadata[Reflection::metadataIndex++];
+TypeInfo* metadata = &Mirror::metadata[Mirror::metadataIndex++];
 
 metadata->name = "AnotherClassBitesTheDust";
 
 metadata->pushProperty(Property("queenType", offsetof(AnotherClassBitesTheDust, AnotherClassBitesTheDust::queenType), TypeDef(Type::CHAR, true)));
 metadata->pushProperty(Property("isFredy", offsetof(AnotherClassBitesTheDust, AnotherClassBitesTheDust::isFredy), Type::BOOL));
 metadata->pushProperty(Property("indexOfAwesomeness", offsetof(AnotherClassBitesTheDust, AnotherClassBitesTheDust::indexOfAwesomeness), Type::INT));
+
+}
+
+TypeInfo Mirror::metadata[];
+int Mirror::metadataIndex = 0;
+
+Mirror::Mirror() {
+}
+
+
+Mirror::~Mirror() {
+}
+
+
+TypeInfo* Mirror::getMetadataFor(const char* objectName) {
+
+	for (int i = 0; i < metadataIndex; i++)
+		if (strcmp(objectName, metadata[i].name) == 0)
+			return &metadata[i];
+
+	return nullptr;
+}
+
+void registerALLForReflection() {
+
+registerMyClassForReflection();
+registerMyStructureForReflection();
+registerMyOtherClassForReflection();
+registerAnotherClassBitesTheDustForReflection();
 
 }

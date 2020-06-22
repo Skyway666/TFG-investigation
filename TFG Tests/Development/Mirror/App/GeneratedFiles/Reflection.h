@@ -310,10 +310,10 @@ public:
 
 };
 
-class Reflection {
+class Mirror {
 public:
-	Reflection();
-	~Reflection();
+	Mirror();
+	~Mirror();
 
 
 	static TypeInfo* getMetadataFor(const char* objectName);
@@ -342,3 +342,11 @@ void registerMyOtherClassForReflection();
 // Register function for AnotherClassBitesTheDust
 void registerAnotherClassBitesTheDustForReflection();
 
+
+
+// Global register function
+void registerALLForReflection();
+
+
+
+#endif //REFLECTION
