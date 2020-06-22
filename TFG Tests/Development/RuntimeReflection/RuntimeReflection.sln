@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.28306.52
+VisualStudioVersion = 15.0.28307.1145
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReflectionTool", "ReflectionTool\ReflectionTool.vcxproj", "{A801A733-5690-4BAE-BB22-DCC25A4BDAD8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RuntimeReflection", "RuntimeReflection\RuntimeReflection.vcxproj", "{A801A733-5690-4BAE-BB22-DCC25A4BDAD8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +26,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {0E255E5D-AB7F-4EFC-B1AE-EE6BE679FFB8}
+		SolutionGuid = {D0C5E089-71AD-4313-9502-81D99F5DACC3}
 	EndGlobalSection
 EndGlobal

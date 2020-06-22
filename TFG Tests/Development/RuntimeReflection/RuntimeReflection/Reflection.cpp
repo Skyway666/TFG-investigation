@@ -1,4 +1,4 @@
-#include "../../CodeGenerator/TypeInfo.h"
+#include "../../Mirror/TypeInfo.h"
 
 TypeInfo Reflection::metadata[];
 int Reflection::metadataIndex = 0;

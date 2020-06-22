@@ -342,11 +342,3 @@ void registerMyOtherClassForReflection();
 // Register function for AnotherClassBitesTheDust
 void registerAnotherClassBitesTheDustForReflection();
 
-
-
-// Global register function
-void registerALLForReflection();
-
-
-
-#endif //REFLECTION

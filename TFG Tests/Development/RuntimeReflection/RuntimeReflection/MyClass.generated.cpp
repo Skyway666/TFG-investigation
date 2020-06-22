@@ -1,6 +1,6 @@
 
 
-#include "../../CodeGenerator/TypeInfo.h"
+#include "../../Mirror/TypeInfo.h"
 #include "MyClass.h"
 
 

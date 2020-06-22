@@ -1,6 +1,6 @@
 
 #include "MyClass.h"
-#include "../../CodeGenerator/TypeInfo.h"
+#include "../../Mirror/TypeInfo.h"
 
 
 #include "MyClass.generated.h"
@@ -114,7 +114,6 @@ int main() {
 	myClassMetadata->methodDataHolder.PushArgument(&intArgument3);
 	myClassMetadata->Invoke(&instance, def);
 	
-
 	return 0;
 
 }
