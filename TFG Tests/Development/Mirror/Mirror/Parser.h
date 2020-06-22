@@ -97,14 +97,14 @@ struct PProperty {
 struct PMethod {
 	char name[MAX_NAME_CHARS];
 
-	Type returnValue = Type::NULL_TYPE;
-	int argumentsIndex = 0;
+	Type returnType = Type::NULL_TYPE;
+	int argumentCount = 0;
 	Type arguments[MAX_ARGUMENTS];
 
 	void Parse(Token* tokens, int* currentToken) {
 		// Current token is the return value specifier
 
-		returnValue = token2Type(tokens[*currentToken].type);
+		returnType = token2Type(tokens[*currentToken].type);
 		bool nameFound = false;
 
 		(*currentToken)++; // Go passed the return value
@@ -118,7 +118,7 @@ struct PMethod {
 
 			if (tokenIsType(tokens[*currentToken])) {
 				// This is an argument
-				arguments[argumentsIndex++] = token2Type(tokens[*currentToken].type);
+				arguments[argumentCount++] = token2Type(tokens[*currentToken].type);
 			}
 
 			(*currentToken)++;
@@ -132,10 +132,10 @@ struct PMethod {
 struct PObject {
 	char name[MAX_NAME_CHARS];
 
-	int propertyIndex = 0;
+	int propertyCount = 0;
 	PProperty properties[MAX_PROPERTIES];
 
-	int methodIndex = 0;
+	int methodCount = 0;
 	PMethod methods[MAX_METHODS];
 
 	void ParseName(Token* tokens, int* currentToken) {
@@ -168,9 +168,9 @@ struct PObject {
 
 				// Method or property
 				if (isMethod)
-					methods[methodIndex++].Parse(tokens, currentToken);
+					methods[methodCount++].Parse(tokens, currentToken);
 				else 
-					properties[propertyIndex++].Parse(tokens, currentToken);
+					properties[propertyCount++].Parse(tokens, currentToken);
 
 			}
 			(*currentToken)++;

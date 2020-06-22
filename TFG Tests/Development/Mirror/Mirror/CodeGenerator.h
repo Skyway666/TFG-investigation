@@ -52,17 +52,17 @@ void writeFunctionDeclaration(std::ofstream& cpp, char* className, PMethod metho
 	cpp  << className << "FuncWrap_";
 
 	cpp << method.name;
-	for (int i = 0; i < method.argumentsIndex; i++) {
+	for (int i = 0; i < method.argumentCount; i++) {
 		Type argument = method.arguments[i];
 		cpp << "_" << type2String(method.arguments[i]);
 	}
 }
 
 bool supportCheck(PMethod& method) {
-	if (method.returnValue == Type::OBJECT)
+	if (method.returnType == Type::OBJECT)
 		return false;
 
-	for (int i = 0; i < method.argumentsIndex; i++) {
+	for (int i = 0; i < method.argumentCount; i++) {
 		if (method.arguments[i] == Type::OBJECT)
 			return false;
 	}
@@ -120,7 +120,7 @@ void generateCode(PObject object) {
 	cpp << std::endl;
 
 	// METHODS WRAPPERS
-	for (int i = 0; i < object.methodIndex; i++) {
+	for (int i = 0; i < object.methodCount; i++) {
 
 		PMethod method = object.methods[i];
 
@@ -136,17 +136,17 @@ void generateCode(PObject object) {
 		cpp << "TypeInfo* metadata = Mirror::getMetadataFor(\"" << object.name << "\");" << std::endl;
 		cpp << "MethodDataHolder mdh = metadata->methodDataHolder;" << std::endl << std::endl;
 
-		if (method.returnValue != Type::VOID) {
-			cpp << "*(" << type2Ctype(method.returnValue) << "*)mdh.returnPointer = ";
+		if (method.returnType != Type::VOID) {
+			cpp << "*(" << type2Ctype(method.returnType) << "*)mdh.returnPointer = ";
 		}
 
 		cpp << "((" << object.name << "*)mdh.instancePointer)->" << method.name << "(";
 
-		for (int i = 0; i < method.argumentsIndex; i++) {
+		for (int i = 0; i < method.argumentCount; i++) {
 			Type argument = method.arguments[i];
 
-			cpp << "*(" << type2Ctype(argument) << "*)mdh.argumentsPointers[" << std::to_string(i) << "]";
-			if (i != method.argumentsIndex - 1) {
+			cpp << "*(" << type2Ctype(argument) << "*)mdh.argumentPointers[" << std::to_string(i) << "]";
+			if (i != method.argumentCount - 1) {
 				cpp << ", ";
 			}
 
@@ -172,7 +172,7 @@ void generateCode(PObject object) {
 
 	cpp << "metadata->name = " << "\"" <<object.name << "\";" << std::endl << std::endl;
 
-	for (int i = 0; i < object.propertyIndex; i++) {
+	for (int i = 0; i < object.propertyCount; i++) {
 		PProperty prop = object.properties[i];
 
 		cpp << "metadata->pushProperty(Property(\"" << prop.name << "\", ";
@@ -214,10 +214,10 @@ void generateCode(PObject object) {
 
 	// METHOD REFLECTION
 
-	if(object.methodIndex != 0)
+	if(object.methodCount != 0)
 		cpp << "Method method;" << std::endl;
 
-	for (int i = 0; i < object.methodIndex; i++) {
+	for (int i = 0; i < object.methodCount; i++) {
 		PMethod method = object.methods[i];
 
 		if (!supportCheck(method)) 
@@ -227,9 +227,9 @@ void generateCode(PObject object) {
 		writeFunctionDeclaration(cpp, object.name, method);
 		cpp << ";" << std::endl;
 		cpp << "method.def.name = \"" << method.name << "\";" << std::endl;
-		cpp << "method.def.returnValue = Type::" << type2String(method.returnValue) << ";" << std::endl;
+		cpp << "method.def.returnType = Type::" << type2String(method.returnType) << ";" << std::endl;
 
-		for (int i = 0; i < method.argumentsIndex; i++) {
+		for (int i = 0; i < method.argumentCount; i++) {
 			cpp << "method.def.pushArgument(Type::" << type2String(method.arguments[i]) << ");" << std::endl;
 		}
 		cpp << std::endl;

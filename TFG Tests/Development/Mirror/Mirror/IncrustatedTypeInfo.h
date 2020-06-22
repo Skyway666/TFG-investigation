@@ -87,7 +87,7 @@ struct Property {
 struct MethodDef {
 
 	int argumentCount = 0;
-	Type returnValue = Type::NULL_TYPE;
+	Type returnType = Type::NULL_TYPE;
 	Type arguments[MAX_ARGUMENTS] = {Type::NULL_TYPE};
 	const char* name = "Null Method";
 
@@ -114,7 +114,7 @@ struct MethodDef {
 
 	void clear() {
 		argumentCount = 0;
-		returnValue = Type::NULL_TYPE;
+		returnType = Type::NULL_TYPE;
 		for (int i = 0; i < MAX_ARGUMENTS; i++)
 			arguments[i] = Type::NULL_TYPE;
 		name = "Null Method";
@@ -143,23 +143,23 @@ struct MethodDataHolder {
 	void* returnPointer;
 
 
-	int argumentsCount = 0;
-	void* argumentsPointers[MAX_ARGUMENTS];
+	int argumentPointerCount = 0;
+	void* argumentPointers[MAX_ARGUMENTS];
 
 	// Public to user
 	void PushReturnPointer(void* userPointer) {
 		returnPointer = userPointer;
 	}
 	void PushArgument(void* argument) {
-		argumentsPointers[argumentsCount++] = argument;
+		argumentPointers[argumentPointerCount++] = argument;
 	}
 
 	void clear() {
 		returnPointer = nullptr;
 		instancePointer = nullptr;
-		argumentsCount = 0;
+		argumentPointerCount = 0;
 		for (int i = 0; i < MAX_ARGUMENTS; i++) {
-			argumentsPointers[i] = nullptr;
+			argumentPointers[i] = nullptr;
 		}
 	}
 };
@@ -169,11 +169,11 @@ public:
 
 	const char* name;
 	// Properties
-	unsigned int propertyIndex = 0;
+	unsigned int propertyCount = 0;
 	Property properties[MAX_PROPERTIES];
 
 	void pushProperty(Property property) {
-		properties[propertyIndex++] = property;
+		properties[propertyCount++] = property;
 	}
 
 	// Get field data from pointers
@@ -232,8 +232,8 @@ public:
 
 
 	// Should return some form of container, since several variables of different type can be declared with the same variable name
-	TypeDef getFieldType(const char* name) {
-		for (int i = 0; i < propertyIndex; i++)
+	TypeDef getPropertyType(const char* name) {
+		for (int i = 0; i < propertyCount; i++)
 			if (strcmp(name, properties[i].name) == 0) {
 				return properties[i].type;
 			}
@@ -243,7 +243,7 @@ public:
 
 	// Get Properties
 	Property getProperty(const char* name, TypeDef type) {
-		for (int i = 0; i < propertyIndex; i++)
+		for (int i = 0; i < propertyCount; i++)
 			if (strcmp(name, properties[i].name) == 0 && type == properties[i].type)
 				return properties[i];
 
@@ -258,7 +258,7 @@ public:
 	}
 
 	Property getArray(const char* name, TypeDef type) {
-		for (int i = 0; i < propertyIndex; i++)
+		for (int i = 0; i < propertyCount; i++)
 			if (strcmp(name, properties[i].name) == 0 && type.isArrayOf(type))
 				return properties[i];
 
@@ -268,12 +268,12 @@ public:
 
 
 	// Methods
-	unsigned int methodIndex = 0;
+	unsigned int methodCount= 0;
 	Method methods[MAX_METHODS];
 	MethodDataHolder methodDataHolder;
 
 	void pushMethod(Method method) {
-		methods[methodIndex++] = method;
+		methods[methodCount++] = method;
 	}
 	// Invoke methods from pointers
 	void Invoke(void* instance_ptr, const char* name) {
@@ -292,7 +292,7 @@ public:
 
 	// Get methods
 	Method getMethodByString(const char* name) {
-		for (int i = 0; i < methodIndex; i++)
+		for (int i = 0; i < methodCount; i++)
 			if (strcmp(name, methods[i].def.name) == 0)
 				return methods[i];
 
@@ -300,7 +300,7 @@ public:
 	}
 
 	Method getMethodByDef(MethodDef def) {
-		for (int i = 0; i < methodIndex; i++)
+		for (int i = 0; i < methodCount; i++)
 			if (methods[i].def == def)
 				return methods[i];
 

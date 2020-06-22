@@ -8,35 +8,35 @@ void MyClassFuncWrap_sum1ToA_BOOL() {
 TypeInfo* metadata = Mirror::getMetadataFor("MyClass");
 MethodDataHolder mdh = metadata->methodDataHolder;
 
-*(int*)mdh.returnPointer = ((MyClass*)mdh.instancePointer)->sum1ToA(*(bool*)mdh.argumentsPointers[0]);
+*(int*)mdh.returnPointer = ((MyClass*)mdh.instancePointer)->sum1ToA(*(bool*)mdh.argumentPointers[0]);
 }
 
 void MyClassFuncWrap_addNumbers_INT_INT() {
 TypeInfo* metadata = Mirror::getMetadataFor("MyClass");
 MethodDataHolder mdh = metadata->methodDataHolder;
 
-*(int*)mdh.returnPointer = ((MyClass*)mdh.instancePointer)->addNumbers(*(int*)mdh.argumentsPointers[0], *(int*)mdh.argumentsPointers[1]);
+*(int*)mdh.returnPointer = ((MyClass*)mdh.instancePointer)->addNumbers(*(int*)mdh.argumentPointers[0], *(int*)mdh.argumentPointers[1]);
 }
 
 void MyClassFuncWrap_addNumbers_INT_INT_INT() {
 TypeInfo* metadata = Mirror::getMetadataFor("MyClass");
 MethodDataHolder mdh = metadata->methodDataHolder;
 
-*(int*)mdh.returnPointer = ((MyClass*)mdh.instancePointer)->addNumbers(*(int*)mdh.argumentsPointers[0], *(int*)mdh.argumentsPointers[1], *(int*)mdh.argumentsPointers[2]);
+*(int*)mdh.returnPointer = ((MyClass*)mdh.instancePointer)->addNumbers(*(int*)mdh.argumentPointers[0], *(int*)mdh.argumentPointers[1], *(int*)mdh.argumentPointers[2]);
 }
 
 void MyClassFuncWrap_reference_BOOL() {
 TypeInfo* metadata = Mirror::getMetadataFor("MyClass");
 MethodDataHolder mdh = metadata->methodDataHolder;
 
-*(int*)mdh.returnPointer = ((MyClass*)mdh.instancePointer)->reference(*(bool*)mdh.argumentsPointers[0]);
+*(int*)mdh.returnPointer = ((MyClass*)mdh.instancePointer)->reference(*(bool*)mdh.argumentPointers[0]);
 }
 
 void MyClassFuncWrap_getName_BOOL() {
 TypeInfo* metadata = Mirror::getMetadataFor("MyClass");
 MethodDataHolder mdh = metadata->methodDataHolder;
 
-*(char*)mdh.returnPointer = ((MyClass*)mdh.instancePointer)->getName(*(bool*)mdh.argumentsPointers[0]);
+*(char*)mdh.returnPointer = ((MyClass*)mdh.instancePointer)->getName(*(bool*)mdh.argumentPointers[0]);
 }
 
 void registerMyClassForReflection(){
@@ -60,7 +60,7 @@ metadata->pushProperty(Property("classArrays", offsetof(MyClass, MyClass::classA
 Method method;
 method.function_wrapper = &MyClassFuncWrap_sum1ToA_BOOL;
 method.def.name = "sum1ToA";
-method.def.returnValue = Type::INT;
+method.def.returnType = Type::INT;
 method.def.pushArgument(Type::BOOL);
 
 metadata->pushMethod(method);
@@ -68,7 +68,7 @@ method.def.clear();
 
 method.function_wrapper = &MyClassFuncWrap_addNumbers_INT_INT;
 method.def.name = "addNumbers";
-method.def.returnValue = Type::INT;
+method.def.returnType = Type::INT;
 method.def.pushArgument(Type::INT);
 method.def.pushArgument(Type::INT);
 
@@ -77,7 +77,7 @@ method.def.clear();
 
 method.function_wrapper = &MyClassFuncWrap_addNumbers_INT_INT_INT;
 method.def.name = "addNumbers";
-method.def.returnValue = Type::INT;
+method.def.returnType = Type::INT;
 method.def.pushArgument(Type::INT);
 method.def.pushArgument(Type::INT);
 method.def.pushArgument(Type::INT);
@@ -87,7 +87,7 @@ method.def.clear();
 
 method.function_wrapper = &MyClassFuncWrap_reference_BOOL;
 method.def.name = "reference";
-method.def.returnValue = Type::INT;
+method.def.returnType = Type::INT;
 method.def.pushArgument(Type::BOOL);
 
 metadata->pushMethod(method);
@@ -95,7 +95,7 @@ method.def.clear();
 
 method.function_wrapper = &MyClassFuncWrap_getName_BOOL;
 method.def.name = "getName";
-method.def.returnValue = Type::CHAR;
+method.def.returnType = Type::CHAR;
 method.def.pushArgument(Type::BOOL);
 
 metadata->pushMethod(method);

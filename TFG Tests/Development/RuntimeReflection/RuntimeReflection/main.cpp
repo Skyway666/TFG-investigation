@@ -53,13 +53,13 @@ int main() {
 	bool* boolPointers_value[3];
 	myClassMetadata->getArrayValue(&instance, "boolPointers", TypeDef(Type::BOOL, true), boolPointers_value);
 
-	TypeDef a_type = myClassMetadata->getFieldType("a");
-	TypeDef is_type = myClassMetadata->getFieldType("is");
-	TypeDef name_type = myClassMetadata->getFieldType("name");
-	TypeDef message_type = myClassMetadata->getFieldType("message");
-	TypeDef numbers_type = myClassMetadata->getFieldType("numbers");
-	TypeDef child_type = myClassMetadata->getFieldType("child");
-	TypeDef numberPointer_type = myClassMetadata->getFieldType("numberPointer");
+	TypeDef a_type = myClassMetadata->getPropertyType("a");
+	TypeDef is_type = myClassMetadata->getPropertyType("is");
+	TypeDef name_type = myClassMetadata->getPropertyType("name");
+	TypeDef message_type = myClassMetadata->getPropertyType("message");
+	TypeDef numbers_type = myClassMetadata->getPropertyType("numbers");
+	TypeDef child_type = myClassMetadata->getPropertyType("child");
+	TypeDef numberPointer_type = myClassMetadata->getPropertyType("numberPointer");
 
 
 	// Methods
