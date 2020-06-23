@@ -41,17 +41,17 @@ int main() {
 	const char* name_value = myClassMetadata->getStringVaue(&instance, "name");
 
 	char message_value[150];
-	myClassMetadata->getArrayValue(&instance, "message", Type::CHAR, (void*)message_value);
+	myClassMetadata->getArrayValue(&instance, "message", (void*)message_value);
 
 	int numbers_value[3];
-	myClassMetadata->getArrayValue(&instance, "numbers", Type::INT, numbers_value);
+	myClassMetadata->getArrayValue(&instance, "numbers", numbers_value);
 
-	MyOtherClass child_value = *((MyOtherClass*)myClassMetadata->getObjectPointer(&instance, "child", "MyOtherClass"));
+	MyOtherClass child_value = *((MyOtherClass*)myClassMetadata->getPropertyPointer(&instance, "child"));
 
-	int* numberPointer_value = (int*)myClassMetadata->getPointerValue(&instance, "numberPointer", Type::INT);
+	int* numberPointer_value = (int*)myClassMetadata->getPointerValue(&instance, "numberPointer");
 
 	bool* boolPointers_value[3];
-	myClassMetadata->getArrayValue(&instance, "boolPointers", TypeDef(Type::BOOL, true), boolPointers_value);
+	myClassMetadata->getArrayValue(&instance, "boolPointers", boolPointers_value);
 
 	TypeDef a_type = myClassMetadata->getPropertyType("a");
 	TypeDef is_type = myClassMetadata->getPropertyType("is");

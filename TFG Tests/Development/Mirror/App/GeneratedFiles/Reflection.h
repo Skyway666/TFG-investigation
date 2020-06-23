@@ -72,6 +72,7 @@ struct TypeDef {
 
 		return type == typeDef.type &&
 			isPointer == typeDef.isPointer &&
+			arraySize != -1 &&
 			objectNameCheck;
 	}
 };
@@ -179,60 +180,36 @@ public:
 
 	// Get field data from pointers
 	int getIntegerValue(void* instance_ptr, const char* name) {
-		Property property = getVariable(name, Type::INT);
-
-		int ret = *((int*)((size_t)instance_ptr + property.offset));
-
-		return ret;
+		return *((int*)(getPropertyPointer(instance_ptr, name)));
 	}
 
 	bool getBoolValue(void* instance_ptr, const char* name) {
-		Property property = getVariable(name, Type::BOOL);
-
-		bool ret = *((bool*)((size_t)instance_ptr + property.offset));
-
-		return ret;
+		return *((bool*)(getPropertyPointer(instance_ptr, name)));
 	}
 	char getCharValue(void* instance_ptr, const char* name) {
-		Property property = getVariable(name, Type::CHAR);
-
-		char ret = *((char*)((size_t)instance_ptr + property.offset));
-
-		return ret;
+		return *((char*)(getPropertyPointer(instance_ptr, name)));
 	}
 
 	char* getStringVaue(void* instance_ptr, const char* name) {
-		Property property = getVariable(name, Type::CHAR, true);
-
-		char* ret = *((char**)((size_t)instance_ptr + property.offset));
-
-		return ret;
+		return *((char**)(getPropertyPointer(instance_ptr, name)));
 	}
 
-	void getArrayValue(void* instance_ptr, const char* name, TypeDef elementType, void* output_array) {
-		Property array = getArray(name, elementType);
-
+	void getArrayValue(void* instance_ptr, const char* name, void* output_array) {
+		Property array = getProperty(name);
 		void* to_copy_arr = ((void*)((size_t)instance_ptr + array.offset));
-
 		memcpy(output_array, to_copy_arr, array.type.arraySize);
 	}
 
-	void* getObjectPointer(void* instance_ptr, const char* name, const char* objectName) {
-		Property object = getObject(name, objectName);
+	void* getPointerValue(void* instance_ptr, const char* name) {
+		return *((void**)(getPropertyPointer(instance_ptr, name)));
+	}
 
+	void* getPropertyPointer(void* instance_ptr, const char* name) {
+		Property object = getProperty(name);
 		return ((void*)((size_t)instance_ptr + object.offset));
 	}
-
-	void* getPointerValue(void* instance_ptr, const char* name, Type type, const char* objectName = nullptr) {
-		Property pointer = getProperty(name, TypeDef(type, objectName, true));
-
-		return *((void**)((size_t)instance_ptr + pointer.offset));
-	}
-
-	// TODO (Lucas): Create "getPropertyPointer", which returns a void* to the property
-
-
-	// Should return some form of container, since several variables of different type can be declared with the same variable name
+	
+	// Get property types
 	TypeDef getPropertyType(const char* name) {
 		for (int i = 0; i < propertyCount; i++)
 			if (strcmp(name, properties[i].name) == 0) {
@@ -243,29 +220,13 @@ public:
 	}
 
 	// Get Properties
-	Property getProperty(const char* name, TypeDef type) {
+	Property getProperty(const char* name) {
 		for (int i = 0; i < propertyCount; i++)
-			if (strcmp(name, properties[i].name) == 0 && type == properties[i].type)
+			if (strcmp(name, properties[i].name) == 0)
 				return properties[i];
 
 		return Property();
 	}
-	Property getVariable(const char* name, Type type, bool isPointer = false) {
-		return getProperty(name, TypeDef(type, isPointer));
-	}
-
-	Property getObject(const char* varName, const char* objectName, bool isPointer = false) {
-		return getProperty(varName, TypeDef(Type::OBJECT, objectName, isPointer));
-	}
-
-	Property getArray(const char* name, TypeDef type) {
-		for (int i = 0; i < propertyCount; i++)
-			if (strcmp(name, properties[i].name) == 0 && type.isArrayOf(type))
-				return properties[i];
-
-		return Property();
-	}
-
 
 
 	// Methods
