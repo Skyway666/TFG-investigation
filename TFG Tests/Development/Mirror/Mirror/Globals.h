@@ -1,6 +1,6 @@
 #pragma once
 // GLOBAL INCLUDES
-#include <string>
+#include<string>
 
 //GLOBAL DEFINES
 #define MAX_NAME_CHARS 50
