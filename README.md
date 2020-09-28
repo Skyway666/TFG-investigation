@@ -6,7 +6,7 @@ Mirror is a light weight tool, which parses the C++ headers in your code base to
 
 # What is reflection?
 
-Briefly summarized, reflection data is the the information regarding the structure of objects in a program. For more information, feel free to check out the Memory(UNFINISHED) developed for this project, where you can also find insights on the development and internal structure of the tool.
+Briefly summarized, reflection data is the the information regarding the structure of objects in a program. For more information, feel free to check out the [Memory](https://drive.google.com/file/d/1o4Awh5tqd6IOLrl5_n9FtD0Ba6mU4gCz/view?usp=sharing) developed for this project, where you can also find insights on the development and internal structure of the tool.
 
 # What can I use reflection for?
 
